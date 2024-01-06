@@ -1,4 +1,68 @@
-extends ../../layouts/default.pug
+extends ../../layouts/default
 
 block main 
-  h1 OK
+  h1(class="mb-4") Danh sách khoa
+  .card.mb-3
+    .card-header Danh sách
+    .card-body 
+      .row 
+        .col-8 
+          .col-4.text-right 
+            a(
+              href=`${prefixAdmin}/department/create`
+              class="btn btn-outline-success"
+            ) +Thêm mới
+
+      table(
+        class="table table-hover table-sm"
+      )
+        thead
+          tr 
+            th STT 
+            th Tên khoa
+            th Trưởng khoa
+            th Trạng thái
+            th Hành động
+        tbody 
+          if(departments && departments.length>0)
+            each department,index in departments 
+              tr 
+                td #{index+1}
+                td #{department.name}
+                td #{department.teacherName}
+                td 
+                  if(department.status == "active")
+                    a(
+                      href="javascript:;" 
+                      class="badge text-bg-success"
+                      data-status=department.status
+                      data-id=department.id
+                      ) Hoạt động 
+                  else
+                    a(
+                      href="javascript:;" 
+                      class="badge text-bg-danger"
+                      data-status=department.status
+                      data-id=department.id
+                      ) Dừng hoạt động
+                
+                td 
+                  a(
+                    class="btn btn-secondary btn-sm"
+                    href=`${prefixAdmin}/department/detail/${department.id}`
+                  ) Chi tiết
+                  a(
+                    class="btn btn-warning btn-sm"
+                    href=`${prefixAdmin}/department/edit/${department.id}`
+                  ) Sửa
+                  button(
+                    class="btn btn-danger btn-sm ml-1"
+                    button-delete
+                    data-id=department.id
+                  ) Xóa
+          else
+            tr
+              td(colspan="4" class="text-center") 
+                h3 Chưa có khoa nào được tạo
+  script(src="/admin/js/product.js") 
+

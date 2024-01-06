@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const path = require("path");
 const { systemConfig } = require('./config/system');
+const bodyParser = require('body-parser')
 
 //Nhúng file env
 require("dotenv").config();
@@ -20,6 +21,11 @@ database.connect();
 //Nhúng file public
 app.use(express.static(`${__dirname}/public`));
 //End nhúng file public
+
+//Nhúng bodyParser
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
+//End nhúng bodyParser
 
 //Nhúng route
 const adminRoute = require('./routers/admin/index.route');
