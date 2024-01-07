@@ -3,6 +3,7 @@ const app = express();
 const path = require("path");
 const { systemConfig } = require('./config/system');
 const bodyParser = require('body-parser')
+const moment = require('moment');
 
 //Nhúng file env
 require("dotenv").config();
@@ -11,6 +12,7 @@ const port = process.env.PORT;
 
 //Biến toàn cục
 app.locals.prefixAdmin = systemConfig.prefixAdmin;
+app.locals.moment = moment;
 //End biến toàn cục
 
 //Connect database

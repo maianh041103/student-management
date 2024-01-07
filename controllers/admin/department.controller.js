@@ -41,7 +41,7 @@ module.exports.create = async (req, res) => {
 module.exports.createPOST = async (req, res) => {
   try {
     console.log(req.body);
-    const newDepartment = await Department.create(req.body);
+    const newDepartment = new Department(req.body);
     await newDepartment.save();
     res.redirect(`${systemConfig.prefixAdmin}/department`);
   } catch (error) {

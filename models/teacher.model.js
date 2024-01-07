@@ -12,7 +12,10 @@ const teacherSchema = new mongoose.Schema({
   birthday: Date,
   salary: Number, //lương trên 1 buổi
   status: String,
-  deleted: Boolean,
+  deleted: {
+    type: Boolean,
+    default: false
+  },
   deletedAt: Date,
   createdBy: {
     accId: String,
