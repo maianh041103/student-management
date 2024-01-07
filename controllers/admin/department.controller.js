@@ -11,8 +11,9 @@ module.exports.index = async (req, res) => {
   for (const department of departments) {
     const teacher = await Teacher.findOne({
       deleted: false,
-      id: department.id_teacher
+      _id: department.id_teacher
     });
+
     if (teacher)
       department.teacherName = teacher.name;
     else
@@ -43,8 +44,10 @@ module.exports.createPOST = async (req, res) => {
     console.log(req.body);
     const newDepartment = new Department(req.body);
     await newDepartment.save();
+    req.flash("success", "Thêm khoa thành công");
     res.redirect(`${systemConfig.prefixAdmin}/department`);
   } catch (error) {
+    req.flash("error", "Thêm khoa thất bại");
     res.redirect(`${systemConfig.prefixAdmin}/department`);
   }
 }

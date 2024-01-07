@@ -48,10 +48,11 @@ module.exports.createPOST = async (req, res) => {
     }
     const newTeacher = new Teacher(req.body);
     await newTeacher.save();
+    req.flash("success", "Thêm giáo viên thành công");
     res.redirect(`${systemConfig.prefixAdmin}/teacher`);
   } catch (error) {
     console.log(error);
+    req.flash("error", "Thêm giáo viên thất bại");
     res.redirect(`${systemConfig.prefixAdmin}/teacher`);
   }
-
 }

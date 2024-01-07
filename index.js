@@ -4,6 +4,9 @@ const path = require("path");
 const { systemConfig } = require('./config/system');
 const bodyParser = require('body-parser')
 const moment = require('moment');
+const flash = require("express-flash");
+const cookieParser = require("cookie-parser");
+const session = require('express-session');
 
 //Nhúng file env
 require("dotenv").config();
@@ -28,6 +31,12 @@ app.use(express.static(`${__dirname}/public`));
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 //End nhúng bodyParser
+
+//Nhúng express-flash
+app.use(cookieParser('maianh20'));
+app.use(session({ cookie: { maxAge: 60000 } }));
+app.use(flash());
+//End nhúng express-flash
 
 //Nhúng route
 const adminRoute = require('./routers/admin/index.route');

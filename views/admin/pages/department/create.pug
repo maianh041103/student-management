@@ -22,7 +22,7 @@ block main
       select(name="id_teacher" id="id_teacher" class="form-control")
         option(disabled) -- Chọn --
         each teacher in teachers
-          option(value=teacher.id) #{teacher.name}
+          option(value=teacher._id) #{teacher.name}
 
     div(class="form-group form-check form-check-inline")
       input(
