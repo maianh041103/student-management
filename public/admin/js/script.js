@@ -11,6 +11,51 @@ if (showAlerts) {
       item.classList.add("alert-hidden");
     })
   }
-
 }
 //End alert
+
+//Change status
+const listButtonStatus = document.querySelectorAll("[data-status]");
+if (listButtonStatus) {
+  for (const button of listButtonStatus) {
+    button.addEventListener("click", (e) => {
+      const dataId = button.getAttribute("data-id");
+      const dataStatus = button.getAttribute("data-status");
+      const type = button.getAttribute("type");
+      fetch(`http://localhost:3000/admin/department/changeStatus/${type}?id=${dataId}&status=${dataStatus}`, {
+        method: "PATCH",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      })
+        .then(res => res.json())
+        .then(data => {
+          location.reload();
+        })
+    })
+  }
+}
+//End change status
+
+//Delete Item
+const listButtonDelete = document.querySelectorAll("[button-delete]");
+if (listButtonDelete) {
+  for (const button of listButtonDelete) {
+    button.addEventListener("click", (e) => {
+      const type = button.getAttribute("type");
+      const id = button.getAttribute("data-id");
+      fetch(`http://localhost:3000/admin/department/delete/${type}/${id}`, {
+        method: "DELETE",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      })
+        .then(res => res.json())
+        .then(data => {
+          location.reload();
+        })
+    })
+  }
+}
+
+//End delete Item

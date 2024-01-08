@@ -1,0 +1,46 @@
+extends ../../layouts/default
+
+block main
+  if(department)
+    if(department.name)
+      h1(class="mb-4") #{department.name}
+
+    if(teachers)
+      .card.mb-3
+        .card-header Danh sách giảng viên
+        .card-body 
+          table(
+            class="table table-hover table-sm"
+          )
+            thead
+              tr 
+                th STT 
+                th Avatar
+                th Họ tên
+                th Mã giảng viên
+            tbody    
+              each teacher, index in teachers 
+                tr
+                  th #{index + 1}
+                  th 
+                    img(src=teacher.avatar style="width:100px")
+                  th #{teacher.name} #{(department.id_teacher==teacher._id)?"(Trưởng khoa)":""}
+                  th #{teacher._id}
+
+    if (department.status)
+      div(class="mb-4")
+        span Trạng thái :
+        if (department.status === "active")
+          span(class="btn btn-success") Hoạt động
+        else
+          span(class="btn btn-danger") Dừng hoạt động
+
+    a(
+      class="btn btn-warning btn-sm"
+      href = `${prefixAdmin}/department/edit/${department._id}`
+      ) <b>Chỉnh sửa</b>
+  else  
+    h1(class="mb-4") Không tìm thấy tour 
+  
+
+    

@@ -7,6 +7,7 @@ const moment = require('moment');
 const flash = require("express-flash");
 const cookieParser = require("cookie-parser");
 const session = require('express-session');
+const methodOverride = require("method-override");
 
 //Nhúng file env
 require("dotenv").config();
@@ -31,6 +32,10 @@ app.use(express.static(`${__dirname}/public`));
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 //End nhúng bodyParser
+
+//Nhúng methodOverride
+app.use(methodOverride('_method'))
+//End nhúng methodOverride
 
 //Nhúng express-flash
 app.use(cookieParser('maianh20'));

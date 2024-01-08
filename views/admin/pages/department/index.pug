@@ -35,30 +35,33 @@ block main
                     a(
                       href="javascript:;" 
                       class="badge text-bg-success"
+                      type="department"
                       data-status=department.status
-                      data-id=department.id
+                      data-id=department._id
                       ) Hoạt động 
                   else
                     a(
                       href="javascript:;" 
                       class="badge text-bg-danger"
+                      type="department"
                       data-status=department.status
-                      data-id=department.id
+                      data-id=department._id
                       ) Dừng hoạt động
                 
                 td 
                   a(
                     class="btn btn-secondary btn-sm"
-                    href=`${prefixAdmin}/department/detail/${department.id}`
+                    href=`${prefixAdmin}/department/detail/${department._id}`
                   ) Chi tiết
                   a(
                     class="btn btn-warning btn-sm"
-                    href=`${prefixAdmin}/department/edit/${department.id}`
+                    href=`${prefixAdmin}/department/edit/${department._id}`
                   ) Sửa
                   button(
                     class="btn btn-danger btn-sm ml-1"
                     button-delete
-                    data-id=department.id
+                    data-id=department._id
+                    type="department"
                   ) Xóa
           else
             tr
