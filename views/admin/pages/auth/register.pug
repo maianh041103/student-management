@@ -1,0 +1,53 @@
+extends ../../layouts/auth.pug
+
+block main 
+  .container.my-5
+    .row.justify-content-center
+      .col-8
+        h1(class="text-center") Đăng ký
+
+        form(
+          action=`${prefixAdmin}/auth/register`
+          method="POST"
+        )
+          div(class="form-group")
+            label(for="fullName") Họ tên: 
+            input(
+              type="fullName"
+              name="fullName"
+              id="fullName"
+              class="form-control"
+              required
+            )
+          div(class="form-group")
+            label(for="email") Email: 
+            input(
+              type="email"
+              name="email"
+              id="email"
+              class="form-control"
+              required
+            )
+          div(class="form-group")
+            label(for="password") Mật khẩu: 
+            input(
+              type="password"
+              name="password"
+              id="password"
+              class="form-control"
+              required
+            )
+          div(class="form-group")
+            label(for="confirmPass") Xác nhận mật khẩu: 
+            input(
+              type="password"
+              name="confirmPass"
+              id="confirm-pass"
+              class="form-control"
+              required
+            )
+          div(form-group)
+            button(
+              type="submit"
+              class="btn btn-primary btn-block"
+            ) Đăng ký

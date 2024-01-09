@@ -12,7 +12,10 @@ const accountSchema = new mongoose.Schema({
   role_id: String,
   phone: String,
   status: String,
-  deleted: Boolean,
+  deleted: {
+    type: Boolean,
+    default: false
+  },
   deletedAt: Date,
   createdBy: {
     accId: String,
