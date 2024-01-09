@@ -49,14 +49,16 @@ block main
                       href="javascript:;" 
                       class="badge text-bg-success"
                       data-status=teacher.status
-                      data-id=teacher.id
+                      data-id=teacher._id 
+                      type="teacher"
                       ) Đang dạy
                   else
                     a(
                       href="javascript:;" 
                       class="badge text-bg-danger"
                       data-status=teacher.status
-                      data-id=teacher.id
+                      data-id=teacher._id
+                      type="teacher"
                       ) Đang nghỉ
                 
                 td 
@@ -72,6 +74,7 @@ block main
                     class="btn btn-danger btn-sm ml-1"
                     button-delete
                     data-id=teacher._id
+                    type="teacher"
                   ) Xóa
           else
             tr

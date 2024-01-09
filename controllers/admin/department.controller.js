@@ -122,7 +122,7 @@ module.exports.editPATCH = async (req, res) => {
   }
 }
 
-//[PATCH] /admin/department/department/changeStatus
+//[PATCH] /admin/department/changeStatus
 module.exports.changeStatus = async (req, res) => {
   try {
     const id = req.query.id;
@@ -147,7 +147,7 @@ module.exports.changeStatus = async (req, res) => {
   }
 }
 
-//[DELETE] /admin/department/delete/:type/:id
+//[DELETE] /admin/department/delete/:id
 module.exports.deleteItem = async (req, res) => {
   try {
     const id = req.params.id;

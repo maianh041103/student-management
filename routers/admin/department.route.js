@@ -15,8 +15,8 @@ route.get("/edit/:id", controller.edit);
 
 route.patch("/edit/:id", controller.editPATCH);
 
-route.patch("/changeStatus/department", controller.changeStatus);
+route.patch("/changeStatus", controller.changeStatus);
 
-route.delete("/delete/department/:id", controller.deleteItem);
+route.delete("/delete/:id", controller.deleteItem);
 
 module.exports = route;

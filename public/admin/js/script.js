@@ -22,7 +22,7 @@ if (listButtonStatus) {
       const dataId = button.getAttribute("data-id");
       const dataStatus = button.getAttribute("data-status");
       const type = button.getAttribute("type");
-      fetch(`http://localhost:3000/admin/department/changeStatus/${type}?id=${dataId}&status=${dataStatus}`, {
+      fetch(`http://localhost:3000/admin/${type}/changeStatus?id=${dataId}&status=${dataStatus}`, {
         method: "PATCH",
         "headers": {
           "Content-Type": "application/json"
@@ -42,20 +42,34 @@ const listButtonDelete = document.querySelectorAll("[button-delete]");
 if (listButtonDelete) {
   for (const button of listButtonDelete) {
     button.addEventListener("click", (e) => {
-      const type = button.getAttribute("type");
-      const id = button.getAttribute("data-id");
-      fetch(`http://localhost:3000/admin/department/delete/${type}/${id}`, {
-        method: "DELETE",
-        "headers": {
-          "Content-Type": "application/json"
-        }
-      })
-        .then(res => res.json())
-        .then(data => {
-          location.reload();
+      const check = confirm("Bạn có chắc chắn muốn xóa?");
+      if (check) {
+        const type = button.getAttribute("type");
+        const id = button.getAttribute("data-id");
+        fetch(`http://localhost:3000/admin/${type}/delete/${id}`, {
+          method: "DELETE",
+          "headers": {
+            "Content-Type": "application/json"
+          }
         })
+          .then(res => res.json())
+          .then(data => {
+            location.reload();
+          })
+      }
     })
   }
 }
-
 //End delete Item
+
+//Preview Image
+const uploadImage = document.querySelector("[upload-image]");
+if (uploadImage) {
+  const uploadImageInput = document.querySelector("[upload-image-input]");
+  const uploadImagePreview = document.querySelector("[upload-image-preview]");
+  uploadImageInput.addEventListener("change", (e) => {
+    const [file] = e.target.files;
+    uploadImagePreview.src = URL.createObjectURL(file);
+  })
+}
+//End preview image
