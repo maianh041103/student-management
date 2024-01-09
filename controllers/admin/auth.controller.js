@@ -60,7 +60,8 @@ module.exports.loginPOST = async (req, res) => {
     const password = req.body.password;
     const account = await Account.findOne({
       email: email,
-      deleted: false
+      deleted: false,
+      status: "active"
     });
     if (!account) {
       req.flash("error", "Email không tồn tại");
