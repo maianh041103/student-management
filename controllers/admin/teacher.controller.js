@@ -2,6 +2,9 @@ const { systemConfig } = require('../../config/system');
 const Department = require('../../models/department.model');
 const Teacher = require('../../models/teacher.model');
 
+const generateHelper = require('../../helpers/generate.helper');
+const GenerateAccount = require('../../models/generate-account.model');
+
 //[GET] /admin/teacher
 module.exports.index = async (req, res) => {
   const teachers = await Teacher.find({
@@ -40,14 +43,29 @@ module.exports.create = async (req, res) => {
 
 //[POST] /admin/teacher/create
 module.exports.createPOST = async (req, res) => {
-  console.log(req.body);
   try {
     if (req.body.gender) {
       req.body.gender = parseInt(req.body.gender);
+    }
+    if (req.body.salary) {
       req.body.salary = parseInt(req.body.salary);
     }
+    req.body.teacherCode = generateHelper.generateRandomNumber(7);
     const newTeacher = new Teacher(req.body);
     await newTeacher.save();
+
+    //Tự động sinh tài khoản
+    const dataGenerateAccount = {
+      email: generateHelper.generateEmail(newTeacher.name, newTeacher.teacherCode),
+      password: generateHelper.generatePassword(newTeacher.birthday),
+      token: generateHelper.generateRandomString(20),
+      type: "teacher",
+      code: req.body.teacherCode
+    }
+
+    const newAccount = new GenerateAccount(dataGenerateAccount);
+    await newAccount.save();
+    //End tự động sinh tài khoản
     req.flash("success", "Thêm giáo viên thành công");
     res.redirect(`${systemConfig.prefixAdmin}/teacher`);
   } catch (error) {
@@ -158,12 +176,22 @@ module.exports.changeStatus = async (req, res) => {
 module.exports.deleteItem = async (req, res) => {
   try {
     const id = req.params.id;
+    const teacher = await Teacher.findOne({
+      _id: id
+    });
     await Teacher.updateOne({
       _id: id
     }, {
       deleted: true,
       deletedAt: new Date()
     });
+
+    await GenerateAccount.updateOne({
+      code: teacher.teacherCode
+    }, {
+      deleted: true,
+      deletedAt: new Date()
+    })
     req.flash("success", "Xóa giảng viên thành công");
     res.json({
       code: 200,

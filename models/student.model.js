@@ -13,6 +13,7 @@ const studentSchema = new mongoose.Schema({
   course: Number, //Khoá học
   id_classManagement: String,
   gpa: Number,
+  phone: String,
   status: String,
   deleted: Boolean,
   deletedAt: Date,

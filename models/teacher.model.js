@@ -11,6 +11,8 @@ const teacherSchema = new mongoose.Schema({
   countryside: String,
   birthday: Date,
   salary: Number, //lương trên 1 buổi
+  teacherCode: String,
+  phone: String,
   status: String,
   deleted: {
     type: Boolean,

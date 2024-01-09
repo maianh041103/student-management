@@ -22,6 +22,7 @@ block main
             th STT 
             th Avatar
             th Tên giảng viên
+            th Mã giảng viên
             th Tên khoa
             th Giới tính
             th Quê quán
@@ -37,6 +38,7 @@ block main
                 td 
                   img(src=teacher.avatar||"/admin/images/avatar.jpg" alt = teacher.name style="width:150px")
                 td #{teacher.name}
+                td #{teacher.teacherCode}
                 td #{teacher.departmentName}
                 td #{teacher.gender == 0 ? "Nam" : "Nữ"}
                 td #{teacher.countryside}
