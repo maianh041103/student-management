@@ -1,161 +1,151 @@
 const GenerateAccount = require('../../models/generate-account.model');
-const Student = require('../../models/student.model');
+const Teacher = require('../../models/teacher.model');
+const Department = require('../../models/department.model');
 
 const generateHelper = require('../../helpers/generate.helper');
 const { systemConfig } = require('../../config/system');
 
 const md5 = require("md5");
 
-//[GET] /admin/student-account/
+//[GET] /admin/teacher-account/
 module.exports.index = async (req, res) => {
-  let listStudentAccount = await GenerateAccount.find({
+  let listTeacherAccount = await GenerateAccount.find({
     deleted: false,
-    type: "student"
+    type: "teacher"
   });
 
-  for (const studentAccount of listStudentAccount) {
-    const student = await Student.findOne({
-      studentCode: studentAccount.code,
+  for (const teacherAccount of listTeacherAccount) {
+    const teacher = await Teacher.findOne({
+      teacherCode: teacherAccount.code,
       deleted: false
     })
-    studentAccount.studentInfo = student;
+    const department = await Department.findOne({
+      _id: teacher.id_department
+    });
+    teacher.departmentName = department.name;
+    teacherAccount.teacherInfo = teacher;
   }
 
-  res.render("admin/pages/student-account/index.pug", {
-    pageTitle: "Danh sách tài khoản sinh viên",
-    listStudentAccount: listStudentAccount
+  res.render("admin/pages/teacher-account/index.pug", {
+    pageTitle: "Danh sách tài khoản giảng viên",
+    listTeacherAccount: listTeacherAccount
   })
 }
 
-//[GET] /admin/student-account/create
+//[GET] /admin/teacher-account/create
 module.exports.create = async (req, res) => {
-  const listStudent = await Student.find({
+  const listTeacher = await Teacher.find({
     deleted: false
   });
   let listCode = [];
-  for (const student of listStudent) {
-    listCode.push(student.studentCode);
+  for (const teacher of listTeacher) {
+    listCode.push(teacher.teacherCode);
   };
-  res.render("admin/pages/student-account/create.pug", {
-    pageTitle: "Thêm mới tài khoản sinh viên",
+  res.render("admin/pages/teacher-account/create.pug", {
+    pageTitle: "Thêm mới tài khoản giảng viên",
     listCode: listCode
   })
 }
 
-//[POST] /admin/student-account/createPOST
+//[POST] /admin/teacher-account/createPOST
 module.exports.createPOST = async (req, res) => {
   try {
     const emailExist = await GenerateAccount.findOne({
       email: req.body.email,
-      type: "student",
+      type: "teacher",
       deleted: false
     });
     if (emailExist) {
       req.flash("error", "Email đã tồn tại");
-      res.redirect(`${systemConfig.prefixAdmin}/student-account`);
+      res.redirect(`${systemConfig.prefixAdmin}/teacher-account`);
       return;
     }
     const data = {
       email: req.body.email,
       password: md5(req.body.password),
       token: generateHelper.generateRandomString(20),
-      type: "student",
+      type: "teacher",
       code: req.body.code
     }
-    const newStudent = new GenerateAccount(data);
-    await newStudent.save();
-    req.flash("success", "Tạo mới tài khoản sinh viên thành công");
-    res.redirect(`${systemConfig.prefixAdmin}/student-account`);
+    const newTeacher = new GenerateAccount(data);
+    await newTeacher.save();
+    req.flash("success", "Tạo mới tài khoản giảng viên thành công");
+    res.redirect(`${systemConfig.prefixAdmin}/teacher-account`);
   } catch (error) {
     console.log(error);
-    req.flash("error", "Tạo mới tài khoản sinh viên thất bại");
-    res.redirect(`${systemConfig.prefixAdmin}/student-account`);
+    req.flash("error", "Tạo mới tài khoản giảng viên thất bại");
+    res.redirect(`${systemConfig.prefixAdmin}/teacher-account`);
   }
 }
 
-//[GET] /admin/student-account/detail/:id
+//[GET] /admin/teacher-account/detail/:id
 module.exports.detail = async (req, res) => {
   try {
     const account = await GenerateAccount.findOne({
       _id: req.params.id,
-      type: "student",
+      type: "teacher",
       deleted: false
     });
-    const student = await Student.findOne({
-      studentCode: account.code
+    const teacher = await Teacher.findOne({
+      teacherCode: account.code
     });
-    account.infoStudent = student;
+    const department = await Department.findOne({
+      _id: teacher.id_department,
+      deleted: false
+    });
+    teacher.departmentName = department.name;
+    account.infoTeacher = teacher;
 
-    res.render("admin/pages/student-account/detail.pug", {
-      pageTitle: "Chi tiết tài khoản sinh viên",
+
+    res.render("admin/pages/teacher-account/detail.pug", {
+      pageTitle: "Chi tiết tài khoản giảng viên",
       account: account
     });
   } catch (error) {
-    req.flash("error", "Không thấy tìm thấy tài khoản sinh viên");
+    req.flash("error", "Không thấy tìm thấy tài khoản giảng viên");
     res.redirect("back");
   }
 }
 
-//[GET] /admin/student-account/edit/:id
+//[GET] /admin/teacher-account/edit/:id
 module.exports.edit = async (req, res) => {
   try {
     const account = await GenerateAccount.findOne({
       _id: req.params.id,
-      type: "student",
+      type: "teacher",
       deleted: false
     });
 
-    const listStudent = await Student.find({
+    const listTeacher = await Teacher.find({
       deleted: false
     });
 
     let listCode = [];
-    for (const student of listStudent) {
-      listCode.push(student.studentCode);
+    for (const teacher of listTeacher) {
+      listCode.push(teacher.teacherCode);
     }
 
-    res.render("admin/pages/student-account/edit.pug", {
-      pageTitle: "Chỉnh sửa thông tin tài khoản sinh viên",
+    res.render("admin/pages/teacher-account/edit.pug", {
+      pageTitle: "Chỉnh sửa thông tin tài khoản giảng viên",
       account: account,
       listCode: listCode
     });
   } catch (error) {
     console.log(error);
-    req.flash("error", "Không tìm thấy tài khoản sinh viên");
+    req.flash("error", "Không tìm thấy tài khoản giảng viên");
     res.redirect("back");
   }
 }
 
-//[PATCH] /admin/student-account/edit/:id
+//[PATCH] /admin/teacher-account/edit/:id
 module.exports.editPATCH = async (req, res) => {
   try {
-    const studentAccount = await GenerateAccount.findOne({
-      _id: req.params.id,
-      type: "student",
-      deleted: false
-    });
-    const emailExists = await GenerateAccount.findOne({
-      $and: [
-        { email: req.body.email },
-        {
-          email: {
-            $ne: studentAccount.email
-          }
-        },
-      ],
-      deleted: false
-    });
-    if (emailExists) {
-      req.flash("error", "Địa chỉ email đã tồn tại");
-      res.redirect("back");
-      return;
-    }
     if (!req.body.password) {
       delete req.body.password
     }
     await GenerateAccount.updateOne({
       _id: req.params.id,
-      type: "student",
+      type: "teacher",
       deleted: false
     }, req.body);
 
@@ -168,7 +158,7 @@ module.exports.editPATCH = async (req, res) => {
   }
 }
 
-//[PATCH] /admin/student-account/changeStatus
+//[PATCH] /admin/teacher-account/changeStatus
 module.exports.changeStatus = async (req, res) => {
   try {
     const id = req.query.id;
@@ -176,8 +166,7 @@ module.exports.changeStatus = async (req, res) => {
     status = (status == "inactive" ? "active" : "inactive");
     await GenerateAccount.updateOne({
       _id: id,
-      deleted: false,
-      type: "student"
+      type: "teacher"
     }, {
       status: status
     });
@@ -195,14 +184,13 @@ module.exports.changeStatus = async (req, res) => {
   }
 }
 
-//[DELETE] /admin/student-account/delete/:id
+//[DELETE] /admin/teacher-account/delete/:id
 module.exports.deleteItem = async (req, res) => {
   try {
     const id = req.params.id;
     await GenerateAccount.updateOne({
       _id: id,
-      deleted: false,
-      type: "student"
+      type: "teacher"
     }, {
       deleted: true,
       deletedAt: new Date()

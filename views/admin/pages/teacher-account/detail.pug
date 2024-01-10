@@ -1,0 +1,36 @@
+extends ../../layouts/default
+
+block main
+  if(account)
+    if(account.infoTeacher.avatar)
+      image(src=account.infoTeacher.avatar alt="Ảnh đại diện" style="width:200px")
+
+    if(account.infoTeacher.name)
+      div(class="mb-4") Họ tên: #{account.infoTeacher.name}
+
+    if(account.infoTeacher.teacherCode)
+      div(class="mb-4") Mã giảng viên: #{account.infoTeacher.teacherCode}
+    
+    if (account.infoTeacher.departmentName)
+      div(class="mb-4") Khoa: #{account.infoTeacher.departmentName}
+    
+    if (account.email)
+      div(class="mb-4") Email: #{account.email}
+
+    if (account.status)
+      div(class="mb-4")
+        span Trạng thái :
+        if (account.status === "active")
+          span(class="btn btn-success") Hoạt động
+        else
+          span(class="btn btn-danger") Dừng hoạt động
+
+    a(
+      class="btn btn-warning btn-sm"
+      href = `${prefixAdmin}/teacher-account/edit/${account._id}`
+      ) <b>Chỉnh sửa</b>
+  else  
+    h1(class="mb-4") Không tìm thấy tài khoản giảng viên
+  
+
+    
