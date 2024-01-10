@@ -3,6 +3,7 @@ const ClassManagement = require('../../models/classManagement.model');
 const GenerateAccount = require('../../models/generate-account.model');
 
 const generateHelper = require('../../helpers/generate.helper');
+const md5 = require("md5");
 
 const { systemConfig } = require('../../config/system');
 
@@ -45,7 +46,7 @@ module.exports.createPOST = async (req, res) => {
     //Tự động sinh tài khoản
     const dataGenerateAccount = {
       email: generateHelper.generateEmail(newStudent.name, newStudent.studentCode),
-      password: generateHelper.generatePassword(newStudent.birthday),
+      password: md5(generateHelper.generatePassword(newStudent.birthday)),
       token: generateHelper.generateRandomString(20),
       type: "student",
       code: req.body.studentCode

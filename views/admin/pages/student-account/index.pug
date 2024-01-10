@@ -1,0 +1,78 @@
+extends ../../layouts/default
+include ../../mixins/moment.pug
+
+block main 
+  h1(class="mb-4") Danh sách tài khoản sinh viên
+  .card.mb-3
+    .card-header Danh sách
+    .card-body 
+      .row 
+        .col-8 
+          .col-4.text-right 
+            a(
+              href=`${prefixAdmin}/student-account/create`
+              class="btn btn-outline-success"
+            ) +Thêm mới
+
+      table(
+        class="table table-hover table-sm"
+      )
+        thead
+          tr 
+            th STT 
+            th Avatar
+            th Họ Tên
+            th Lớp quản lý
+            th Mã sinh viên
+            th Email
+            th Trạng thái
+            th Hành động
+        tbody 
+          if(listStudentAccount && listStudentAccount.length>0)
+            each studentAccount,index in listStudentAccount 
+              tr 
+                td #{index+1}
+                td 
+                  img(src=studentAccount.studentInfo.avatar||"/admin/images/avatar.jpg" alt = studentAccount.studentInfo.name style="width:150px")
+                td #{studentAccount.studentInfo.name}
+                td #{studentAccount.studentInfo.id_classManagement}
+                td #{studentAccount.studentInfo.studentCode}
+                td #{studentAccount.email}
+                td 
+                  if(studentAccount.status == "active")
+                    a(
+                      href="javascript:;" 
+                      class="badge text-bg-success"
+                      data-status=studentAccount.status
+                      data-id=studentAccount._id 
+                      type="student-account"
+                      ) Hoạt động
+                  else
+                    a(
+                      href="javascript:;" 
+                      class="badge text-bg-danger"
+                      data-status=studentAccount.status
+                      data-id=studentAccount._id
+                      type="student-account"
+                      ) Dừng hoạt động
+                
+                td 
+                  a(
+                    class="btn btn-secondary btn-sm"
+                    href=`${prefixAdmin}/student-account/detail/${studentAccount._id}`
+                  ) Chi tiết
+                  a(
+                    class="btn btn-warning btn-sm"
+                    href=`${prefixAdmin}/student-account/edit/${studentAccount._id}`
+                  ) Sửa
+                  button(
+                    class="btn btn-danger btn-sm ml-1"
+                    button-delete
+                    data-id=studentAccount._id
+                    type="student-account"
+                  ) Xóa
+          else
+            tr
+              td(colspan="4" class="text-center") 
+                h3 Không có tài khoản sinh viên nào
+

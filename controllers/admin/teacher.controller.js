@@ -1,4 +1,5 @@
 const { systemConfig } = require('../../config/system');
+const md5 = require("md5");
 const Department = require('../../models/department.model');
 const Teacher = require('../../models/teacher.model');
 
@@ -57,7 +58,7 @@ module.exports.createPOST = async (req, res) => {
     //Tự động sinh tài khoản
     const dataGenerateAccount = {
       email: generateHelper.generateEmail(newTeacher.name, newTeacher.teacherCode),
-      password: generateHelper.generatePassword(newTeacher.birthday),
+      password: md5(generateHelper.generatePassword(newTeacher.birthday)),
       token: generateHelper.generateRandomString(20),
       type: "teacher",
       code: req.body.teacherCode
