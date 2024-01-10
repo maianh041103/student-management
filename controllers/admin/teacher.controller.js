@@ -83,15 +83,21 @@ module.exports.detail = async (req, res) => {
       _id: id,
       deleted: false
     });
+
     const department = await Department.findOne({
       deleted: false,
       _id: teacher.id_department
     });
     teacher.departmentName = department.name;
 
+    const account = GenerateAccount.findOne({
+      code: teacher.teacherCode
+    });
+
     res.render("admin/pages/teacher/detail.pug", {
       pageTitle: "Thông tin chi tiết giảng viên",
-      teacher: teacher
+      teacher: teacher,
+      account: account
     });
   } catch (error) {
     req.flash("error", "Không tìm thấy giảng viên");

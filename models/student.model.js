@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const slug = require('mongoose-slug-updater');
-mongoose.plugin('slug');
+mongoose.plugin(slug);
 
 const studentSchema = new mongoose.Schema({
   id: String,
@@ -15,7 +15,10 @@ const studentSchema = new mongoose.Schema({
   gpa: Number,
   phone: String,
   status: String,
-  deleted: Boolean,
+  deleted: {
+    type: Boolean,
+    default: false
+  },
   deletedAt: Date,
   createdBy: {
     accId: String,
