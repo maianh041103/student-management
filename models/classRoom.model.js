@@ -7,8 +7,6 @@ const ClassRoomSchema = new mongoose.Schema({
   name: String,
   id_teacher: String,
   id_subject: String,
-  theory: Number, //tiết lý thuyết
-  practice: Number, //tiết thực hành
   stock: Number, //vị trí còn trống
   score: Number, // điểm trung bình
   listStudent: [{

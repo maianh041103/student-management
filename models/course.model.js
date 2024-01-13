@@ -6,8 +6,13 @@ const courseSchema = new mongoose.Schema({
   id: String,
   name: String,
   credits: Number, //Số tín chỉ
+  theory: Number, //tiết lý thuyết
+  practice: Number, //tiết thực hành
   status: String,
-  deleted: Boolean,
+  deleted: {
+    type: Boolean,
+    default: false
+  },
   deletedAt: Date,
   createdBy: {
     accId: String,
@@ -28,4 +33,6 @@ const courseSchema = new mongoose.Schema({
   }
 })
 
-const Course = mongoose.model("Course", courseSchema, courses);
+const Course = mongoose.model("Course", courseSchema, "courses");
+
+module.exports = Course;

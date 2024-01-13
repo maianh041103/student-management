@@ -6,6 +6,7 @@ const myAccountRoute = require('./my-account.route');
 const studentRoute = require('./student.route');
 const studentAccountRoute = require('./student-account.route');
 const teacherAccountRoute = require('./teacher-account.route');
+const courseRoute = require('./course.route');
 
 const authMiddlerware = require('../../middlerware/auth.middlerware');
 
@@ -17,4 +18,5 @@ module.exports = async (app) => {
   app.use(`${systemConfig.prefixAdmin}/student`, authMiddlerware.auth, studentRoute);
   app.use(`${systemConfig.prefixAdmin}/student-account`, authMiddlerware.auth, studentAccountRoute);
   app.use(`${systemConfig.prefixAdmin}/teacher-account`, authMiddlerware.auth, teacherAccountRoute);
+  app.use(`${systemConfig.prefixAdmin}/course`, authMiddlerware.auth, courseRoute);
 }
