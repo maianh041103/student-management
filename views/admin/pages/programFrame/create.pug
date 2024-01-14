@@ -1,0 +1,60 @@
+extends ../../layouts/default.pug
+
+block main
+  h1(class="mb-4") Thêm mới chương trình khung
+
+  form(
+    action=`${prefixAdmin}/programFrame/create`
+    method="POST"
+  )
+    div(class="form-group")
+      label(for="id_department") Thuộc khoa
+      select(name="id_department" id="id_department" class="form-control")
+        option(disabled) -- Chọn --
+        each department in departments
+          option(value=department._id) #{department.name}
+      
+    div(class="form-group")
+      label(for="semester") Học kỳ
+      select(name="semester" id="semester" class="form-control")
+        option(disabled) -- Chọn --
+        -for(let i = 1;i<=12;i++)
+          option(value=i) Học kỳ #{i}
+    
+    div(class="form-group")
+      label(for="id_course") Danh sách môn học
+      table(
+        class="table table-hover table-sm"
+        table-courses
+      )
+        tbody
+          each course in listCourse
+            tr 
+              td(class="text-center") 
+                input(type="checkbox" name="id_course" value=course._id)
+              td #{course.name}
+   
+    div(class="form-group form-check form-check-inline")
+      input(
+        type="radio"
+        class="form-check-input"
+        id="statusActive"
+        name="status"
+        value="active"
+        checked
+      )
+      label(for="statusActive" class="form-check-label") Hoạt động
+    div(class="form-group form-check form-check-inline")
+      input(
+        type="radio"
+        class="form-check-input"
+        id="statusInActive"
+        name="status"
+        value="inactive"
+      )
+      label(for="statusInActive" class="form-check-label") Dừng hoạt động
+    div(class="form-group")
+      button(
+        type="submit"
+        class="btn btn-primary"
+      ) Tạo mới

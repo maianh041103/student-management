@@ -1,0 +1,72 @@
+extends ../../layouts/default
+
+block main 
+  h1(class="mb-4") Danh sách chương trình khung
+  .card.mb-3
+    .card-header Danh sách
+    .card-body 
+      .row 
+        .col-8 
+          .col-4.text-right 
+            a(
+              href=`${prefixAdmin}/programFrame/create`
+              class="btn btn-outline-success"
+            ) +Thêm mới
+
+      table(
+        class="table table-hover table-sm"
+      )
+        thead
+          tr 
+            th STT 
+            th Tên khoa
+            th Học kỳ
+            th Tổng số tín
+            th Trạng thái
+            th Hành động
+        tbody 
+          if(programFrames && programFrames.length>0)
+            each programFrame,index in programFrames 
+              tr 
+                td #{index+1}
+                td #{programFrame.departmentName}
+                td #{programFrame.semester}
+                td #{programFrame.totalCredits}
+                td 
+                  if(programFrame.status == "active")
+                    a(
+                      href="javascript:;" 
+                      class="badge text-bg-success"
+                      type="programFrame"
+                      data-status=programFrame.status
+                      data-id=programFrame._id
+                      ) Hoạt động 
+                  else
+                    a(
+                      href="javascript:;" 
+                      class="badge text-bg-danger"
+                      type="programFrame"
+                      data-status=programFrame.status
+                      data-id=programFrame._id
+                      ) Dừng hoạt động
+                
+                td 
+                  a(
+                    class="btn btn-secondary btn-sm"
+                    href=`${prefixAdmin}/programFrame/detail/${programFrame._id}`
+                  ) Chi tiết
+                  a(
+                    class="btn btn-warning btn-sm"
+                    href=`${prefixAdmin}/programFrame/edit/${programFrame._id}`
+                  ) Sửa
+                  button(
+                    class="btn btn-danger btn-sm ml-1"
+                    button-delete
+                    data-id=programFrame._id
+                    type="programFrame"
+                  ) Xóa
+          else
+            tr
+              td(colspan="4" class="text-center") 
+                h3 Chưa có chương trình khung nào được tạo
+

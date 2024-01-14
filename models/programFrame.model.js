@@ -3,12 +3,13 @@ const mongoose = require("mongoose");
 const programFrameSchema = new mongoose.Schema({
   id: String,
   id_department: String,
-  list: [{
-    semester: Number,
-    id_course: Array
-  }],
+  semester: Number,
+  id_course: Array,
   status: String,
-  deleted: Boolean,
+  deleted: {
+    type: Boolean,
+    default: false
+  },
   deletedAt: Date,
   createdBy: {
     accId: String,
