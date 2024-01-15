@@ -9,7 +9,10 @@ const classManagementSchema = new mongoose.Schema({
   id_department: String, //id khoa
   yearStart: String,
   status: String,
-  deleted: Boolean,
+  deleted: {
+    type: Boolean,
+    default: false
+  },
   deletedAt: Date,
   createdBy: {
     accId: String,

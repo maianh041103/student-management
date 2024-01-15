@@ -9,6 +9,7 @@ const teacherAccountRoute = require('./teacher-account.route');
 const courseRoute = require('./course.route');
 const programFrameRoute = require('./programFrame.route');
 const classRoomRoute = require('./classRoom.route');
+const classManagementRoute = require('./classManagement.route');
 
 const authMiddlerware = require('../../middlerware/auth.middlerware');
 
@@ -23,4 +24,5 @@ module.exports = async (app) => {
   app.use(`${systemConfig.prefixAdmin}/course`, authMiddlerware.auth, courseRoute);
   app.use(`${systemConfig.prefixAdmin}/programFrame`, authMiddlerware.auth, programFrameRoute);
   app.use(`${systemConfig.prefixAdmin}/classRoom`, authMiddlerware.auth, classRoomRoute);
+  app.use(`${systemConfig.prefixAdmin}/classManagement`, authMiddlerware.auth, classManagementRoute);
 }

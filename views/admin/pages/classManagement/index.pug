@@ -1,0 +1,84 @@
+extends ../../layouts/default
+
+block main 
+  h1(class="mb-4") Danh sách lớp quản lý
+  .card.mb-3
+    .card-header Danh sách
+    .card-body 
+      .row 
+        .col-8 
+          .col-4.text-right 
+            a(
+              href=`${prefixAdmin}/classManagement/create`
+              class="btn btn-outline-success"
+            ) +Thêm mới
+
+      table(
+        class="table table-hover table-sm"
+      )
+        thead
+          tr 
+            th STT 
+            th Tên lớp
+            th Tên khoa
+            th Chủ nhiệm
+            th Số sinh viên
+            th Năm bắt đầu
+            th Trạng thái
+            th Hành động
+        tbody 
+          if(classManagements && classManagements.length>0)
+            each classManagement,index in classManagements 
+              tr 
+                td #{index+1}
+                td #{classManagement.name}
+                td #{classManagement.departmentName}
+                td #{classManagement.teacherName}
+                td #{classManagement.listStudent.length}
+                td #{classManagement.yearStart}
+                td 
+                  if(classManagement.status == "active")
+                    a(
+                      href="javascript:;" 
+                      class="badge text-bg-success"
+                      type="classManagement"
+                      data-status=classManagement.status
+                      data-id=classManagement._id
+                      ) Hoạt động 
+                  else if (classManagement.status == "cancel")
+                    a(
+                      href="javascript:;" 
+                      class="badge text-bg-danger"
+                      data-status=classManagement.status
+                      data-id=classManagement._id
+                      type="classManagement"
+                      ) Đã hủy
+                  else 
+                    a(
+                      href="javascript:;" 
+                      class="badge text-bg-primary"
+                      data-status=classManagement.status
+                      data-id=classManagement._id
+                      type="classManagement"
+                      ) Đã hoàn thành
+                
+                td 
+                  a(
+                    class="btn btn-secondary btn-sm"
+                    href=`${prefixAdmin}/classManagement/detail/${classManagement._id}`
+                  ) Chi tiết
+                  a(
+                    class="btn btn-warning btn-sm"
+                    href=`${prefixAdmin}/classManagement/edit/${classManagement._id}`
+                  ) Sửa
+                  button(
+                    class="btn btn-danger btn-sm ml-1"
+                    button-delete
+                    data-id=classManagement._id
+                    type="classManagement"
+                  ) Xóa
+          else
+            tr
+              td(colspan="4" class="text-center") 
+                h3 Chưa có lớp quản lý nào được tạo
+

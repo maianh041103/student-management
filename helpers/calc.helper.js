@@ -1,4 +1,5 @@
 const Course = require('../models/course.model');
+const ClassRoom = require('../models/classRoom.model');
 
 module.exports.calcCredits = async (programFrame) => {
   let sum = 0;
@@ -41,4 +42,33 @@ module.exports.calcPoint4 = async (point10) => {
     return 3.5;
   }
   return 4;
+}
+
+module.exports.calcTotalCredits = async (idStudent) => {
+  let result = 0;
+  const classRoom = await ClassRoom.find({
+    listStudent: { $elemMatch: { id_student: idStudent } }
+  });
+
+  let listIdCourse = classRoom.map((item, index) => {
+    return {
+      studentInfo: item.listStudent.find(itemChild => {
+        return itemChild.id_student == idStudent;
+      }),
+      idCourse: item.id_course
+    }
+  });
+
+  for (const item of listIdCourse) {
+    if (this.calcPoint10(item.studentInfo.pointProcess, item.studentInfo.pointTest) >= 4) {
+      const course = await Course.findOne({
+        _id: item.idCourse,
+        deleted: false
+      });
+      if (course) {
+        result += course.credits;
+      }
+    }
+  }
+  return result;
 }

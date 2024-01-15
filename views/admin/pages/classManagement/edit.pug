@@ -1,0 +1,125 @@
+extends ../../layouts/default.pug
+include ../../mixins/moment.pug
+
+block main
+  h1(class="mb-4") Thêm mới lớp quản lý
+
+  form(
+    action=`${prefixAdmin}/classManagement/edit/${classManagement._id}?_method=PATCH`
+    method="POST"
+  )
+    div(class="form-group")
+      label(for="name") Tên lớp quản lý
+      input(
+        type="text"
+        class="form-control"
+        id="name"
+        name="name"
+        value=classManagement.name
+        required
+      )
+
+    div(class="form-group")
+      label(for="id_department") Khoa
+      select(name="id_department" id="id_department" class="form-control")
+        option(disabled) -- Chọn --
+        each department in departments
+          option(value=department._id selected=(department._id==classManagement.id_department)) #{department.name}
+    
+    div(class="form-group")
+      label(for="id_teacher") Giảng viên
+      select(name="id_teacher" id="id_teacher" class="form-control")
+        option(disabled) -- Chọn --
+        each teacher in teachers
+          option(value=teacher._id seleted=(teacher._id==classManagement.id_teacher)) #{teacher.name}
+        
+    div(class="form-group")
+      label(for="yearStart") Năm bắt đầu
+      input(
+        type="number"
+        id="yearStart"
+        name="yearStart"
+        class="form-control"
+        min=0
+        value=classManagement.yearStart
+      )
+    
+    if(listStudent)
+      .card.mb-3
+        .card-header Danh sách sinh viên
+        .card-body 
+          table(
+            class="table table-hover table-sm"
+          )
+            thead
+              tr 
+                th STT
+                th Mã sinh viên
+                th Họ tên
+                th Ngày sinh
+                th Quê quán
+                th Số điện thoại
+                th GPA
+                th Tín chỉ tích lũy
+                th Hành động
+            tbody    
+              each student, index in listStudent 
+                tr
+                  td #{index + 1}
+                  td #{student.studentCode}
+                  td #{student.name}
+                  td 
+                    +formatDate(student.birthday)
+                  td #{student.countryside}
+                  td #{student.phone}
+                  td #{student.gpa}
+                  td #{student.totalCredits}
+                  th 
+                    button(
+                      class="btn btn-danger btn-sm ml-1"
+                      button-remove
+                      data-student-id=student._id
+                      data-class-id=classManagement._id
+                      type="classManagement"
+                    ) Xóa
+
+    div(class="form-group form-check form-check-inline")
+      input(
+        type="radio"
+        class="form-check-input"
+        id="statusActive"
+        name="status"
+        value="active"
+        checked=(classManagement.status=="active"?true:false)
+      )
+      label(for="statusActive" class="form-check-label") Hoạt động
+    div(class="form-group form-check form-check-inline")
+      input(
+        type="radio"
+        class="form-check-input"
+        id="statusCancel"
+        name="status"
+        value="cancel"
+        checked=(classManagement.status=="cancel"?true:false)
+      )
+      label(for="statusCancel" class="form-check-label") Đã hủy
+    div(class="form-group form-check form-check-inline")
+      input(
+        type="radio"
+        class="form-check-input"
+        id="statusComplete"
+        name="status"
+        value="complete"
+        checked=(classManagement.status=="complete"?true:false)
+      )
+      label(for="statusComplete" class="form-check-label") Hoàn thành
+
+    div(class="form-group")
+      button(
+        type="submit"
+        class="btn btn-primary"
+      ) Chỉnh sửa
+      a(
+        href=`${prefixAdmin}/classManagement/insertStudent/${classManagement._id}`
+        class="btn btn-success btn-block"
+      ) Thêm sinh viên

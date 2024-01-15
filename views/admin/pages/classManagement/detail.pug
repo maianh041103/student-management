@@ -1,0 +1,66 @@
+extends ../../layouts/default
+include ../../mixins/moment
+
+block main
+  if(classManagement)
+    if(classManagement.name)
+      h1(class="mb-4") #{classManagement.name}
+    
+    if(classManagement.teacherName)
+      div(class="mb-4") Giảng viên : #{classManagement.teacherName}
+
+    if(classManagement.courseName)
+      div(class="mb-4") Môn học : #{classManagement.courseName}
+    
+    if(listStudent)
+      div(class="mb-4") Số sinh viên : #{listStudent.length}
+
+    if(listStudent)
+      .card.mb-3
+        .card-header Danh sách sinh viên
+        .card-body 
+          table(
+            class="table table-hover table-sm"
+          )
+            thead
+              tr 
+                th STT
+                th Mã sinh viên
+                th Họ tên
+                th Ngày sinh
+                th Quê quán
+                th Số điện thoại
+                th GPA
+                th Tín chỉ tích lũy
+            tbody    
+              each student, index in listStudent 
+                tr
+                  td #{index + 1}
+                  td #{student.studentCode}
+                  td #{student.name}
+                  td 
+                    +formatDate(student.birthday)
+                  td #{student.countryside}
+                  td #{student.phone}
+                  td #{student.gpa}
+                  td #{student.totalCredits}
+
+    if (classManagement.status)
+      div(class="mb-4")
+        span Trạng thái :
+        if (classManagement.status === "active")
+          span(class="btn btn-success") Hoạt động
+        else if(classManagement.status==="cancel")
+          span(class="btn btn-danger") Đã hủy
+        else
+          span(class="badge text-bg-primary") Hoàn thành
+
+    a(
+      class="btn btn-warning btn-sm"
+      href = `${prefixAdmin}/classManagement/edit/${classManagement._id}`
+      ) <b>Chỉnh sửa</b>
+  else  
+    h1(class="mb-4") Không tìm thấy lớp quản lý
+  
+
+    

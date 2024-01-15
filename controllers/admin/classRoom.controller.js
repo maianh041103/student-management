@@ -89,7 +89,7 @@ module.exports.detail = async (req, res) => {
     let listStudent = [];
     for (const element of classRoom.listStudent) {
       const student = await Student.findOne({
-        _id: element.id,
+        _id: element.id_student,
         deleted: false
       });
       const classManagement = await ClassManagement.findOne({
@@ -101,8 +101,8 @@ module.exports.detail = async (req, res) => {
       }
       student.pointProcess = element.pointProcess;
       student.pointTest = element.pointTest;
-      student.point10 = calcHelper.calcPoint10(element.pointProcess, element.pointTest);
-      student.point4 = calcHelper.calcPoint10(student.point10);
+      student.point10 = await calcHelper.calcPoint10(element.pointProcess, element.pointTest);
+      student.point4 = await calcHelper.calcPoint10(student.point10);
       listStudent.push(student);
     }
     //End lấy thông tin sinh viên
