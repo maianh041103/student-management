@@ -2,7 +2,7 @@ extends ../../layouts/default.pug
 include ../../mixins/moment.pug
 
 block main
-  h1(class="mb-4") Thêm mới lớp học phần
+  h1(class="mb-4") Chỉnh sửa thông tin lớp học phần
 
   form(
     action=`${prefixAdmin}/classRoom/edit/${classRoom._id}?_method=PATCH`
@@ -72,12 +72,39 @@ block main
                   td #{student.name}
                   td 
                     +formatDate(student.birthday)
-                  th #{student.classManagementName}
-                  th #{student.pointProcess||""}
-                  th #{student.pointTest||""}
-                  th #{student.point10||""}
-                  th #{student.point4||""}
-                  th 
+                  td #{student.classManagementName}
+                  td 
+                    input(
+                      type="number"
+                      class="form-control"
+                      id="pointProcess"
+                      name="pointProcess"
+                      point-process 
+                      student-id=student._id
+                      min=0
+                      value=student.dataPoint.pointProcess
+                    )
+                  td 
+                    input(
+                      type="number"
+                      class="form-control"
+                      id="pointTest"
+                      name="pointTest"
+                      point-test
+                      student-id=student._id
+                      min=0
+                      value=student.dataPoint.pointTest
+                    )
+                  td #{student.dataPoint.point10}
+                  td #{student.dataPoint.point4}
+                  td 
+                    button(
+                      class="btn btn-warning btn-sm ml-1"
+                      button-edit
+                      data-student-id=student._id
+                      data-class-id=classRoom._id
+                      type="classRoom"
+                    ) Chỉnh sửa
                     button(
                       class="btn btn-danger btn-sm ml-1"
                       button-remove

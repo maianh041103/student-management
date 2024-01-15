@@ -137,17 +137,29 @@ module.exports.edit = async (req, res) => {
       status: "active"
     });
 
+    const point = classRoom.listStudent;
+
     let listStudentId = [];
     for (const element of classRoom.listStudent) {
       listStudentId.push(element.id_student);
     }
 
     let listStudent = [];
-    for (const id of listStudentId) {
+    for (let i = 0; i < listStudentId.length; i++) {
       const student = await Student.findOne({
-        _id: id,
+        _id: listStudentId[i],
         deleted: false
       });
+      point[i].point10 = await calcHelper.calcPoint10(point[i].pointProcess || 0, point[i].pointTest || 0);
+      point[i].point4 = calcHelper.calcPoint4(point[i].point10 || 0);
+      student.dataPoint = point[i];
+      const classManagement = await ClassManagement.findOne({
+        _id: student.id_classManagement,
+        deleted: false
+      });
+      if (classManagement) {
+        student.classManagementName = classManagement.name;
+      }
       listStudent.push(student);
     }
 
@@ -259,7 +271,7 @@ module.exports.insertStudentPOST = async (req, res) => {
       _id: req.params.id
     },
       {
-        listStudent: listStudent
+        $push: { listStudent: listStudent }
       });
     req.flash("success", "Thêm sinh viên vào lớp học phần thành công");
     res.redirect(`${systemConfig.prefixAdmin}/classRoom/edit/${req.params.id}`);
@@ -344,5 +356,36 @@ module.exports.deleteItem = async (req, res) => {
       code: 400,
       message: "Xóa thất bại"
     });
+  }
+}
+
+//[PATCH] /admin/classRoom/edit/:classId/:studentId
+module.exports.editStudent = async (req, res) => {
+  try {
+    const classId = req.params.classId;
+    const studentId = req.params.studentId;
+    const data = req.body;
+
+    await ClassRoom.updateOne({
+      _id: classId,
+      'listStudent.id_student': studentId
+    },
+      {
+        $set: {
+          'listStudent.$.pointProcess': parseInt(data.pointProcess),
+          'listStudent.$.pointTest': parseInt(data.pointTest)
+        }
+      })
+    res.json({
+      code: 200,
+      message: "Thành công"
+    })
+  } catch (error) {
+    console.log(error);
+    req.flash("error", "Chỉnh sửa thông tin sinh viên trong lớp học phần thất bại");
+    res.json({
+      code: 400,
+      message: "Thất bại"
+    })
   }
 }

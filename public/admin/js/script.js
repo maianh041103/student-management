@@ -74,7 +74,7 @@ if (uploadImage) {
 }
 //End preview image
 
-//Remove Student 
+//Button remove student 
 const listButtonRemove = document.querySelectorAll("[button-remove]");
 if (listButtonRemove) {
   for (const button of listButtonRemove) {
@@ -100,4 +100,51 @@ if (listButtonRemove) {
     })
   }
 }
-//End romove student
+//End button romove student
+
+//Button edit student
+const listButtonEdit = document.querySelectorAll("[button-edit]");
+if (listButtonEdit) {
+  for (const button of listButtonEdit) {
+    button.addEventListener("click", (e) => {
+      const check = confirm("Bạn có chắc chắn muốn sửa?");
+      if (check) {
+        e.preventDefault();
+        const studentId = button.getAttribute("data-student-id");
+        const classRoomId = button.getAttribute("data-class-id");
+        const type = button.getAttribute("type");
+        const listInputPointProcess = document.querySelectorAll("[point-process]");
+        console.log(listInputPointProcess);
+        let inputPointProcess;
+        listInputPointProcess.forEach(button => {
+          if (button.getAttribute("student-id") == studentId)
+            inputPointProcess = button
+        })
+        const listInputPointTest = document.querySelectorAll("[point-test]");
+        let inputPointTest;
+        listInputPointTest.forEach(button => {
+          if (button.getAttribute("student-id") == studentId)
+            inputPointTest = button
+        })
+        const dataSendServer = {
+          pointProcess: inputPointProcess.value,
+          pointTest: inputPointTest.value
+        }
+
+        fetch(`http://localhost:3000/admin/${type}/edit/${classRoomId}/${studentId}`, {
+          method: "PATCH",
+          "headers": {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(dataSendServer)
+        })
+          .then(res => res.json())
+          .then(data => {
+            if (data.code == 200)
+              location.reload();
+          })
+      }
+    })
+  }
+}
+//End button edit student

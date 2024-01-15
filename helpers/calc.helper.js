@@ -19,7 +19,7 @@ module.exports.calcPoint10 = async (pointProcess, pointTest) => {
   return Math.round((pointProcess * 0.3 + pointTest * 0.7) * 100) / 100;
 }
 
-module.exports.calcPoint4 = async (point10) => {
+module.exports.calcPoint4 = (point10) => {
   if (point10 < 4) {
     return 0;
   }

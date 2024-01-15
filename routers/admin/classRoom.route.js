@@ -24,4 +24,6 @@ route.patch("/changeStatus", controller.changeStatus);
 
 route.delete("/delete/:id", controller.deleteItem);
 
+route.patch("/edit/:classId/:studentId", controller.editStudent);
+
 module.exports = route;
