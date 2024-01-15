@@ -6,16 +6,18 @@ const ClassRoomSchema = new mongoose.Schema({
   id: String,
   name: String,
   id_teacher: String,
-  id_subject: String,
-  stock: Number, //vị trí còn trống
-  score: Number, // điểm trung bình
+  id_course: String,
+  quantity: Number, //tổng số chỗ 
   listStudent: [{
     id_student: String,
     pointProcess: Number, //điểm qt
     pointTest: Number //điểm ck
   }],
   status: String,
-  deleted: Boolean,
+  deleted: {
+    type: Boolean,
+    default: false
+  },
   deletedAt: Date,
   createdBy: {
     accId: String,

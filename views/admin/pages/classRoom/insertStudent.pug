@@ -1,0 +1,34 @@
+extends ../../layouts/default.pug
+
+block main
+  h1(class="mb-4") Thêm sinh viên vào lớp học phần
+
+  form(
+    action=`${prefixAdmin}/classRoom/insertStudent/${classRoomId}`
+    method="POST"
+  )
+    div(class="form-group")
+      label(for="id_course") Danh sách sinh viên
+      table(
+        class="table table-hover table-sm"
+        table-students
+      )
+        thead 
+          tr 
+            th 
+            th Mã sinh viên
+            th Tên sinh viên
+            th Lớp quản lý
+        tbody
+          each student in listStudent
+            tr 
+              td(class="text-center") 
+                input(type="checkbox" name="id_student" value=student._id)
+              td #{student.studentCode}
+              td #{student.name}
+              td #{student.departmentName}
+    div(class="form-group")
+      button(
+        type="submit"
+        class="btn btn-primary"
+      ) Thêm mới

@@ -1,0 +1,82 @@
+extends ../../layouts/default
+
+block main 
+  h1(class="mb-4") Danh sách lớp học phần
+  .card.mb-3
+    .card-header Danh sách
+    .card-body 
+      .row 
+        .col-8 
+          .col-4.text-right 
+            a(
+              href=`${prefixAdmin}/classRoom/create`
+              class="btn btn-outline-success"
+            ) +Thêm mới
+
+      table(
+        class="table table-hover table-sm"
+      )
+        thead
+          tr 
+            th STT 
+            th Tên lớp
+            th Tên môn
+            th Giảng viên
+            th Số sinh viên
+            th Trạng thái
+            th Hành động
+        tbody 
+          if(classRooms && classRooms.length>0)
+            each classRoom,index in classRooms 
+              tr 
+                td #{index+1}
+                td #{classRoom.name}
+                td #{classRoom.courseName}
+                td #{classRoom.teacherName}
+                td #{classRoom.listStudent.length}
+                td 
+                  if(classRoom.status == "active")
+                    a(
+                      href="javascript:;" 
+                      class="badge text-bg-success"
+                      type="classRoom"
+                      data-status=classRoom.status
+                      data-id=classRoom._id
+                      ) Hoạt động 
+                  else if (classRoom.status == "cancel")
+                    a(
+                      href="javascript:;" 
+                      class="badge text-bg-danger"
+                      data-status=classRoom.status
+                      data-id=classRoom._id
+                      type="classRoom"
+                      ) Đã hủy
+                  else 
+                    a(
+                      href="javascript:;" 
+                      class="badge text-bg-primary"
+                      data-status=classRoom.status
+                      data-id=classRoom._id
+                      type="classRoom"
+                      ) Đã hoàn thành
+                
+                td 
+                  a(
+                    class="btn btn-secondary btn-sm"
+                    href=`${prefixAdmin}/classRoom/detail/${classRoom._id}`
+                  ) Chi tiết
+                  a(
+                    class="btn btn-warning btn-sm"
+                    href=`${prefixAdmin}/classRoom/edit/${classRoom._id}`
+                  ) Sửa
+                  button(
+                    class="btn btn-danger btn-sm ml-1"
+                    button-delete
+                    data-id=classRoom._id
+                    type="classRoom"
+                  ) Xóa
+          else
+            tr
+              td(colspan="4" class="text-center") 
+                h3 Chưa có lớp học phần nào được tạo
+

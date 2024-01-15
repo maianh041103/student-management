@@ -73,3 +73,31 @@ if (uploadImage) {
   })
 }
 //End preview image
+
+//Remove Student 
+const listButtonRemove = document.querySelectorAll("[button-remove]");
+if (listButtonRemove) {
+  for (const button of listButtonRemove) {
+    button.addEventListener("click", (e) => {
+      const check = confirm("Bạn có chắc chắn muốn xóa?");
+      if (check) {
+        e.preventDefault();
+        const studentId = button.getAttribute("data-student-id");
+        const classRoomId = button.getAttribute("data-class-id");
+        const type = button.getAttribute("type");
+        fetch(`http://localhost:3000/admin/${type}/remove/${classRoomId}/${studentId}`, {
+          method: "DELETE",
+          "headers": {
+            "Content-Type": "application/json"
+          }
+        })
+          .then(res => res.json())
+          .then(data => {
+            if (data.code == 200)
+              location.reload();
+          })
+      }
+    })
+  }
+}
+//End romove student

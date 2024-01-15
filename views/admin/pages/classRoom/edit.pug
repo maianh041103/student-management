@@ -1,0 +1,129 @@
+extends ../../layouts/default.pug
+include ../../mixins/moment.pug
+
+block main
+  h1(class="mb-4") Thêm mới lớp học phần
+
+  form(
+    action=`${prefixAdmin}/classRoom/edit/${classRoom._id}?_method=PATCH`
+    method="POST"
+  )
+    div(class="form-group")
+      label(for="name") Tên lớp học phần
+      input(
+        type="text"
+        class="form-control"
+        id="name"
+        name="name"
+        value=classRoom.name
+        required
+      )
+    
+    div(class="form-group")
+      label(for="id_teacher") Giảng viên
+      select(name="id_teacher" id="id_teacher" class="form-control")
+        option(disabled) -- Chọn --
+        each teacher in teachers
+          option(value=teacher._id selected=(teacher._id==classRoom.id_teacher)) #{teacher.name}
+        
+    div(class="form-group")
+      label(for="id_course") Môn học
+      select(name="id_course" id="id_course" class="form-control")
+        option(disabled) -- Chọn --
+        each course in courses
+          option(value=course._id selected=(course._id==classRoom.course)) #{course.name}
+    
+    div(class="form-group")
+      label(for="quantity") Số sinh viên
+      input(
+        type="number"
+        class="form-control"
+        id="quantity"
+        name="quantity"
+        min=0
+        value=classRoom.quantity
+        required
+      )
+
+    if(listStudent)
+      .card.mb-3
+        .card-header Danh sách sinh viên
+        .card-body 
+          table(
+            class="table table-hover table-sm"
+          )
+            thead
+              tr 
+                th STT
+                th Mã sinh viên
+                th Họ tên
+                th Ngày sinh
+                th Lớp quản lý
+                th Điểm quá trình
+                th Điểm thi
+                th Điểm hệ 10
+                th Điểm hệ 4
+                th Hành động
+            tbody    
+              each student, index in listStudent 
+                tr
+                  td #{index + 1}
+                  td #{student.studentCode}
+                  td #{student.name}
+                  td 
+                    +formatDate(student.birthday)
+                  th #{student.classManagementName}
+                  th #{student.pointProcess||""}
+                  th #{student.pointTest||""}
+                  th #{student.point10||""}
+                  th #{student.point4||""}
+                  th 
+                    button(
+                      class="btn btn-danger btn-sm ml-1"
+                      button-remove
+                      data-student-id=student._id
+                      data-class-id=classRoom._id
+                      type="classRoom"
+                    ) Xóa
+
+
+    div(class="form-group form-check form-check-inline")
+      input(
+        type="radio"
+        class="form-check-input"
+        id="statusActive"
+        name="status"
+        value="active"
+        checked = (classRoom.status=="active"?true:false)
+      )
+      label(for="statusActive" class="form-check-label") Hoạt động
+    div(class="form-group form-check form-check-inline")
+      input(
+        type="radio"
+        class="form-check-input"
+        id="statusCancel"
+        name="status"
+        value="cancel"
+        checked = (classRoom.status=="cancel"?true:false)
+      )
+      label(for="statusCancel" class="form-check-label") Đã hủy
+    div(class="form-group form-check form-check-inline")
+      input(
+        type="radio"
+        class="form-check-input"
+        id="statusComplete"
+        name="status"
+        value="complete"
+        checked = (classRoom.status=="complete"?true:false)
+      )
+      label(for="statusComplete" class="form-check-label") Hoàn thành
+
+    div(class="form-group")
+      button(
+        type="submit"
+        class="btn btn-primary"
+      ) Chỉnh sửa
+      a(
+        href=`${prefixAdmin}/classRoom/insertStudent/${classRoom._id}`
+        class="btn btn-success btn-block"
+      ) Thêm sinh viên
