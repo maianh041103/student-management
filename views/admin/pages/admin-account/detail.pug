@@ -1,0 +1,33 @@
+extends ../../layouts/default
+
+block main
+  if(account)
+    if(account.avatar)
+      image(src=account.avatar alt="Ảnh đại diện" style="width:200px")
+
+    if(account.fullName)
+      div(class="mb-4") Họ tên: #{account.fullName}
+    
+    if (account.email)
+      div(class="mb-4") Email: #{account.email}
+
+    if (account.phone)
+      div(class="mb-4") Số điện thoại: #{account.phone}
+
+    if (account.status)
+      div(class="mb-4")
+        span Trạng thái :
+        if (account.status === "active")
+          span(class="btn btn-success") Hoạt động
+        else
+          span(class="btn btn-danger") Dừng hoạt động
+
+    a(
+      class="btn btn-warning btn-sm"
+      href = `${prefixAdmin}/admin-account/edit/${account._id}`
+      ) <b>Chỉnh sửa</b>
+  else  
+    h1(class="mb-4") Không tìm thấy tài khoản 
+  
+
+    
