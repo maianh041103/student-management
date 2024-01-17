@@ -1,0 +1,95 @@
+extends ../../layouts/default
+
+block main 
+    h1 Trang tổng quan
+    .row.mt-4 
+        .col-12 
+            .card.mb-4 
+                .card-header Thông tin tài khoản 
+
+                .card-body 
+                    if(user.avatar)
+                        img(
+                            src=user.avatar 
+                            style="height: 100px;margin-bottom: 15px;"
+                        )
+                    if(user.fullName)
+                        p Họ tên: <b>#{user.fullName}</b>
+                    if(user.email)
+                        p Email: <b>#{user.email}</b>
+                    if(user.phone)
+                        p Số điện thoại: <b>#{user.phone}</b>
+        .col-6
+          .card.mb-4
+            .card-header Khoa
+            .card-body
+              p Số lượng: <b>#{data.departmentActive + data.departmentInactive}</b>
+              p Hoạt động: <b>#{data.departmentActive}</b>
+              p Dừng hoạt động: <b>#{data.departmentInactive}</b>
+
+        .col-6
+          .card.mb-4
+            .card-header Môn
+            .card-body
+              p Số lượng: <b>#{data.courseActive + data.courseInactive}</b>
+              p Hoạt động: <b>#{data.courseActive}</b>
+              p Dừng hoạt động: <b>#{data.courseInactive}</b>
+
+        .col-6
+          .card.mb-4
+            .card-header Lớp quản lý
+            .card-body
+              p Số lượng: <b>#{data.classManagementActive + data.classManagementCancel + data.classManagementComplete}</b>
+              p Hoạt động: <b>#{data.classManagementActive}</b>
+              p Đã hủy: <b>#{data.classManagementCancel}</b>
+              p Hoàn thành: <b>#{data.classManagementComplete}</b>
+          
+        .col-6
+          .card.mb-4
+            .card-header Lớp học phần
+            .card-body
+              p Số lượng: <b>#{data.classRoomActive + data.classRoomCancel + data.classRoomComplete}</b>
+              p Hoạt động: <b>#{data.classRoomActive}</b>
+              p Đã hủy: <b>#{data.classRoomCancel}</b>
+              p Hoàn thành: <b>#{data.classRoomComplete}</b>
+
+        .col-6
+          .card.mb-4
+            .card-header Giảng viên
+            .card-body
+              p Số lượng: <b>#{data.teacherActive + data.teacherInactive}</b>
+              p Đang dạy: <b>#{data.teacherActive}</b>
+              p Đang nghỉ: <b>#{data.teacherInactive}</b>
+
+        .col-6
+          .card.mb-4
+            .card-header Sinh viên
+            .card-body
+              p Số lượng: <b>#{data.studentActive + data.studentInactive + data.studentComplete}</b>
+              p Đang học: <b>#{data.studentActive}</b>
+              p Đang nghỉ: <b>#{data.studentInactive}</b>
+              p Đã tốt nghiệp: <b>#{data.studentComplete}</b>
+        
+        .col-6
+          .card.mb-4
+            .card-header Tài khoản quản lý
+            .card-body
+              p Số lượng: <b>#{data.accountAdminActive + data.accountAdminInactive}</b>
+              p Hoạt động: <b>#{data.accountAdminActive}</b>
+              p Dừng hoạt động: <b>#{data.accountAdminInactive}</b>
+
+        .col-6
+          .card.mb-4
+            .card-header Tài khoản giảng viên
+            .card-body
+              p Số lượng: <b>#{data.accountTeacherActive + data.accountTeacherInactive}</b>
+              p Hoạt động: <b>#{data.accountTeacherActive}</b>
+              p Dừng hoạt động: <b>#{data.accountTeacherInactive}</b>
+
+        .col-6
+          .card.mb-4
+            .card-header Tài khoản sinh viên
+            .card-body
+              p Số lượng: <b>#{data.accountStudentActive + data.accountStudentInactive}</b>
+              p Hoạt động: <b>#{data.accountStudentActive}</b>
+              p Dừng hoạt động: <b>#{data.accountStudentInactive}</b>

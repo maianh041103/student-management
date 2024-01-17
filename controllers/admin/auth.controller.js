@@ -70,7 +70,7 @@ module.exports.loginPOST = async (req, res) => {
     }
     if (account.password === md5(password)) {
       res.cookie("token", account.token);
-      res.redirect(`${systemConfig.prefixAdmin}/department`);
+      res.redirect(`${systemConfig.prefixAdmin}`);
       return;
     }
     else {
