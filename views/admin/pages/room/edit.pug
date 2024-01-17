@@ -1,0 +1,46 @@
+extends ../../layouts/default.pug
+
+block main
+  h1(class="mb-4") Sửa thông tin phòng học
+
+  form(
+    action=`${prefixAdmin}/room/edit/${room._id}?_method=PATCH`
+    method="POST"
+  )
+    div(class="form-group")
+      label(for="name") Tên phòng
+      input(
+        type="text"
+        class="form-control"
+        id="name"
+        name="name"
+        required
+        value=room.name
+      )
+    
+    div(class="form-group form-check form-check-inline")
+      input(
+        type="radio"
+        class="form-check-input"
+        id="statusActive"
+        name="status"
+        value="active"
+        checked = (room.status=="active"?true:false)
+      )
+      label(for="statusActive" class="form-check-label") Hoạt động
+    div(class="form-group form-check form-check-inline")
+      input(
+        type="radio"
+        class="form-check-input"
+        id="statusInActive"
+        name="status"
+        value="inactive"
+        checked = (room.status=="inactive"?true:false)
+      )
+      label(for="statusInActive" class="form-check-label") Dừng hoạt động
+
+    div(class="form-group")
+      button(
+        type="submit"
+        class="btn btn-primary"
+      ) Chỉnh sửa

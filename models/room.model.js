@@ -1,15 +1,12 @@
 const mongoose = require("mongoose");
 
-const scheduleSchema = new mongoose.Schema({
+const roomSchema = new mongoose.Schema({
   id: String,
-  time: Number, // ca học : 1 2 3
-  id_classRoom: String,
-  id_room: String,
-  id_teacher: Array,
+  name: String,
   status: String,
   deleted: {
     type: Boolean,
-    deleted: false
+    default: false
   },
   deletedAt: Date,
   createdBy: {
@@ -26,6 +23,6 @@ const scheduleSchema = new mongoose.Schema({
   }
 });
 
-const Schedule = mongoose.model("Schedule", scheduleSchema, "schedules");
+const Room = mongoose.model("Room", roomSchema, "rooms");
 
-module.exports = Schedule;
+module.exports = Room;

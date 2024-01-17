@@ -1,0 +1,44 @@
+extends ../../layouts/default.pug
+
+block main
+  h1(class="mb-4") Thêm mới phòng học
+
+  form(
+    action=`${prefixAdmin}/room/create`
+    method="POST"
+  )
+    div(class="form-group")
+      label(for="name") Tên phòng *
+      input(
+        type="text"
+        class="form-control"
+        id="name"
+        name="name"
+        required
+      )
+
+    div(class="form-group form-check form-check-inline")
+      input(
+        type="radio"
+        class="form-check-input"
+        id="statusActive"
+        name="status"
+        value="active"
+        checked
+      )
+      label(for="statusActive" class="form-check-label") Hoạt động
+    div(class="form-group form-check form-check-inline")
+      input(
+        type="radio"
+        class="form-check-input"
+        id="statusInActive"
+        name="status"
+        value="inactive"
+      )
+      label(for="statusInActive" class="form-check-label") Dừng hoạt động
+
+    div(class="form-group")
+      button(
+        type="submit"
+        class="btn btn-primary"
+      ) Tạo mới
