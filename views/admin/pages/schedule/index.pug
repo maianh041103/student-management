@@ -1,0 +1,79 @@
+extends ../../layouts/default
+include ../../mixins/moment.pug
+
+block main 
+  h1(class="mb-4") Danh sách thời khóa biểu
+  .card.mb-3
+    .card-header Danh sách
+    .card-body 
+      .row 
+        .col-8 
+          .col-4.text-right 
+            a(
+              href=`${prefixAdmin}/schedule/create`
+              class="btn btn-outline-success"
+            ) +Thêm mới
+
+      table(
+        class="table table-hover table-sm"
+      )
+        thead
+          tr 
+            th STT 
+            th Mã lớp
+            th Tên lớp 
+            th Trạng thái
+            th Hành động
+        tbody 
+          if(data && data.length>0)
+            each schedule,index in data
+              tr 
+                td #{index+1}
+                td #{schedule.id}
+                td #{schedule.name}
+                td 
+                  if(schedule.status == "complete")
+                    a(
+                      href="javascript:;" 
+                      class="badge text-bg-success"
+                      data-status=schedule.status
+                      data-id=schedule._id 
+                      type="schedule"
+                      ) Đã xếp lịch
+                  else if (schedule.status == "progress")
+                    a(
+                      href="javascript:;" 
+                      class="badge text-bg-danger"
+                      data-status=schedule.status
+                      data-id=schedule._id
+                      type="schedule"
+                      ) Đang xếp lịch
+                  else 
+                    a(
+                      href="javascript:;" 
+                      class="badge text-bg-primary"
+                      data-status=schedule.status
+                      data-id=schedule._id
+                      type="schedule"
+                      ) Chưa xếp lịch
+                
+                td 
+                  a(
+                    class="btn btn-secondary btn-sm"
+                    href=`${prefixAdmin}/schedule/detail/${schedule._id}`
+                  ) Chi tiết
+                  a(
+                    class="btn btn-warning btn-sm"
+                    href=`${prefixAdmin}/schedule/edit/${schedule._id}`
+                  ) Sửa
+                  button(
+                    class="btn btn-danger btn-sm ml-1"
+                    button-delete
+                    data-id=student._id
+                    type="student"
+                  ) Xóa
+          else
+            tr
+              td(colspan="4" class="text-center") 
+                h3 Không có sinh viên
+

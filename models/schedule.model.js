@@ -2,11 +2,16 @@ const mongoose = require("mongoose");
 
 const scheduleSchema = new mongoose.Schema({
   id: String,
-  time: Number, // ca học : 1 2 3
   id_classRoom: String,
-  id_room: String,
-  id_teacher: Array,
-  status: String,
+  schedule: [
+    {
+      time: Number, // ca học : 1 2 3
+      date: Number, //thứ 2 3 4
+      id_room: String,
+      id_teacher: Array,
+    }
+  ],
+  status: String, //progress, complete
   deleted: {
     type: Boolean,
     deleted: false
