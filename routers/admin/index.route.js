@@ -14,6 +14,7 @@ const dashboardRoute = require('./dashboard.route');
 const adminAccountRoute = require('./admin-account.route');
 const roomRoute = require('./room.route');
 const scheduleRoute = require("./schedule.route");
+const professionalTeamRoute = require("./professionalTeam.route");
 
 const authMiddlerware = require('../../middlerware/auth.middlerware');
 
@@ -33,4 +34,5 @@ module.exports = async (app) => {
   app.use(`${systemConfig.prefixAdmin}/admin-account`, authMiddlerware.auth, adminAccountRoute);
   app.use(`${systemConfig.prefixAdmin}/room`, authMiddlerware.auth, roomRoute);
   app.use(`${systemConfig.prefixAdmin}/schedule`, authMiddlerware.auth, scheduleRoute);
+  app.use(`${systemConfig.prefixAdmin}/professionalTeam`, authMiddlerware.auth, professionalTeamRoute);
 }

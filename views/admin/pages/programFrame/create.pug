@@ -9,15 +9,15 @@ block main
   )
     div(class="form-group")
       label(for="id_department") Thuộc khoa
-      select(name="id_department" id="id_department" class="form-control")
-        option(disabled) -- Chọn --
+      select(name="id_department" id="id_department" class="form-control" departmentId)
+        option(disabled selected=true) -- Chọn --
         each department in departments
           option(value=department._id) #{department.name}
       
     div(class="form-group")
       label(for="semester") Học kỳ
-      select(name="semester" id="semester" class="form-control")
-        option(disabled) -- Chọn --
+      select(name="semester" id="semester" class="form-control" semester)
+        option(disabled selected=true) -- Chọn --
         -for(let i = 1;i<=12;i++)
           option(value=i) Học kỳ #{i}
     
@@ -28,11 +28,12 @@ block main
         table-courses
       )
         tbody
-          each course in listCourse
-            tr 
-              td(class="text-center") 
-                input(type="checkbox" name="id_course" value=course._id)
-              td #{course.name}
+          div(divCourse)
+          //- each course in listCourse
+          //-   tr 
+          //-     td(class="text-center") 
+          //-       input(type="checkbox" name="id_course" value=course._id)
+          //-     td #{course.name}
    
     div(class="form-group form-check form-check-inline")
       input(
@@ -58,3 +59,5 @@ block main
         type="submit"
         class="btn btn-primary"
       ) Tạo mới
+
+  script(src="/admin/js/programFrame.js")

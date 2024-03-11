@@ -45,6 +45,56 @@ module.exports.create = async (req, res) => {
   })
 }
 
+//[GET] /admin/programFrame/create/getData?departmentId=?&semester=?
+module.exports.createGetData = async (req, res) => {
+  try {
+    const departmentId = req.query.departmentId;
+    const semester = req.query.semester;
+    const programFrameExists = await ProgramFrame.findOne({
+      id_department: departmentId,
+      semester: semester
+    });
+
+    const listCourse = await Course.find({
+      deleted: false,
+      status: "active"
+    });
+
+    if (programFrameExists) {
+      res.json({
+        code: 200,
+        status: "exists",
+        listCourseSelected: programFrameExists.id_course,
+        listCourse: listCourse
+      })
+    } else {
+      const listProgramFrameByDepartmentId = await ProgramFrame.find({
+        id_department: departmentId
+      });
+
+      listCourses = [];
+      for (const programFrame of listProgramFrameByDepartmentId) {
+        listCourseTmp = programFrame.id_course;
+        listCourseTmp.forEach(item => {
+          listCourses.push(item);
+        })
+      }
+
+      res.json({
+        code: 200,
+        status: "none",
+        listCourseSelected: listCourses,
+        listCourse: listCourse
+      })
+    }
+  } catch (error) {
+    res.json({
+      code: 400,
+      message: "Error"
+    })
+  }
+}
+
 //[POST] /admin/programFrame/createPOST
 module.exports.createPOST = async (req, res) => {
   try {
@@ -117,19 +167,38 @@ module.exports.edit = async (req, res) => {
       _id: req.params.id,
       deleted: false
     });
-    const departments = await Department.find({
-      deleted: false
+
+    const departmentId = programFrame.id_department;
+
+    const department = await Department.findOne({
+      _id: departmentId
     });
+
+    const programFramesExists = await ProgramFrame.find({
+      id_department: departmentId,
+      semester: { $ne: programFrame.semester }
+    });
+
+    listCourseExists = [];
+    for (const programFrame of programFramesExists) {
+      const courses = programFrame.id_course;
+      courses.forEach(item => {
+        listCourseExists.push(item);
+      })
+    }
+
     const listCourse = await Course.find({
       deleted: false,
-      status: "active"
+      status: "active",
+      _id: { $nin: listCourseExists }
     });
 
     res.render("admin/pages/programFrame/edit.pug", {
       pageTitle: "Sửa chương trình khung",
       programFrame: programFrame,
-      departments: departments,
-      listCourse: listCourse
+      listCourse: listCourse,
+      department: department,
+
     })
   } catch (error) {
     console.log(error);
@@ -141,7 +210,6 @@ module.exports.edit = async (req, res) => {
 //[PATCH] /admin/programFrame/edit/:id
 module.exports.editPATCH = async (req, res) => {
   try {
-    req.body.semester = parseInt(req.body.semester);
     const programFrameExists = await ProgramFrame.findOne({
       semester: req.body.semester,
       id_department: req.body.id_department

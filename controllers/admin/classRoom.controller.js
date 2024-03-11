@@ -7,6 +7,7 @@ const Department = require('../../models/department.model');
 
 const { systemConfig } = require('../../config/system');
 const calcHelper = require('../../helpers/calc.helper');
+const generateYearHelper = require('../../helpers/generate.year.helper');
 
 //[GET] /admin/classRoom/
 module.exports.index = async (req, res) => {
@@ -56,6 +57,24 @@ module.exports.create = async (req, res) => {
 module.exports.createPOST = async (req, res) => {
   try {
     req.body.quantity = parseInt(req.body.quantity);
+    var currentDate = new Date();
+    const month = currentDate.getMonth() + 1;
+    const year = currentDate.getFullYear();
+    // T9->12: HK1 T1->T5: HK2 T6->T8 : HK3 
+    let semester;
+    let strYear;
+    if (month >= 9 && month <= 12) {
+      semester = 1;
+      strYear = `${year}-${year + 1}`;
+    } else if (month >= 1 && month <= 5) {
+      semester = 2;
+      strYear = `${year - 1}-${year}`
+    } else {
+      semester = 3;
+      strYear = `${year - 1}-${year}`
+    }
+    req.body.semester = semester;
+    req.body.year = strYear;
     const newClassRoom = new ClassRoom(req.body);
     await newClassRoom.save();
     req.flash("success", "Thêm mới lớp học phần thành công");
@@ -162,13 +181,15 @@ module.exports.edit = async (req, res) => {
       }
       listStudent.push(student);
     }
+    const listYear = generateYearHelper.generateYear();
 
     res.render("admin/pages/classRoom/edit", {
       pageTitle: "Chỉnh sửa lớp học phần",
       classRoom: classRoom,
       teachers: teachers,
       courses: courses,
-      listStudent: listStudent
+      listStudent: listStudent,
+      listYear: listYear
     })
   } catch (error) {
     console.log(error);
@@ -181,6 +202,7 @@ module.exports.edit = async (req, res) => {
 module.exports.editPATCH = async (req, res) => {
   try {
     req.body.quantity = parseInt(req.body.quantity);
+    req.body.semester = parseInt(req.body.semester);
     await ClassRoom.updateOne({
       _id: req.params.id,
       deleted: false

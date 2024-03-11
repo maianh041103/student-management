@@ -18,6 +18,12 @@ block main
     if(classRoom.listStudent && classRoom.quantity)
       div(class="mb-4") Số chỗ trống : #{classRoom.quantity - classRoom.listStudent.length}
 
+    if(classRoom.semester)
+      div(class="mb-4") Học kỳ : #{classRoom.semester}
+
+    if(classRoom.year)
+      div(class="mb-4") Năm học : #{classRoom.year}
+
     if(listStudent)
       .card.mb-3
         .card-header Danh sách sinh viên

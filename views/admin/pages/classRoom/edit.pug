@@ -45,6 +45,25 @@ block main
         required
       )
 
+    div(class="form-group")
+      label(for="semester") Học kỳ
+      input(
+        type="number"
+        class="form-control"
+        id="semester"
+        name="semester"
+        min=0
+        value=classRoom.semester
+        required
+      )
+
+    div(class="form-group")
+      label(for="year") Năm học
+      select(name="year" id="year" class="form-control")
+        option(disabled) -- Chọn --
+        for i in listYear
+          option(value=i) #{i}
+
     if(listStudent)
       .card.mb-3
         .card-header Danh sách sinh viên
@@ -64,54 +83,55 @@ block main
                 th Điểm hệ 10
                 th Điểm hệ 4
                 th Hành động
-            tbody    
-              each student, index in listStudent 
-                tr
-                  td #{index + 1}
-                  td #{student.studentCode}
-                  td #{student.name}
-                  td 
-                    +formatDate(student.birthday)
-                  td #{student.classManagementName}
-                  td 
-                    input(
-                      type="number"
-                      class="form-control"
-                      id="pointProcess"
-                      name="pointProcess"
-                      point-process 
-                      student-id=student._id
-                      min=0
-                      value=student.dataPoint.pointProcess
-                    )
-                  td 
-                    input(
-                      type="number"
-                      class="form-control"
-                      id="pointTest"
-                      name="pointTest"
-                      point-test
-                      student-id=student._id
-                      min=0
-                      value=student.dataPoint.pointTest
-                    )
-                  td #{student.dataPoint.point10}
-                  td #{student.dataPoint.point4}
-                  td 
-                    button(
-                      class="btn btn-warning btn-sm ml-1"
-                      button-edit
-                      data-student-id=student._id
-                      data-class-id=classRoom._id
-                      type="classRoom"
-                    ) Chỉnh sửa
-                    button(
-                      class="btn btn-danger btn-sm ml-1"
-                      button-remove
-                      data-student-id=student._id
-                      data-class-id=classRoom._id
-                      type="classRoom"
-                    ) Xóa
+            tbody  
+              if(listStudent.length > 0)  
+                each student, index in listStudent 
+                  tr
+                    td #{index + 1}
+                    td #{student.studentCode}
+                    td #{student.name}
+                    td 
+                      +formatDate(student.birthday)
+                    td #{student.classManagementName}
+                    td 
+                      input(
+                        type="number"
+                        class="form-control"
+                        id="pointProcess"
+                        name="pointProcess"
+                        point-process 
+                        student-id=student._id
+                        min=0
+                        value=student.dataPoint.pointProcess
+                      )
+                    td 
+                      input(
+                        type="number"
+                        class="form-control"
+                        id="pointTest"
+                        name="pointTest"
+                        point-test
+                        student-id=student._id
+                        min=0
+                        value=student.dataPoint.pointTest
+                      )
+                    td #{student.dataPoint.point10}
+                    td #{student.dataPoint.point4}
+                    td 
+                      button(
+                        class="btn btn-warning btn-sm ml-1"
+                        button-edit
+                        data-student-id=student._id
+                        data-class-id=classRoom._id
+                        type="classRoom"
+                      ) Chỉnh sửa
+                      button(
+                        class="btn btn-danger btn-sm ml-1"
+                        button-remove
+                        data-student-id=student._id
+                        data-class-id=classRoom._id
+                        type="classRoom"
+                      ) Xóa
 
 
     div(class="form-group form-check form-check-inline")

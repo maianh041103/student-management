@@ -24,7 +24,9 @@ module.exports.index = async (req, res) => {
       dataClassRoom["status"] = schedule ? "complete" : "progress";
     }
     data.push(dataClassRoom);
+
   }
+  console.log(data);
   res.render("admin/pages/schedule/index.pug", {
     pageTitle: "Danh sách thời khóa biểu",
     data: data

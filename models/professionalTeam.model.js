@@ -2,13 +2,10 @@ const mongoose = require('mongoose');
 const slug = require('mongoose-slug-updater');
 mongoose.plugin(slug);
 
-const courseSchema = new mongoose.Schema({
+const professionalTeamSchema = new mongoose.Schema({
   id: String,
   name: String,
-  id_professionalTeam: String,
-  credits: Number, //Số tín chỉ
-  theory: Number, //tiết lý thuyết
-  practice: Number, //tiết thực hành
+  id_teacher: String,
   status: String,
   deleted: {
     type: Boolean,
@@ -32,8 +29,9 @@ const courseSchema = new mongoose.Schema({
     slug: "name",
     unique: true
   }
-})
+});
 
-const Course = mongoose.model("Course", courseSchema, "courses");
+const ProfessionalTeam = mongoose.model("ProfessionalTeam", professionalTeamSchema, "professionalTeams");
 
-module.exports = Course;
+module.exports = ProfessionalTeam;
+

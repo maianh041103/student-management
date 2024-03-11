@@ -23,6 +23,8 @@ block main
             th Tên môn
             th Giảng viên
             th Số sinh viên
+            th Học kỳ
+            th Năm học
             th Trạng thái
             th Hành động
         tbody 
@@ -34,6 +36,8 @@ block main
                 td #{classRoom.courseName}
                 td #{classRoom.teacherName}
                 td #{classRoom.listStudent.length}
+                td #{classRoom.semester?classRoom.semester:""}
+                td #{classRoom.year?classRoom.year:""}
                 td 
                   if(classRoom.status == "active")
                     a(

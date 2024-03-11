@@ -7,19 +7,9 @@ block main
     action=`${prefixAdmin}/programFrame/edit/${programFrame._id}?_method=PATCH`
     method="POST"
   )
-    div(class="form-group")
-      label(for="id_department") Thuộc khoa
-      select(name="id_department" id="id_department" class="form-control")
-        option(disabled) -- Chọn --
-        each department in departments
-          option(value=department._id selected=(department._id==programFrame.id_department?true:false)) #{department.name}
+    div Tên khoa :  #{department.name}
       
-    div(class="form-group")
-      label(for="semester") Học kỳ
-      select(name="semester" id="semester" class="form-control")
-        option(disabled) -- Chọn --
-        -for(let i = 1;i<=12;i++)
-          option(value=i selected=(programFrame.semester==i?true:false)) Học kỳ #{i}
+    div Học kỳ : #{programFrame.semester}
     
     div(class="form-group")
       label(for="id_course") Danh sách môn học

@@ -148,3 +148,19 @@ if (listButtonEdit) {
   }
 }
 //End button edit student
+
+//Table schedule
+const tableSchedule = document.querySelector("[name-table]");
+if (tableSchedule) {
+  tableSchedule.addEventListener("click", (e) => {
+    const dataCells = tableSchedule.querySelectorAll("[row]");
+    for (const item of dataCells) {
+      item.addEventListener("click", e => {
+        const value = item.getAttribute("value");
+        console.log(value);
+      })
+    }
+  })
+}
+
+//End table schedule

@@ -1,0 +1,132 @@
+extends ../../layouts/default.pug
+include ../../mixins/moment.pug
+
+block main
+  h1(class="mb-4") Sửa thông tin bộ môn
+
+  form(
+    action=`${prefixAdmin}/professionalTeam/edit/${professionalTeam._id}?_method=PATCH`
+    method="POST"
+  )
+    div(class="form-group")
+      label(for="name") Tên bộ môn*
+      input(
+        type="text"
+        class="form-control"
+        id="name"
+        name="name"
+        required
+        value=professionalTeam.name
+      )
+    
+    div(class="form-group")
+      label(for="id_teacher") Trưởng bộ môn
+      select(name="id_teacher" id="id_teacher" class="form-control")
+        option(disabled) -- Chọn --
+        each teacher in teachers
+          option(value=teacher._id selected=(teacher._id == professionalTeam.id_teacher?true:false)) #{teacher.name}
+
+    if(teachers)
+      .card.mb-3
+        .card-header Danh sách giảng viên của bộ môn
+        .card-body 
+          table(
+            class="table table-hover table-sm"
+          )
+            thead
+              tr 
+                th STT
+                th Mã giảng viên
+                th Họ tên
+                th Ngày sinh
+                th Giới tính
+                th Quê quán
+                th Số điện thoại
+                th Hệ số lương
+                th Hành động
+            tbody    
+              each teacher, index in teacherOfProfessionalTeam 
+                tr
+                  td #{index + 1}
+                  td #{teacher.teacherCode}
+                  td #{teacher.name}
+                  td 
+                    +formatDate(teacher.birthday)
+                  td #{teacher.gender}
+                  td #{teacher.countryside}
+                  td #{teacher.phone}
+                  td #{teacher.salary}
+                  th 
+                    button(
+                      class="btn btn-danger btn-sm ml-1"
+                      button-remove
+                      data-teacher-id=teacher._id
+                      data-class-id=professionalTeam._id
+                      type="professionalTeam"
+                    ) Xóa
+
+    if(teachers)
+      .card.mb-3
+        .card-header Danh sách môn 
+        .card-body 
+          table(
+            class="table table-hover table-sm"
+          )
+            thead
+              tr 
+                th STT
+                th Mã môn
+                th Tên môn
+                th Số tín chỉ
+                th Hành động
+            tbody    
+              each course, index in courses 
+                tr
+                  td #{index + 1}
+                  td #{course._id}
+                  td #{course.name}
+                  td #{course.credits}
+                
+                  th 
+                    button(
+                      class="btn btn-danger btn-sm ml-1"
+                      button-remove
+                      data-teacher-id=teacher._id
+                      data-class-id=professionalTeam._id
+                      type="professionalTeam"
+                    ) Xóa
+
+    div(class="form-group form-check form-check-inline")
+      input(
+        type="radio"
+        class="form-check-input"
+        id="statusActive"
+        name="status"
+        value="active"
+        checked = (professionalTeam.status=="active"?true:false)
+      )
+      label(for="statusActive" class="form-check-label") Hoạt động
+    div(class="form-group form-check form-check-inline")
+      input(
+        type="radio"
+        class="form-check-input"
+        id="statusInActive"
+        name="status"
+        value="inactive"
+        checked = (professionalTeam.status=="inactive"?true:false)
+      )
+      label(for="statusInActive" class="form-check-label") Dừng hoạt động
+
+    div(class="form-group")
+      button(
+        type="submit"
+        class="btn btn-primary"
+      ) Chỉnh sửa
+      a(
+        href=`${prefixAdmin}/professionalTeam/insertTeacher/${professionalTeam._id}`
+        class="btn btn-success btn-block"
+      ) Thêm giảng viên
+      a(
+        href=`${prefixAdmin}/professionalTeam/insertCourse/${professionalTeam._id}`
+        class="btn btn-success btn-block"
+      ) Thêm môn học

@@ -6,6 +6,8 @@ route.get("/", controller.index);
 
 route.get("/create", controller.create);
 
+route.get("/create/getData", controller.createGetData);
+
 route.post("/create", controller.createPOST);
 
 route.get("/detail/:id", controller.detail);

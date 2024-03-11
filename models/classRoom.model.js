@@ -13,6 +13,8 @@ const ClassRoomSchema = new mongoose.Schema({
     pointProcess: Number, //điểm qt
     pointTest: Number //điểm ck
   }],
+  semester: Number,
+  year: String,
   status: String,
   deleted: {
     type: Boolean,
