@@ -4,6 +4,7 @@ const Course = require('../../models/course.model');
 const Student = require('../../models/student.model');
 const ClassManagement = require('../../models/classManagement.model');
 const Department = require('../../models/department.model');
+const ProgramFrame = require('../../models/programFrame.model');
 
 const { systemConfig } = require('../../config/system');
 const calcHelper = require('../../helpers/calc.helper');
@@ -20,7 +21,7 @@ module.exports.index = async (req, res) => {
         deleted: false,
         _id: classRoom.id_teacher
       });
-      classRoom.teacherName = teacher.name;
+      classRoom.teacherName = teacher?.name || "";
       const course = await Course.findOne({
         deleted: false,
         _id: classRoom.id_course
@@ -34,7 +35,7 @@ module.exports.index = async (req, res) => {
   } catch (error) {
     console.log(error);
     req.flash("Không thể mở danh sách lớp học phần");
-    res.redirect(back);
+    res.redirect("back");
   }
 }
 
@@ -86,6 +87,108 @@ module.exports.createPOST = async (req, res) => {
   }
 }
 
+//[GET] /admin/classRoom/generate
+module.exports.generate = async (req, res) => {
+  try {
+    const classManagements = await ClassManagement.find({
+      deleted: false,
+      status: "active"
+    });
+
+    let semester;
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
+    const currentMonth = currentDate.getMonth() + 1;
+
+    for (const classManagement of classManagements) {
+      if (currentMonth >= 9) {
+        semester = 1;
+      } else if (currentMonth >= 6) {
+        semester = 3;
+      } else {
+        semester = 2;
+      }
+
+      const yearStr = classManagement.yearStart;
+      let year;
+      if (currentMonth >= 9) {
+        year = yearStr.substring(0, 4);
+      }
+      else {
+        year = yearStr.substring(5, 9);
+      }
+      semester += (currentYear - year) * 3;
+      classManagement.semester = semester;
+    }
+
+    res.render("admin/pages/classRoom/generate.pug", {
+      pageTitle: "Sinh lớp học phần",
+      classManagements: classManagements
+    })
+
+  } catch (error) {
+    req.flash("Lỗi trong quá trình tìm lớp");
+    res.redirect("back");
+  }
+}
+
+//[POST] /admin/classRoom/generatePOST
+module.exports.generatePOST = async (req, res) => {
+  try {
+    const dataResult = JSON.parse(req.body.listClassManagement);
+    for (const item of dataResult) {
+      const classManagement = await ClassManagement.findOne({
+        deleted: false,
+        _id: item.split("-")[0]
+      });
+      const semester = parseInt(item.split("-")[1]);
+      const programFrame = await ProgramFrame.findOne({
+        id_department: classManagement.id_department,
+        semester: semester
+      });
+      let year;
+      const currentDate = new Date();
+      const currentYear = currentDate.getFullYear();
+      if (semester == 1) {
+        year = `${currentYear}-${currentYear + 1}`;
+      } else {
+        year = `${currentYear - 1}-${currentYear}`;
+      }
+      const listIdCourse = programFrame.id_course;
+
+      const listStudent = await Student.find({
+        id_classManagement: item.split("-")[0],
+        deleted: false
+      });
+
+      const listStudentId = listStudent.map(student => {
+        return {
+          id_student: student._id
+        }
+      })
+
+      for (const idCourse of listIdCourse) {
+        const classRoomObject = {
+          name: `${classManagement.name}-${idCourse}`,
+          id_course: idCourse,
+          quantity: 50,
+          listStudent: listStudentId,
+          semester: semester,
+          year: year,
+          status: "active"
+        }
+        const newClassRoom = ClassRoom(classRoomObject);
+        await newClassRoom.save();
+      }
+    }
+    req.flash("success", "Generate lớp học phần thành công");
+    res.redirect(`${systemConfig.prefixAdmin}/classRoom`);
+  } catch (error) {
+    req.flash("Lỗi trong quá trình generate lớp học phần");
+    req.redirect("back");
+  }
+}
+
 //[GET] /admin/classRoom/detail/:id
 module.exports.detail = async (req, res) => {
   try {
@@ -97,7 +200,7 @@ module.exports.detail = async (req, res) => {
       _id: classRoom.id_teacher,
       deleted: false
     });
-    classRoom.teacherName = teacher.name;
+    classRoom.teacherName = teacher?.name || "";
     const course = await Course.findOne({
       _id: classRoom.id_course,
       deleted: false

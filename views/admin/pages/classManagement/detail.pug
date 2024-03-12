@@ -9,9 +9,12 @@ block main
     if(classManagement.teacherName)
       div(class="mb-4") Giảng viên : #{classManagement.teacherName}
 
-    if(classManagement.courseName)
-      div(class="mb-4") Môn học : #{classManagement.courseName}
-    
+    if(classManagement.id_department)
+      div(class="mb-4") Khoa quản lý : #{classManagement.departmentName}
+      
+    if(classManagement.yearStart)
+      div(class="mb-4") Năm bắt đầu : #{classManagement.yearStart}
+
     if(listStudent)
       div(class="mb-4") Số sinh viên : #{listStudent.length}
 

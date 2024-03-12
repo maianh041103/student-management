@@ -8,6 +8,10 @@ route.get("/create", controller.create);
 
 route.post("/create", controller.createPOST);
 
+route.get("/generate", controller.generate);
+
+route.post("/generate", controller.generatePOST);
+
 route.get("/detail/:id", controller.detail);
 
 route.get("/edit/:id", controller.edit);

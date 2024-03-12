@@ -162,5 +162,31 @@ if (tableSchedule) {
     }
   })
 }
-
 //End table schedule
+
+//Generate classRoom
+const formGenerateClassRoom = document.querySelector("[form-data='form-generate-classRoom']");
+if (formGenerateClassRoom) {
+  const tableGenerateClassRoom = document.querySelector("[table-generate-classRoom]");
+  if (tableGenerateClassRoom) {
+    const buttonGenerateClassRoom = document.querySelector("[button-generate-classRoom]");
+    if (buttonGenerateClassRoom) {
+      buttonGenerateClassRoom.addEventListener("click", (e) => {
+        e.preventDefault();
+        const check = confirm("Bạn có chắc chắn muốn sinh tự động các lớp học phần");
+        if (check) {
+          const input = document.querySelector("input[name='listClassManagement']");
+          const checkboxs = document.querySelectorAll("input[type=checkbox]:checked");
+          result = [];
+          checkboxs.forEach(checkbox => {
+            result.push(checkbox.value);
+          })
+          input.value = JSON.stringify(result);
+          formGenerateClassRoom.submit();
+        }
+      })
+
+    }
+  }
+}
+//End generate classRoom

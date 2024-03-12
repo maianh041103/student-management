@@ -64,10 +64,15 @@ module.exports.create = async (req, res) => {
 module.exports.createPOST = async (req, res) => {
   try {
     if (!req.body.yearStart) {
-      const currentDate = new Date();
-      req.body.yearStart = currentDate.getFullYear();
-    } else {
-      req.body.yearStart = parseInt(req.body.yearStart);
+      var currentDate = new Date();
+      const month = currentDate.getMonth() + 1;
+      const year = currentDate.getFullYear();
+      // T9->12: HK1 T1->T5: HK2 T6->T8 : HK3 
+      if (month >= 9) {
+        req.body.yearStart = `${year}-${year + 1}`;
+      } else {
+        req.body.yearStart = `${year - 1}-${year}`;
+      }
     }
     const newClass = new ClassManagement(req.body);
     await newClass.save();
@@ -162,8 +167,6 @@ module.exports.edit = async (req, res) => {
 //[PATCH] /admin/classManagement/edit/:id
 module.exports.editPATCH = async (req, res) => {
   try {
-    if (req.body.yearStart)
-      req.body.yearStart = parseInt(req.body.yearStart);
     await ClassManagement.updateOne({
       _id: req.params.id
     }, req.body);

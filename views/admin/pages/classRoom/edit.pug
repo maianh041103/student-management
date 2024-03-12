@@ -62,7 +62,7 @@ block main
       select(name="year" id="year" class="form-control")
         option(disabled) -- Chọn --
         for i in listYear
-          option(value=i) #{i}
+          option(value=i selected=(i==classRoom.year?true:false)) #{i}
 
     if(listStudent)
       .card.mb-3

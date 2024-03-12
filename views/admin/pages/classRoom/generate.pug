@@ -1,0 +1,37 @@
+extends ../../layouts/default
+
+block main 
+  h1(class="mb-4") Sinh lớp học phần
+  form(
+    form-data="form-generate-classRoom"
+    action=`${prefixAdmin}/classRoom/generate`
+    method="POST"
+  )
+
+    input(type="text" name="listClassManagement" class="d-none")
+
+    table(
+      class="table table-hover table-sm"
+      table-generate-classRoom
+    )
+      thead 
+        tr
+          th 
+          th Tên lớp
+          th Học kỳ
+      tbody
+        each classManagement in classManagements
+          tr
+            td(class="text-center") 
+              input(type="checkbox" value=`${classManagement._id}-${classManagement.semester}`)
+            td #{classManagement.name}
+            td #{classManagement.semester}
+    
+
+    div(class="form-group")
+      button(
+        button-generate-classRoom
+        type="submit"
+        class="btn btn-primary"
+      ) Tạo mới
+          
