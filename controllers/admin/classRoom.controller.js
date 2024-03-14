@@ -177,6 +177,7 @@ module.exports.generatePOST = async (req, res) => {
           year: year,
           status: "active"
         }
+
         const newClassRoom = ClassRoom(classRoomObject);
         await newClassRoom.save();
       }

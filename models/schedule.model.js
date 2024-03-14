@@ -7,14 +7,12 @@ const scheduleSchema = new mongoose.Schema({
     {
       time: Number, // ca học : 1 2 3
       date: Number, //thứ 2 3 4
-      id_room: String,
-      id_teacher: Array,
     }
   ],
-  status: String, //progress, complete
+  // status: String, //progress, complete
   deleted: {
     type: Boolean,
-    deleted: false
+    default: false
   },
   deletedAt: Date,
   createdBy: {

@@ -155,7 +155,7 @@ module.exports.insertTeacher = async (req, res) => {
 //[POST] /admin/professionalTeam/insertTeacher/:id
 module.exports.insertTeacherPOST = async (req, res) => {
   try {
-    
+
     const dataTeacherId = req.body.id_teacher || []
     let listTeacherId = [];
     if (typeof dataTeacherId == "string") {
@@ -163,7 +163,6 @@ module.exports.insertTeacherPOST = async (req, res) => {
     } else {
       listTeacherId = dataTeacherId;
     }
-    const teacher = 
     console.log(listTeacherId);
     // req.flash("success", "Thêm sinh viên vào lớp học phần thành công");
     // res.redirect(`${systemConfig.prefixAdmin}/classRoom/edit/${req.params.id}`);
