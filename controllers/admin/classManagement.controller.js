@@ -2,6 +2,7 @@ const ClassManagement = require('../../models/classManagement.model');
 const Department = require('../../models/department.model');
 const Teacher = require('../../models/teacher.model');
 const Student = require('../../models/student.model');
+const Room = require('../../models/room.model');
 
 const { systemConfig } = require('../../config/system');
 const calcHelper = require('../../helpers/calc.helper');
@@ -35,6 +36,13 @@ module.exports.index = async (req, res) => {
     });
 
     classManagement.listStudent = listStudent;
+
+    const room = await Room.findOne({
+      _id: classManagement.id_room
+    });
+    if (room) {
+      classManagement.roomName = room.name;
+    }
   }
 
   res.render("admin/pages/classManagement/index.pug", {
@@ -53,10 +61,25 @@ module.exports.create = async (req, res) => {
     deleted: false
   });
 
+  const classManagements = await ClassManagement.find({
+    deleted: false
+  });
+
+  let listRoomId = [];
+  classManagements.forEach(item => {
+    listRoomId.push(item.id_room);
+  });
+
+  const rooms = await Room.find({
+    deleted: false,
+    _id: { $nin: listRoomId }
+  });
+
   res.render("admin/pages/classManagement/create", {
     pageTitle: "Thêm lớp quản lý",
     departments: departments,
-    teachers: teachers
+    teachers: teachers,
+    rooms: rooms
   })
 }
 
@@ -105,6 +128,12 @@ module.exports.detail = async (req, res) => {
     });
     classManagement.teacherName = teacher.name;
 
+    const room = await Room.findOne({
+      deleted: false,
+      _id: classManagement.id_room
+    });
+    classManagement.roomName = room.name;
+
     const listStudent = await Student.find({
       id_classManagement: classManagement._id,
       deleted: false
@@ -145,6 +174,18 @@ module.exports.edit = async (req, res) => {
       status: "active"
     });
 
+    const classManagements = await ClassManagement.find({
+      deleted:false
+    });
+    let listRoomId = [];
+    classManagements.forEach(item => {
+      listRoomId.push(item.id_room);
+    });
+    const rooms = await Room.find({
+      deleted: false,
+      _id: { $nin: listRoomId }
+    });
+
     const listStudent = await Student.find({
       id_classManagement: classManagement._id,
       deleted: false
@@ -155,6 +196,7 @@ module.exports.edit = async (req, res) => {
       classManagement: classManagement,
       departments: departments,
       teachers: teachers,
+      rooms: rooms,
       listStudent: listStudent
     });
   } catch (error) {

@@ -7,6 +7,7 @@ const classManagementSchema = new mongoose.Schema({
   name: String,
   id_teacher: String,
   id_department: String, //id khoa
+  id_room: String,
   yearStart: String,
   status: String,
   deleted: {

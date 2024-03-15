@@ -15,6 +15,9 @@ block main
     if(classManagement.yearStart)
       div(class="mb-4") Năm bắt đầu : #{classManagement.yearStart}
 
+    if(classManagement.id_room)
+      div(class="mb-4") Phòng học : #{classManagement.roomName}
+
     if(listStudent)
       div(class="mb-4") Số sinh viên : #{listStudent.length}
 

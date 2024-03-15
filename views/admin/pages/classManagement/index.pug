@@ -24,6 +24,7 @@ block main
             th Chủ nhiệm
             th Số sinh viên
             th Năm bắt đầu
+            th Phòng học
             th Trạng thái
             th Hành động
         tbody 
@@ -36,6 +37,7 @@ block main
                 td #{classManagement.teacherName}
                 td #{classManagement.listStudent.length}
                 td #{classManagement.yearStart}
+                td #{classManagement.roomName}
                 td 
                   if(classManagement.status == "active")
                     a(

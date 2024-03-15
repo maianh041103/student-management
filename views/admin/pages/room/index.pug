@@ -19,7 +19,8 @@ block main
         thead
           tr 
             th STT 
-            th Tên phòng
+            th Tên phòng 
+            th Lớp học
             th Trạng thái
             th Hành động
         tbody 
@@ -28,6 +29,7 @@ block main
               tr 
                 td #{index+1}
                 td #{room.name}
+                td #{room.classManagementName}
                 td 
                   if(room.status == "active")
                     a(

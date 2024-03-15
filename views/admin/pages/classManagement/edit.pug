@@ -44,6 +44,13 @@ block main
         value=classManagement.yearStart
       )
     
+    div(class="form-group")
+      label(for="id_room") Phòng học
+      select(name="id_room" id="id_room" class="form-control")
+        option(disabled selected value="") -- Chọn --
+        each room in rooms
+          option(value=room._id seleted=(room._id==classManagement.id_room)) #{room.name}
+    
     if(listStudent)
       .card.mb-3
         .card-header Danh sách sinh viên

@@ -54,6 +54,13 @@ block main
         required
       )
 
+    div(class="form-group")
+      label(for="id_room") Phòng học
+      select(name="id_room" id="id_room" class="form-control")
+        option(disabled) -- Chọn --
+        each room in rooms
+          option(value=room._id) #{room.name}
+
     div(class="form-group form-check form-check-inline")
       input(
         type="radio"

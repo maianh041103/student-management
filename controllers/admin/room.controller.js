@@ -1,12 +1,24 @@
 const Room = require("../../models/room.model")
 
 const { systemConfig } = require("../../config/system");
+const ClassManagement = require("../../models/classManagement.model");
 
 //[GET] /admin/room/
 module.exports.index = async (req, res) => {
   const rooms = await Room.find({
     deleted: false
   });
+
+  for (const room of rooms) {
+    const classManagement = await ClassManagement.findOne({
+      id_room: room._id,
+      deleted: false
+    });
+    if (classManagement)
+      room.classManagementName = classManagement.name;
+    else
+      room.classManagementName = "";
+  }
 
   res.render("admin/pages/room/index.pug", {
     pageTitle: "Danh sách phòng học",
