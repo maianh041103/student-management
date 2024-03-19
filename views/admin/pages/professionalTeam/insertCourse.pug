@@ -1,0 +1,40 @@
+extends ../../layouts/default.pug
+include ../../mixins/moment.pug
+
+block main
+  h1(class="mb-4") Thêm môn học vào tổ bộ môn
+
+  form(
+    action=`${prefixAdmin}/professionalTeam/insertCourse/${professionalTeamId}`
+    method="POST"
+  )
+    div(class="form-group")
+      <b>Danh sách môn học</b>
+      table(
+        class="table table-hover table-sm"
+        table-courses
+      )
+        thead 
+          tr 
+            th 
+            th Mã môn
+            th Tên môn
+            th Số tín chỉ
+            th Số tiết lý thuyết
+            th Số tiết thực hành
+        tbody
+          each course in courses
+            tr 
+              td(class="text-center") 
+                input(type="checkbox" name="id_course" value=course._id checked=(course.id_professionalTeam==professionalTeamId?true:false))
+              td #{course._id}
+              td #{course.name}
+              td #{course.credits}
+              td #{course.theory}
+              td #{course.practice}
+
+    div(class="form-group")
+      button(
+        type="submit"
+        class="btn btn-primary"
+      ) Thêm mới

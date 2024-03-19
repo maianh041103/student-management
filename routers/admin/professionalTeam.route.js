@@ -16,4 +16,8 @@ route.get("/insertTeacher/:id", controller.insertTeacher);
 
 route.post("/insertTeacher/:id", controller.insertTeacherPOST);
 
+route.get("/insertCourse/:id", controller.insertCourse);
+
+route.post("/insertCourse/:id", controller.insertCoursePOST);
+
 module.exports = route;

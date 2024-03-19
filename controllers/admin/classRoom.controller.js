@@ -224,8 +224,8 @@ module.exports.detail = async (req, res) => {
       }
       student.pointProcess = element.pointProcess;
       student.pointTest = element.pointTest;
-      student.point10 = await calcHelper.calcPoint10(element.pointProcess, element.pointTest);
-      student.point4 = await calcHelper.calcPoint10(student.point10);
+      student.point10 = calcHelper.calcPoint10(element.pointProcess, element.pointTest);
+      student.point4 = calcHelper.calcPoint4(student.point10);
       listStudent.push(student);
     }
     //End lấy thông tin sinh viên
@@ -273,7 +273,7 @@ module.exports.edit = async (req, res) => {
         _id: listStudentId[i],
         deleted: false
       });
-      point[i].point10 = await calcHelper.calcPoint10(point[i].pointProcess || 0, point[i].pointTest || 0);
+      point[i].point10 = calcHelper.calcPoint10(point[i].pointProcess || 0, point[i].pointTest || 0);
       point[i].point4 = calcHelper.calcPoint4(point[i].point10 || 0);
       student.dataPoint = point[i];
       const classManagement = await ClassManagement.findOne({
@@ -323,14 +323,40 @@ module.exports.editPATCH = async (req, res) => {
 //[GET] /admin/classRoom/indertStudent/:id
 module.exports.insertStudent = async (req, res) => {
   try {
+    let listClassIgnore = [];
     const classRoom = await ClassRoom.findOne({
       _id: req.params.id,
       deleted: false
     });
+    listClassIgnore.push(classRoom);
 
-    let listStudentId = [];
-    for (const element of classRoom.listStudent) {
-      listStudentId.push(element.id_student);
+    const listClassRoomActive = await ClassRoom.find({
+      id_course: classRoom.id_course,
+      status: "active"
+    });
+    listClassRoomActive.forEach(e => {
+      listClassIgnore.push(e);
+    });
+
+    const listClassRoomComplete = await ClassRoom.find({
+      id_course: classRoom.id_course,
+      status: "complete"
+    });
+
+    let listStudentId = [];  //Danh sách sinh viên bỏ qua
+    for (const classRoom of listClassIgnore) {
+      for (const element of classRoom.listStudent) {
+        listStudentId.push(element.id_student);
+      }
+    }
+
+    for (const classRoom of listClassRoomComplete) {
+      for (const element of classRoom.listStudent) {
+        const point = calcHelper.calcPoint10(element.pointProcess, element.pointTest);
+        if (point >= 5.5) {
+          listStudentId.push(element.id_student);
+        }
+      }
     }
 
     const listStudent = await Student.find({
@@ -502,6 +528,48 @@ module.exports.editStudent = async (req, res) => {
           'listStudent.$.pointTest': parseInt(data.pointTest)
         }
       })
+    res.json({
+      code: 200,
+      message: "Thành công"
+    })
+  } catch (error) {
+    console.log(error);
+    req.flash("error", "Chỉnh sửa thông tin sinh viên trong lớp học phần thất bại");
+    res.json({
+      code: 400,
+      message: "Thất bại"
+    })
+  }
+}
+
+//[PATCH] /admin/classRoom/save/:classId
+module.exports.saveStudent = async (req, res) => {
+  try {
+    const classId = req.params.classId;
+    const listPointProcess = req.body.listPointProcess;
+    const listPointTest = req.body.listPointTest;
+    const listStudentId = req.body.listStudentId;
+
+    let listStudent = [];
+    for (let i = 0; i < listStudentId.length; i++) {
+      let student = {
+        id_student: listStudentId[i]
+      }
+      if (listPointProcess[i]) {
+        student.pointProcess = parseFloat(listPointProcess[i]);
+      }
+      if (listPointTest[i]) {
+        student.pointTest = parseFloat(listPointTest[i]);
+      }
+      listStudent.push(student);
+    }
+
+    await ClassRoom.updateOne({
+      _id: classId,
+    }, {
+      listStudent: listStudent
+    })
+
     res.json({
       code: 200,
       message: "Thành công"

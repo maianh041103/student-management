@@ -163,14 +163,67 @@ module.exports.insertTeacherPOST = async (req, res) => {
     } else {
       listTeacherId = dataTeacherId;
     }
-    console.log(listTeacherId);
-    // req.flash("success", "Thêm sinh viên vào lớp học phần thành công");
-    // res.redirect(`${systemConfig.prefixAdmin}/classRoom/edit/${req.params.id}`);
 
-    res.send("OK");
+    await Teacher.updateMany({
+      _id: { $in: listTeacherId }
+    }, {
+      id_professionalTeam: req.params.id
+    });
+    req.flash("success", "Thêm giảng viên vào tổ chuyên môn thành công");
+    res.redirect(`${systemConfig.prefixAdmin}/professionalTeam/edit/${req.params.id}`);
   } catch (error) {
     console.log(error);
-    req.flash("error", "Thêm sinh viên vào lớp học phần thất bại");
+    req.flash("error", "Thêm giảng viên vào tổ chuyên môn thất bại");
+    res.redirect("back");
+  }
+}
+
+//[GET] /admin/professionalTeam/insertCourse/:id
+module.exports.insertCourse = async (req, res) => {
+  try {
+    const courses = await Course.find({
+      deleted: false,
+      $or: [{
+        id_professionalTeam: null
+      }, {
+        id_professionalTeam: req.params.id
+      }]
+    });
+
+    res.render("admin/pages/professionalTeam/insertCourse", {
+      pageTitle: "Thêm môn học",
+      professionalTeamId: req.params.id,
+      courses: courses
+    })
+  } catch (error) {
+    console.log(error);
+    req.flash("error", "Lỗi khi in ra danh sách môn học");
+    res.redirect("back");
+  }
+}
+
+//[POST] /admin/professionalTeam/insertCourse/:id
+module.exports.insertCoursePOST = async (req, res) => {
+  try {
+
+    const dataCourseId = req.body.id_course || []
+    let listCourseId = [];
+    if (typeof dataCourseId == "string") {
+      listCourseId.push(dataCourseId);
+    } else {
+      listCourseId = dataCourseId;
+    }
+
+    await Course.updateMany({
+      _id: { $in: listCourseId }
+    }, {
+      id_professionalTeam: req.params.id
+    });
+    req.flash("success", "Thêm môn học vào tổ chuyên môn thành công");
+    res.redirect(`${systemConfig.prefixAdmin}/professionalTeam/edit/${req.params.id}`);
+  } catch (error) {
+    console.log(error);
+    req.flash("error", "Thêm môn học vào tổ chuyên môn thất bại");
     res.redirect("back");
   }
 }

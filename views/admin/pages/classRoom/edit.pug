@@ -22,16 +22,16 @@ block main
     div(class="form-group")
       label(for="id_teacher") Giảng viên
       select(name="id_teacher" id="id_teacher" class="form-control")
-        option(disabled) -- Chọn --
+        option(disabled selected) -- Chọn --
         each teacher in teachers
           option(value=teacher._id selected=(teacher._id==classRoom.id_teacher)) #{teacher.name}
         
     div(class="form-group")
-      label(for="id_course") Môn học
+      label(for="id_course" selected) Môn học
       select(name="id_course" id="id_course" class="form-control")
         option(disabled) -- Chọn --
         each course in courses
-          option(value=course._id selected=(course._id==classRoom.course)) #{course.name}
+          option(value=course._id selected=(course._id==classRoom.id_course)) #{course.name}
     
     div(class="form-group")
       label(for="quantity") Số sinh viên
@@ -132,7 +132,12 @@ block main
                         data-class-id=classRoom._id
                         type="classRoom"
                       ) Xóa
-
+          button(
+            class="btn btn-warning btn-sm ml-1 float-end"
+            button-save
+            data-class-id=classRoom._id
+            type="classRoom"
+          ) Lưu
 
     div(class="form-group form-check form-check-inline")
       input(

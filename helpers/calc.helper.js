@@ -15,7 +15,7 @@ module.exports.calcCredits = async (programFrame) => {
   return sum;
 }
 
-module.exports.calcPoint10 = async (pointProcess, pointTest) => {
+module.exports.calcPoint10 = (pointProcess, pointTest) => {
   return Math.round((pointProcess * 0.3 + pointTest * 0.7) * 100) / 100;
 }
 

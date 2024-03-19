@@ -86,12 +86,11 @@ block main
                   td #{course._id}
                   td #{course.name}
                   td #{course.credits}
-                
-                  th 
+                  td
                     button(
                       class="btn btn-danger btn-sm ml-1"
                       button-remove
-                      data-teacher-id=teacher._id
+                      data-course-id=course._id
                       data-class-id=professionalTeam._id
                       type="professionalTeam"
                     ) Xóa

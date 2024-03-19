@@ -149,6 +149,59 @@ if (listButtonEdit) {
 }
 //End button edit student
 
+//Button save
+
+//End button save
+const listButtonSave = document.querySelectorAll("[button-save]");
+if (listButtonSave) {
+  for (const button of listButtonSave) {
+    button.addEventListener("click", (e) => {
+      e.preventDefault();
+      const check = confirm("Bạn có chắc chắn muốn lưu?");
+      if (check) {
+        const classRoomId = button.getAttribute("data-class-id");
+        const type = button.getAttribute("type");
+
+        const listInputPointProcess = document.querySelectorAll("[point-process]");
+
+        const listInputPointTest = document.querySelectorAll("[point-test]");
+
+        let listPointProcess = [];
+        let listPointTest = [];
+        let listStudentId = [];
+        listInputPointProcess.forEach(e => {
+          listPointProcess.push(e.value);
+          studentId = e.getAttribute("student-id");
+          listStudentId.push(studentId);
+        })
+        listInputPointTest.forEach(e => {
+          listPointTest.push(e.value);
+        })
+
+
+        const dataSendServer = {
+          listPointProcess: listPointProcess,
+          listPointTest: listPointTest,
+          listStudentId: listStudentId
+        }
+
+        fetch(`http://localhost:3000/admin/${type}/save/${classRoomId}`, {
+          method: "PATCH",
+          "headers": {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(dataSendServer)
+        })
+          .then(res => res.json())
+          .then(data => {
+            if (data.code == 200)
+              location.reload();
+          })
+      }
+    })
+  }
+}
+
 //Table schedule
 const tableSchedule = document.querySelector("[name-table]");
 if (tableSchedule) {
