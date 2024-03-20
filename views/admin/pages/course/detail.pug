@@ -1,57 +1,38 @@
 extends ../../layouts/default
 
 block main
-  if(course)
-    if(course.name)
-      div(class="mb-4") Tên môn : #{course.name}
+  if(user.permissions.includes("course_view"))
+    if(course)
+      if(course.name)
+        div(class="mb-4") Tên môn : #{course.name}
 
-    if(course.credits)
-      div(class="mb-4") Số tín chỉ : #{course.credits}
+      if(course.credits)
+        div(class="mb-4") Số tín chỉ : #{course.credits}
 
-    if(course.theory)
-      div(class="mb-4") Số tiết lý thuyết : #{course.theory}
+      if(course.theory)
+        div(class="mb-4") Số tiết lý thuyết : #{course.theory}
 
-    if(course.practice)
-      div(class="mb-4") Số tiết thực hành : #{course.practice}
+      if(course.practice)
+        div(class="mb-4") Số tiết thực hành : #{course.practice}
 
-    div(class="mb-4") Danh sách các lớp học phần 
-      
-    //- if(teachers)
-    //-   .card.mb-3
-    //-     .card-header Danh sách các lớp học phần
-    //-     .card-body 
-    //-       table(
-    //-         class="table table-hover table-sm"
-    //-       )
-    //-         thead
-    //-           tr 
-    //-             th STT 
-    //-             th Avatar
-    //-             th Họ tên
-    //-             th Mã giảng viên
-    //-         tbody    
-    //-           each teacher, index in teachers 
-    //-             tr
-    //-               th #{index + 1}
-    //-               th 
-    //-                 img(src=teacher.avatar style="width:100px")
-    //-               th #{teacher.name} #{(department.id_teacher==teacher._id)?"(Trưởng khoa)":""}
-    //-               th #{teacher._id}
+      div(class="mb-4") Danh sách các lớp học phần 
 
-    if (course.status)
-      div(class="mb-4")
-        span Trạng thái :
-        if (course.status === "active")
-          span(class="btn btn-success") Hoạt động
-        else
-          span(class="btn btn-danger") Dừng hoạt động
-
-    a(
-      class="btn btn-warning btn-sm"
-      href = `${prefixAdmin}/course/edit/${course._id}`
-      ) <b>Chỉnh sửa</b>
-  else  
-    h1(class="mb-4") Không tìm thấy môn học
+      if (course.status)
+        div(class="mb-4")
+          span Trạng thái :
+          if (course.status === "active")
+            span(class="btn btn-success") Hoạt động
+          else
+            span(class="btn btn-danger") Dừng hoạt động
+      if(user.permissions.includes("course_edit"))
+        a(
+          class="btn btn-warning btn-sm"
+          href = `${prefixAdmin}/course/edit/${course._id}`
+          ) <b>Chỉnh sửa</b>
+    else  
+      h1(class="mb-4") Không tìm thấy môn học
+  else 
+    h1 Không có quyền truy cập
   
 
     

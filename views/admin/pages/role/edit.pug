@@ -1,0 +1,60 @@
+extends ../../layouts/default.pug
+
+block main
+  if(user.permissions.includes("role_edit"))
+    h1(class="mb-4") Chỉnh sửa nhóm quyền
+
+    form(
+      action=`${prefixAdmin}/role/edit/${role._id}?_method=PATCH`
+      method="POST"
+    )
+      div(class="form-group")
+        label(for="name") Tên nhóm quyền *
+        input(
+          type="text"
+          class="form-control"
+          id="name"
+          name="name"
+          required
+          value=role.name
+        )
+
+      div(class="form-group")
+        label(for="description") Mô tả 
+        input(
+          type="text"
+          class="form-control"
+          id="description"
+          name="description"
+          required
+          value=role.description
+        )
+
+    div(class="form-group form-check form-check-inline")
+      input(
+        type="radio"
+        class="form-check-input"
+        id="statusActive"
+        name="status"
+        value="active"
+        checked = (role.status=="active"?true:false)
+      )
+      label(for="statusActive" class="form-check-label") Hoạt động
+    div(class="form-group form-check form-check-inline")
+      input(
+        type="radio"
+        class="form-check-input"
+        id="statusInActive"
+        name="status"
+        value="inactive"
+        checked = (role.status=="inactive"?true:false)
+      )
+      label(for="statusInActive" class="form-check-label") Dừng hoạt động
+
+    div(class="form-group")
+      button(
+        type="submit"
+        class="btn btn-primary"
+      ) Chỉnh sửa
+  else 
+    h1 Không có quyền truy cập

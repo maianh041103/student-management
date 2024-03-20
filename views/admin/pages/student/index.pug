@@ -2,96 +2,115 @@ extends ../../layouts/default
 include ../../mixins/moment.pug
 
 block main 
-  h1(class="mb-4") Danh sách sinh viên
-  .card.mb-3
-    .card-header Danh sách
-    .card-body 
-      .row 
-        .col-8 
-          .col-4.text-right 
-            a(
-              href=`${prefixAdmin}/student/create`
-              class="btn btn-outline-success"
-            ) +Thêm mới
+  if(user.permissions.includes("student_view"))
+    h1(class="mb-4") Danh sách sinh viên
+    .card.mb-3
+      .card-header Danh sách
+      .card-body 
+        .row 
+          if(user.permissions.includes("student_create"))
+            .col-8 
+              .col-4.text-right 
+                a(
+                  href=`${prefixAdmin}/student/create`
+                  class="btn btn-outline-success"
+                ) +Thêm mới
 
-      table(
-        class="table table-hover table-sm"
-      )
-        thead
-          tr 
-            th STT 
-            th Avatar
-            th Tên sinh viên
-            th Mã sinh viên
-            th Lớp quản lý
-            th Khóa học
-            th Giới tính
-            th Quê quán
-            th Ngày sinh
-            th Số điện thoại
-            th GPA
-            th Trạng thái
-            th Hành động
-        tbody 
-          if(students && students.length>0)
-            each student,index in students 
-              tr 
-                td #{index+1}
-                td 
-                  img(src=student.avatar||"/admin/images/avatar.jpg" alt = student.name style="width:150px")
-                td #{student.name}
-                td #{student.studentCode}
-                td #{student.id_classManagement}
-                td #{student.course}
-                td #{student.gender == 0 ? "Nam" : "Nữ"}
-                td #{student.countryside}
-                td 
-                  +formatDate(student.birthday)
-                td #{student.phone}
-                td #{student.gpa}
-                td 
-                  if(student.status == "active")
-                    a(
-                      href="javascript:;" 
-                      class="badge text-bg-success"
-                      data-status=student.status
-                      data-id=student._id 
-                      type="student"
-                      ) Đang học
-                  else if (student.status == "inactive")
-                    a(
-                      href="javascript:;" 
-                      class="badge text-bg-danger"
-                      data-status=student.status
-                      data-id=student._id
-                      type="student"
-                      ) Đã nghỉ học
-                  else 
-                    a(
-                      href="javascript:;" 
-                      class="badge text-bg-primary"
-                      data-status=student.status
-                      data-id=student._id
-                      type="student"
-                      ) Đã tốt nghiệp
-                
-                td 
-                  a(
-                    class="btn btn-secondary btn-sm"
-                    href=`${prefixAdmin}/student/detail/${student._id}`
-                  ) Chi tiết
-                  a(
-                    class="btn btn-warning btn-sm"
-                    href=`${prefixAdmin}/student/edit/${student._id}`
-                  ) Sửa
-                  button(
-                    class="btn btn-danger btn-sm ml-1"
-                    button-delete
-                    data-id=student._id
-                    type="student"
-                  ) Xóa
-          else
-            tr
-              td(colspan="4" class="text-center") 
-                h3 Không có sinh viên
-
+        table(
+          class="table table-hover table-sm"
+        )
+          thead
+            tr 
+              th STT 
+              th Avatar
+              th Tên sinh viên
+              th Mã sinh viên
+              th Lớp quản lý
+              th Khóa học
+              th Giới tính
+              th Quê quán
+              th Ngày sinh
+              th Số điện thoại
+              th GPA
+              th Trạng thái
+              th Hành động
+          tbody 
+            if(students && students.length>0)
+              each student,index in students 
+                tr 
+                  td #{index+1}
+                  td 
+                    img(src=student.avatar||"/admin/images/avatar.jpg" alt = student.name style="width:150px")
+                  td #{student.name}
+                  td #{student.studentCode}
+                  td #{student.id_classManagement}
+                  td #{student.course}
+                  td #{student.gender == 0 ? "Nam" : "Nữ"}
+                  td #{student.countryside}
+                  td 
+                    +formatDate(student.birthday)
+                  td #{student.phone}
+                  td #{student.gpa}
+                  td 
+                    if(user.permissions.includes("student_edit"))
+                      if(student.status == "active")
+                        a(
+                          href="javascript:;" 
+                          class="badge text-bg-success"
+                          data-status=student.status
+                          data-id=student._id 
+                          type="student"
+                          ) Đang học
+                      else if (student.status == "inactive")
+                        a(
+                          href="javascript:;" 
+                          class="badge text-bg-danger"
+                          data-status=student.status
+                          data-id=student._id
+                          type="student"
+                          ) Đã nghỉ học
+                      else 
+                        a(
+                          href="javascript:;" 
+                          class="badge text-bg-primary"
+                          data-status=student.status
+                          data-id=student._id
+                          type="student"
+                          ) Đã tốt nghiệp
+                    else 
+                      if(student.status == "active")
+                        span(
+                          class="badge text-bg-success"
+                          ) Đang học
+                      else if (student.status == "inactive")
+                        span(
+                          class="badge text-bg-danger"
+                          ) Đã nghỉ học
+                      else 
+                        span(
+                          class="badge text-bg-primary"
+                          ) Đã tốt nghiệp
+                  td 
+                    if(user.permissions.includes("student_view"))
+                      a(
+                        class="btn btn-secondary btn-sm"
+                        href=`${prefixAdmin}/student/detail/${student._id}`
+                      ) Chi tiết
+                    if(user.permissions.includes("student_edit"))
+                      a(
+                        class="btn btn-warning btn-sm"
+                        href=`${prefixAdmin}/student/edit/${student._id}`
+                      ) Sửa
+                    if(user.permissions.includes("student_delete"))
+                      button(
+                        class="btn btn-danger btn-sm ml-1"
+                        button-delete
+                        data-id=student._id
+                        type="student"
+                      ) Xóa
+            else
+              tr
+                td(colspan="4" class="text-center") 
+                  h3 Không có sinh viên
+  else 
+    h1 Không có quyền truy cập

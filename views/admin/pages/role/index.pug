@@ -1,19 +1,25 @@
 extends ../../layouts/default
 
 block main 
-  if(user.permissions.includes("department_view"))
-    h1(class="mb-4") Danh sách khoa
+  if(user.permissions.includes("role_view"))
+    h1(class="mb-4") Danh sách nhóm quyền
     .card.mb-3
       .card-header Danh sách
       .card-body 
         .row 
-          .col-8 
-            if(user.permissions.includes("department_create"))
+          if(user.permissions.includes("role_create"))
+            .col-8 
               .col-4.text-right 
                 a(
-                  href=`${prefixAdmin}/department/create`
+                  href=`${prefixAdmin}/role/create`
                   class="btn btn-outline-success"
                 ) +Thêm mới
+          if(user.permissions.includes("role_permission"))
+            .col-4.text-right 
+              a(
+                href=`${prefixAdmin}/role/permissions`
+                class="btn btn-primary"
+              ) Phân quyền
 
         table(
           class="table table-hover table-sm"
@@ -21,67 +27,65 @@ block main
           thead
             tr 
               th STT 
-              th Tên khoa
-              th Trưởng khoa
+              th Tên quyền
+              th Mô tả
               th Trạng thái
               th Hành động
           tbody 
-            if(departments && departments.length>0)
-              each department,index in departments 
+            if(roles && roles.length>0)
+              each role,index in roles 
                 tr 
                   td #{index+1}
-                  td #{department.name}
-                  td #{department.teacherName}
-                  td
-                    if(user.permissions.includes("department_edit")) 
-                      if(department.status == "active")
+                  td #{role.name}
+                  td #{role.description}
+                  td 
+                    if(user.permissions.includes("role_edit"))
+                      if(role.status == "active")
                         a(
                           href="javascript:;" 
                           class="badge text-bg-success"
-                          type="department"
-                          data-status=department.status
-                          data-id=department._id
+                          type="role"
+                          data-status=role.status
+                          data-id=role._id
                           ) Hoạt động 
-                      else
+                      else 
                         a(
                           href="javascript:;" 
                           class="badge text-bg-danger"
-                          type="department"
-                          data-status=department.status
-                          data-id=department._id
+                          data-status=role.status
+                          data-id=role._id
+                          type="role"
                           ) Dừng hoạt động
                     else 
-                      if(department.status == "active")
+                      if(role.status == "active")
                         span(
                           class="badge text-bg-success"
                           ) Hoạt động 
-                      else
-                        a(
+                      else 
+                        span(
                           class="badge text-bg-danger"
                           ) Dừng hoạt động
-                    
                   td 
-                    if(user.permissions.includes("department_view"))
+                    if(user.permissions.includes("role_view"))
                       a(
                         class="btn btn-secondary btn-sm"
-                        href=`${prefixAdmin}/department/detail/${department._id}`
+                        href=`${prefixAdmin}/role/detail/${role._id}`
                       ) Chi tiết
-                    if(user.permissions.includes("department_edit"))
+                    if(user.permissions.includes("role_edit"))
                       a(
                         class="btn btn-warning btn-sm"
-                        href=`${prefixAdmin}/department/edit/${department._id}`
+                        href=`${prefixAdmin}/role/edit/${role._id}`
                       ) Sửa
-                    if(user.permissions.includes("department_delete"))
+                    if(user.permissions.includes("role_delete"))
                       button(
                         class="btn btn-danger btn-sm ml-1"
                         button-delete
-                        data-id=department._id
-                        type="department"
+                        data-id=role._id
+                        type="role"
                       ) Xóa
             else
               tr
                 td(colspan="4" class="text-center") 
-                  h3 Chưa có khoa nào được tạo
+                  h3 Chưa có nhóm quyền
   else 
     h1 Không có quyền truy cập
-

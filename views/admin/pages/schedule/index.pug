@@ -1,80 +1,75 @@
 extends ../../layouts/default
 include ../../mixins/moment.pug
 
-  //- block main
-  //-   table(name-table="schedule")
-  //-     -for (i=1;i<=4;i++)
-  //-       tr
-  //-       -for(j=2;j<=8;j++)
-  //-         td(row=i col=j value=`test${i}${j}`) 
-  //-           select(name="dataTime")
-              
-
 block main 
-  h1(class="mb-4") Danh sách thời khóa biểu
-  
-  form(
-    action=`${prefixAdmin}/schedule`,
-    method="GET",
-    form-data-schedule
-    )
-    .row  
-      .col-4
-        div(class="row g-3 align-items-center")
-          div(class="col-auto")
-            label(for="year" class="col-form-label") Năm học
-          div(class="col-auto")
-            select(name="year" id="year" class="form-control")
-              option(disabled selected) -- Chọn --
-              each year in listYear
-                option(value=year selected=(yearSeleted==year)?true:false) #{year}
-      .col-4 
-        div(class="row g-3 align-items-center")
-          div(class="col-auto")
-            label(for="semester" class="col-form-label") Học kỳ
-          div(class="col-auto")
-            select(name="semester" id="semester" class="form-control")
-              option(disabled selected) -- Chọn --
-              option(value=1 selected=(semesterSelected==1)?true:false ) 1
-              option(value=2 selected=(semesterSelected==2)?true:false) 2
-              option(value=3 selected=(semesterSelected==3)?true:false) 3
-
-
-  if(data && data.length>0)
-    .card.mb-3
-      .card-header Danh sách
-      .card-body     
-        table(
-          class="table table-hover table-sm"
-        )
-          thead
-            tr 
-              th STT 
-              th Tên lớp quản lý
-              th Số môn đã xếp
-              th Hành động
-          tbody 
-            each classManagement,index in data
-              tr 
-                td #{index+1}
-                td #{classManagement.name}
-                td #{classManagement.count}/#{classManagement.maxCount}
-                td 
-                  a(
-                    class="btn btn-secondary btn-sm"
-                    href=`${prefixAdmin}/schedule/detail/${classManagement._id}?year=${yearSeleted}&semester=${semesterSelected}`
-                  ) Chi tiết
-                  a(
-                    class="btn btn-warning btn-sm"
-                    href=`${prefixAdmin}/schedule/edit/${classManagement._id}?year=${yearSeleted}&semester=${semesterSelected}`
-                  ) Sửa
-                  button(
-                    class="btn btn-danger btn-sm ml-1"
-                    button-delete
-                    data-id=classManagement._id
-                    type="schedule"
-                  ) Xóa
-
-  script(src="/admin/js/schedule.js")
-
+  if(user.permissions.includes("schedule_view"))
+    h1(class="mb-4") Danh sách thời khóa biểu
     
+    form(
+      action=`${prefixAdmin}/schedule`,
+      method="GET",
+      form-data-schedule
+      )
+      .row  
+        .col-4
+          div(class="row g-3 align-items-center")
+            div(class="col-auto")
+              label(for="year" class="col-form-label") Năm học
+            div(class="col-auto")
+              select(name="year" id="year" class="form-control")
+                option(disabled selected) -- Chọn --
+                each year in listYear
+                  option(value=year selected=(yearSeleted==year)?true:false) #{year}
+        .col-4 
+          div(class="row g-3 align-items-center")
+            div(class="col-auto")
+              label(for="semester" class="col-form-label") Học kỳ
+            div(class="col-auto")
+              select(name="semester" id="semester" class="form-control")
+                option(disabled selected) -- Chọn --
+                option(value=1 selected=(semesterSelected==1)?true:false ) 1
+                option(value=2 selected=(semesterSelected==2)?true:false) 2
+                option(value=3 selected=(semesterSelected==3)?true:false) 3
+
+
+    if(data && data.length>0)
+      .card.mb-3
+        .card-header Danh sách
+        .card-body     
+          table(
+            class="table table-hover table-sm"
+          )
+            thead
+              tr 
+                th STT 
+                th Tên lớp quản lý
+                th Số môn đã xếp
+                th Hành động
+            tbody 
+              each classManagement,index in data
+                tr 
+                  td #{index+1}
+                  td #{classManagement.name}
+                  td #{classManagement.count}/#{classManagement.maxCount}
+                  td 
+                    if(user.permissions.includes("schedule_view"))
+                      a(
+                        class="btn btn-secondary btn-sm"
+                        href=`${prefixAdmin}/schedule/detail/${classManagement._id}?year=${yearSeleted}&semester=${semesterSelected}`
+                      ) Chi tiết
+                    if(user.permissions.includes("schedule_edit"))
+                      a(
+                        class="btn btn-warning btn-sm"
+                        href=`${prefixAdmin}/schedule/edit/${classManagement._id}?year=${yearSeleted}&semester=${semesterSelected}`
+                      ) Sửa
+                    if(user.permissions.includes("schedule_delete"))
+                      button(
+                        class="btn btn-danger btn-sm ml-1"
+                        button-delete
+                        data-id=classManagement._id
+                        type="schedule"
+                      ) Xóa
+
+    script(src="/admin/js/schedule.js")
+  else 
+    h1 Không có quyền truy cập

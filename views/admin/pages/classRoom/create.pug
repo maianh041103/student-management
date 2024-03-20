@@ -1,79 +1,82 @@
 extends ../../layouts/default.pug
 
 block main
-  h1(class="mb-4") Thêm mới lớp học phần
+  if(user.permissions.includes("classRoom_create"))
+    h1(class="mb-4") Thêm mới lớp học phần
 
-  form(
-    action=`${prefixAdmin}/classRoom/create`
-    method="POST"
-  )
-    div(class="form-group")
-      label(for="name") Tên lớp học phần
-      input(
-        type="text"
-        class="form-control"
-        id="name"
-        name="name"
-        required
-      )
-    
-    div(class="form-group")
-      label(for="id_teacher") Giảng viên
-      select(name="id_teacher" id="id_teacher" class="form-control")
-        option(disabled) -- Chọn --
-        each teacher in teachers
-          option(value=teacher._id) #{teacher.name}
-        
-    div(class="form-group")
-      label(for="id_course") Môn học
-      select(name="id_course" id="id_course" class="form-control")
-        option(disabled) -- Chọn --
-        each course in courses
-          option(value=course._id) #{course.name}
-    
-    div(class="form-group")
-      label(for="quantity") Số sinh viên
-      input(
-        type="number"
-        class="form-control"
-        id="quantity"
-        name="quantity"
-        min=0
-        value=50
-        required
-      )
+    form(
+      action=`${prefixAdmin}/classRoom/create`
+      method="POST"
+    )
+      div(class="form-group")
+        label(for="name") Tên lớp học phần
+        input(
+          type="text"
+          class="form-control"
+          id="name"
+          name="name"
+          required
+        )
+      
+      div(class="form-group")
+        label(for="id_teacher") Giảng viên
+        select(name="id_teacher" id="id_teacher" class="form-control")
+          option(disabled) -- Chọn --
+          each teacher in teachers
+            option(value=teacher._id) #{teacher.name}
+          
+      div(class="form-group")
+        label(for="id_course") Môn học
+        select(name="id_course" id="id_course" class="form-control")
+          option(disabled) -- Chọn --
+          each course in courses
+            option(value=course._id) #{course.name}
+      
+      div(class="form-group")
+        label(for="quantity") Số sinh viên
+        input(
+          type="number"
+          class="form-control"
+          id="quantity"
+          name="quantity"
+          min=0
+          value=50
+          required
+        )
 
-    div(class="form-group form-check form-check-inline")
-      input(
-        type="radio"
-        class="form-check-input"
-        id="statusActive"
-        name="status"
-        value="active"
-        checked
-      )
-      label(for="statusActive" class="form-check-label") Hoạt động
-    div(class="form-group form-check form-check-inline")
-      input(
-        type="radio"
-        class="form-check-input"
-        id="statusCancel"
-        name="status"
-        value="cancel"
-      )
-      label(for="statusCancel" class="form-check-label") Đã hủy
-    div(class="form-group form-check form-check-inline")
-      input(
-        type="radio"
-        class="form-check-input"
-        id="statusComplete"
-        name="status"
-        value="complete"
-      )
-      label(for="statusComplete" class="form-check-label") Hoàn thành
+      div(class="form-group form-check form-check-inline")
+        input(
+          type="radio"
+          class="form-check-input"
+          id="statusActive"
+          name="status"
+          value="active"
+          checked
+        )
+        label(for="statusActive" class="form-check-label") Hoạt động
+      div(class="form-group form-check form-check-inline")
+        input(
+          type="radio"
+          class="form-check-input"
+          id="statusCancel"
+          name="status"
+          value="cancel"
+        )
+        label(for="statusCancel" class="form-check-label") Đã hủy
+      div(class="form-group form-check form-check-inline")
+        input(
+          type="radio"
+          class="form-check-input"
+          id="statusComplete"
+          name="status"
+          value="complete"
+        )
+        label(for="statusComplete" class="form-check-label") Hoàn thành
 
-    div(class="form-group")
-      button(
-        type="submit"
-        class="btn btn-primary"
-      ) Tạo mới
+      div(class="form-group")
+        button(
+          type="submit"
+          class="btn btn-primary"
+        ) Tạo mới
+  else 
+    h1 Không có quyền truy cập

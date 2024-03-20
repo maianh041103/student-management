@@ -9,25 +9,37 @@ const { systemConfig } = require('../../config/system');
 
 //[GET] /admin/student
 module.exports.index = async (req, res) => {
-  const students = await Student.find({
-    deleted: false
-  });
+  try {
+    const students = await Student.find({
+      deleted: false
+    });
 
-  res.render("admin/pages/student/index", {
-    pageTitle: "Danh sách sinh viên",
-    students: students
-  });
+    res.render("admin/pages/student/index", {
+      pageTitle: "Danh sách sinh viên",
+      students: students
+    });
+  } catch (error) {
+    console.log(error);
+    req.flash("error", "Không tìm thấy danh sách sinh viên");
+    res.redirect(`${systemConfig.prefixAdmin}/dashboard`);
+  }
 }
 
 //[GET] /admin/student/create
 module.exports.create = async (req, res) => {
-  const classManagements = await ClassManagement.find({
-    deleted: false
-  });
-  res.render("admin/pages/student/create.pug", {
-    pageTitle: "Thêm sinh viên",
-    classManagements: classManagements
-  })
+  try {
+    const classManagements = await ClassManagement.find({
+      deleted: false
+    });
+    res.render("admin/pages/student/create.pug", {
+      pageTitle: "Thêm sinh viên",
+      classManagements: classManagements
+    })
+  } catch (error) {
+    console.log(error);
+    req.flash("error", "Không thể vào trang thêm sinh viên");
+    res.redirect("back");
+  }
 }
 
 //[POST] /admin/student/create
@@ -49,7 +61,8 @@ module.exports.createPOST = async (req, res) => {
       password: md5(generateHelper.generatePassword(newStudent.birthday)),
       token: generateHelper.generateRandomString(20),
       type: "student",
-      code: req.body.studentCode
+      code: req.body.studentCode,
+      role_id: systemConfig.roleStudentId
     }
 
     const newAccount = new GenerateAccount(dataGenerateAccount);

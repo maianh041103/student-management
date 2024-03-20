@@ -2,71 +2,75 @@ extends ../../layouts/default
 include ../../mixins/moment
 
 block main
-  if(classManagement)
-    if(classManagement.name)
-      h1(class="mb-4") #{classManagement.name}
-    
-    if(classManagement.teacherName)
-      div(class="mb-4") Giảng viên : #{classManagement.teacherName}
-
-    if(classManagement.id_department)
-      div(class="mb-4") Khoa quản lý : #{classManagement.departmentName}
+  if(user.permissions.includes("classManagement_view"))
+    if(classManagement)
+      if(classManagement.name)
+        h1(class="mb-4") #{classManagement.name}
       
-    if(classManagement.yearStart)
-      div(class="mb-4") Năm bắt đầu : #{classManagement.yearStart}
+      if(classManagement.teacherName)
+        div(class="mb-4") Giảng viên : #{classManagement.teacherName}
 
-    if(classManagement.id_room)
-      div(class="mb-4") Phòng học : #{classManagement.roomName}
+      if(classManagement.id_department)
+        div(class="mb-4") Khoa quản lý : #{classManagement.departmentName}
+        
+      if(classManagement.yearStart)
+        div(class="mb-4") Năm bắt đầu : #{classManagement.yearStart}
 
-    if(listStudent)
-      div(class="mb-4") Số sinh viên : #{listStudent.length}
+      if(classManagement.id_room)
+        div(class="mb-4") Phòng học : #{classManagement.roomName}
 
-    if(listStudent)
-      .card.mb-3
-        .card-header Danh sách sinh viên
-        .card-body 
-          table(
-            class="table table-hover table-sm"
-          )
-            thead
-              tr 
-                th STT
-                th Mã sinh viên
-                th Họ tên
-                th Ngày sinh
-                th Quê quán
-                th Số điện thoại
-                th GPA
-                th Tín chỉ tích lũy
-            tbody    
-              each student, index in listStudent 
-                tr
-                  td #{index + 1}
-                  td #{student.studentCode}
-                  td #{student.name}
-                  td 
-                    +formatDate(student.birthday)
-                  td #{student.countryside}
-                  td #{student.phone}
-                  td #{student.gpa}
-                  td #{student.totalCredits}
+      if(listStudent)
+        div(class="mb-4") Số sinh viên : #{listStudent.length}
 
-    if (classManagement.status)
-      div(class="mb-4")
-        span Trạng thái :
-        if (classManagement.status === "active")
-          span(class="btn btn-success") Hoạt động
-        else if(classManagement.status==="cancel")
-          span(class="btn btn-danger") Đã hủy
-        else
-          span(class="badge text-bg-primary") Hoàn thành
+      if(listStudent)
+        .card.mb-3
+          .card-header Danh sách sinh viên
+          .card-body 
+            table(
+              class="table table-hover table-sm"
+            )
+              thead
+                tr 
+                  th STT
+                  th Mã sinh viên
+                  th Họ tên
+                  th Ngày sinh
+                  th Quê quán
+                  th Số điện thoại
+                  th GPA
+                  th Tín chỉ tích lũy
+              tbody    
+                each student, index in listStudent 
+                  tr
+                    td #{index + 1}
+                    td #{student.studentCode}
+                    td #{student.name}
+                    td 
+                      +formatDate(student.birthday)
+                    td #{student.countryside}
+                    td #{student.phone}
+                    td #{student.gpa}
+                    td #{student.totalCredits}
 
-    a(
-      class="btn btn-warning btn-sm"
-      href = `${prefixAdmin}/classManagement/edit/${classManagement._id}`
-      ) <b>Chỉnh sửa</b>
-  else  
-    h1(class="mb-4") Không tìm thấy lớp quản lý
+      if (classManagement.status)
+        div(class="mb-4")
+          span Trạng thái :
+          if (classManagement.status === "active")
+            span(class="btn btn-success") Hoạt động
+          else if(classManagement.status==="cancel")
+            span(class="btn btn-danger") Đã hủy
+          else
+            span(class="badge text-bg-primary") Hoàn thành
+
+      if(user.permissions.includes("classManagement_edit"))
+        a(
+          class="btn btn-warning btn-sm"
+          href = `${prefixAdmin}/classManagement/edit/${classManagement._id}`
+          ) <b>Chỉnh sửa</b>
+    else  
+      h1(class="mb-4") Không tìm thấy lớp quản lý
+  else 
+    h1 Không có quyền truy cập
   
 
     

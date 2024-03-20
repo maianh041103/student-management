@@ -2,84 +2,99 @@ extends ../../layouts/default
 include ../../mixins/moment.pug
 
 block main 
-  h1(class="mb-4") Danh sách giảng viên
-  .card.mb-3
-    .card-header Danh sách
-    .card-body 
-      .row 
-        .col-8 
-          .col-4.text-right 
-            a(
-              href=`${prefixAdmin}/teacher/create`
-              class="btn btn-outline-success"
-            ) +Thêm mới
+  if(user.permissions.includes("teacher_view"))
+    h1(class="mb-4") Danh sách giảng viên
+    .card.mb-3
+      .card-header Danh sách
+      .card-body 
+        .row 
+          if(user.permissions.includes("teacher_create"))
+            .col-8 
+              .col-4.text-right 
+                a(
+                  href=`${prefixAdmin}/teacher/create`
+                  class="btn btn-outline-success"
+                ) +Thêm mới
 
-      table(
-        class="table table-hover table-sm"
-      )
-        thead
-          tr 
-            th STT 
-            th Avatar
-            th Tên giảng viên
-            th Mã giảng viên
-            th Tên khoa
-            th Giới tính
-            th Quê quán
-            th Ngày sinh
-            th Hệ số lương
-            th Trạng thái
-            th Hành động
-        tbody 
-          if(teachers && teachers.length>0)
-            each teacher,index in teachers 
-              tr 
-                td #{index+1}
-                td 
-                  img(src=teacher.avatar||"/admin/images/avatar.jpg" alt = teacher.name style="width:150px")
-                td #{teacher.name}
-                td #{teacher.teacherCode}
-                td #{teacher.departmentName}
-                td #{teacher.gender == 0 ? "Nam" : "Nữ"}
-                td #{teacher.countryside}
-                td 
-                  +formatDate(teacher.birthday)
-                td #{teacher.salary}
-                td 
-                  if(teacher.status == "active")
-                    a(
-                      href="javascript:;" 
-                      class="badge text-bg-success"
-                      data-status=teacher.status
-                      data-id=teacher._id 
-                      type="teacher"
-                      ) Đang dạy
-                  else
-                    a(
-                      href="javascript:;" 
-                      class="badge text-bg-danger"
-                      data-status=teacher.status
-                      data-id=teacher._id
-                      type="teacher"
-                      ) Đang nghỉ
-                
-                td 
-                  a(
-                    class="btn btn-secondary btn-sm"
-                    href=`${prefixAdmin}/teacher/detail/${teacher._id}`
-                  ) Chi tiết
-                  a(
-                    class="btn btn-warning btn-sm"
-                    href=`${prefixAdmin}/teacher/edit/${teacher._id}`
-                  ) Sửa
-                  button(
-                    class="btn btn-danger btn-sm ml-1"
-                    button-delete
-                    data-id=teacher._id
-                    type="teacher"
-                  ) Xóa
-          else
-            tr
-              td(colspan="4" class="text-center") 
-                h3 Không có giảng viên
-
+        table(
+          class="table table-hover table-sm"
+        )
+          thead
+            tr 
+              th STT 
+              th Avatar
+              th Tên giảng viên
+              th Mã giảng viên
+              th Tên khoa
+              th Giới tính
+              th Quê quán
+              th Ngày sinh
+              th Hệ số lương
+              th Trạng thái
+              th Hành động
+          tbody 
+            if(teachers && teachers.length>0)
+              each teacher,index in teachers 
+                tr 
+                  td #{index+1}
+                  td 
+                    img(src=teacher.avatar||"/admin/images/avatar.jpg" alt = teacher.name style="width:150px")
+                  td #{teacher.name}
+                  td #{teacher.teacherCode}
+                  td #{teacher.departmentName}
+                  td #{teacher.gender == 0 ? "Nam" : "Nữ"}
+                  td #{teacher.countryside}
+                  td 
+                    +formatDate(teacher.birthday)
+                  td #{teacher.salary}
+                  td 
+                    if(user.permissions.includes("teacher_edit"))
+                      if(teacher.status == "active")
+                        a(
+                          href="javascript:;" 
+                          class="badge text-bg-success"
+                          data-status=teacher.status
+                          data-id=teacher._id 
+                          type="teacher"
+                          ) Đang dạy
+                      else
+                        a(
+                          href="javascript:;" 
+                          class="badge text-bg-danger"
+                          data-status=teacher.status
+                          data-id=teacher._id
+                          type="teacher"
+                          ) Đang nghỉ
+                    else
+                      if(teacher.status == "active")
+                        span(
+                          class="badge text-bg-success"
+                          ) Đang dạy
+                      else
+                        span(
+                          class="badge text-bg-danger"
+                          ) Đang nghỉ
+                  td
+                    if(user.permissions.includes("teacher_view")) 
+                      a(
+                        class="btn btn-secondary btn-sm"
+                        href=`${prefixAdmin}/teacher/detail/${teacher._id}`
+                      ) Chi tiết
+                    if(user.permissions.includes("teacher_edit"))
+                      a(
+                        class="btn btn-warning btn-sm"
+                        href=`${prefixAdmin}/teacher/edit/${teacher._id}`
+                      ) Sửa
+                    if(user.permissions.includes("teacher_delete"))
+                      button(
+                        class="btn btn-danger btn-sm ml-1"
+                        button-delete
+                        data-id=teacher._id
+                        type="teacher"
+                      ) Xóa
+            else
+              tr
+                td(colspan="4" class="text-center") 
+                  h3 Không có giảng viên
+  else 
+    h1 Không có quyền truy cập

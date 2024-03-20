@@ -2,40 +2,43 @@ extends ../../layouts/default.pug
 include ../../mixins/moment.pug
 
 block main
-  h1(class="mb-4") Thêm sinh viên vào lớp quản lý
+  if(user.permissions.includes("classManagement_edit"))
+    h1(class="mb-4") Thêm sinh viên vào lớp quản lý
 
-  form(
-    action=`${prefixAdmin}/classManagement/insertStudent/${classManagementId}`
-    method="POST"
-  )
-    div(class="form-group")
-      label(for="id_course") <b>Danh sách sinh viên</b>
-      table(
-        class="table table-hover table-sm"
-        table-students
-      )
-        thead 
-          tr 
-            th 
-            th Mã sinh viên
-            th Tên sinh viên
-            th Giới tính
-            th Ngày sinh
-            th Quê quán
-        tbody
-          each student in listStudent
+    form(
+      action=`${prefixAdmin}/classManagement/insertStudent/${classManagementId}`
+      method="POST"
+    )
+      div(class="form-group")
+        label(for="id_course") <b>Danh sách sinh viên</b>
+        table(
+          class="table table-hover table-sm"
+          table-students
+        )
+          thead 
             tr 
-              td(class="text-center") 
-                input(type="checkbox" name="id_student" value=student._id)
-              td #{student.studentCode}
-              td #{student.name}
-              td #{student.gender==0?"Nam":"Nữ"}
-              td 
-                +formatDate(student.birthday)
-              td #{student.countryside}
+              th 
+              th Mã sinh viên
+              th Tên sinh viên
+              th Giới tính
+              th Ngày sinh
+              th Quê quán
+          tbody
+            each student in listStudent
+              tr 
+                td(class="text-center") 
+                  input(type="checkbox" name="id_student" value=student._id)
+                td #{student.studentCode}
+                td #{student.name}
+                td #{student.gender==0?"Nam":"Nữ"}
+                td 
+                  +formatDate(student.birthday)
+                td #{student.countryside}
 
-    div(class="form-group")
-      button(
-        type="submit"
-        class="btn btn-primary"
-      ) Thêm mới
+      div(class="form-group")
+        button(
+          type="submit"
+          class="btn btn-primary"
+        ) Thêm mới
+  else 
+    h1 Không có quyền truy cập

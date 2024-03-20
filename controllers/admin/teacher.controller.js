@@ -8,38 +8,50 @@ const GenerateAccount = require('../../models/generate-account.model');
 
 //[GET] /admin/teacher
 module.exports.index = async (req, res) => {
-  const teachers = await Teacher.find({
-    deleted: false
-  });
-
-  for (const teacher of teachers) {
-    const department = await Department.findOne({
-      deleted: false,
-      _id: teacher.id_department
+  try {
+    const teachers = await Teacher.find({
+      deleted: false
     });
-    console.log(department);
-    if (department)
-      teacher.departmentName = department.name;
-    else
-      teacher.departmentName = "";
-  }
 
-  res.render("admin/pages/teacher/index.pug", {
-    pageTitle: "Danh sách giảng viên",
-    teachers: teachers
-  });
+    for (const teacher of teachers) {
+      const department = await Department.findOne({
+        deleted: false,
+        _id: teacher.id_department
+      });
+      console.log(department);
+      if (department)
+        teacher.departmentName = department.name;
+      else
+        teacher.departmentName = "";
+    }
+
+    res.render("admin/pages/teacher/index.pug", {
+      pageTitle: "Danh sách giảng viên",
+      teachers: teachers
+    });
+  } catch (error) {
+    console.log(error);
+    req.flash("Không tìm thấy danh sách giảng viên");
+    res.redirect(`${systemConfig.prefixAdmin}/dashboard`);
+  }
 }
 
 //[GET] /admin/teacher/create
 module.exports.create = async (req, res) => {
-  const departments = await Department.find({
-    deleted: false
-  });
+  try {
+    const departments = await Department.find({
+      deleted: false
+    });
 
-  res.render("admin/pages/teacher/create.pug", {
-    pageTitle: "Thêm giảng viên",
-    departments: departments
-  })
+    res.render("admin/pages/teacher/create.pug", {
+      pageTitle: "Thêm giảng viên",
+      departments: departments
+    })
+  } catch (error) {
+    console.log(error);
+    req.flash("error", "Không thể vào trang thêm giảng viên");
+    res.redirect("back");
+  }
 }
 
 //[POST] /admin/teacher/create
@@ -61,7 +73,8 @@ module.exports.createPOST = async (req, res) => {
       password: md5(generateHelper.generatePassword(newTeacher.birthday)),
       token: generateHelper.generateRandomString(20),
       type: "teacher",
-      code: req.body.teacherCode
+      code: req.body.teacherCode,
+      role_id: systemConfig.roleTeacherId
     }
 
     const newAccount = new GenerateAccount(dataGenerateAccount);

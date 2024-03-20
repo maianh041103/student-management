@@ -1,41 +1,50 @@
 extends ../../layouts/default.pug
 
 block main
-  h1(class="mb-4") Chỉnh sửa tài khoản sinh viên
+  if(user.permissions.includes("accountStudent_edit"))
+    h1(class="mb-4") Chỉnh sửa tài khoản sinh viên
 
-  form(
-    action=`${prefixAdmin}/student-account/edit/${account._id}?_method=PATCH`
-    method="POST"
-  )
-    div(class="form-group")
-      label(for="email") Email
-      input(
-        type="text"
-        class="form-control"
-        id="email"
-        name="email"
-        required
-        value=account.email
-      )
+    form(
+      action=`${prefixAdmin}/student-account/edit/${account._id}?_method=PATCH`
+      method="POST"
+    )
+      div(class="form-group")
+        label(for="email") Email
+        input(
+          type="text"
+          class="form-control"
+          id="email"
+          name="email"
+          required
+          value=account.email
+        )
 
-    div(class="form-group")
-      label(for="password") Mật khẩu
-      input(
-        type="password"
-        class="form-control"
-        id="password"
-        name="password"
-      )
-    
-    div(class="form-group")
-      label(for="code") Mã sinh viên
-      select(name="code" id="code" class="form-control")
-        option(disabled) -- Chọn --
-        each code in listCode
-          option(value=code checked = (code==account.code?true:false)) #{code}
+      div(class="form-group")
+        label(for="password") Mật khẩu
+        input(
+          type="password"
+          class="form-control"
+          id="password"
+          name="password"
+        )
+      
+      div(class="form-group")
+        label(for="code") Mã sinh viên
+        select(name="code" id="code" class="form-control")
+          option(disabled) -- Chọn --
+          each code in listCode
+            option(value=code selected = (code==account.code?true:false)) #{code}
 
-    div(class="form-group")
-      button(
-        type="submit"
-        class="btn btn-primary"
-      ) Cập nhật
+      div(class="form-group")
+        label(for="role_id") Nhóm quyền
+        select(name="role_id" id="role_id" class="form-control")
+          option(disabled) -- Chọn --
+          each role in roles
+            option(value=role._id selected=(role._id==account.role_id?true:false)) #{role.name}
+
+      div(class="form-group")
+        button(
+          type="submit"
+          class="btn btn-primary"
+        ) Cập nhật
+  h1 Không có quyền truy cập

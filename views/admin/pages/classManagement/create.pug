@@ -1,97 +1,100 @@
 extends ../../layouts/default.pug
 
 block main
-  h1(class="mb-4") Thêm mới lớp quản lý
+  if(user.permissions.includes("classManagement_create"))
+    h1(class="mb-4") Thêm mới lớp quản lý
 
-  form(
-    action=`${prefixAdmin}/classManagement/create`
-    method="POST"
-  )
-    div(class="form-group")
-      label(for="name") Tên lớp quản lý
-      input(
-        type="text"
-        class="form-control"
-        id="name"
-        name="name"
-        required
-      )
+    form(
+      action=`${prefixAdmin}/classManagement/create`
+      method="POST"
+    )
+      div(class="form-group")
+        label(for="name") Tên lớp quản lý
+        input(
+          type="text"
+          class="form-control"
+          id="name"
+          name="name"
+          required
+        )
 
-    div(class="form-group")
-      label(for="id_department") Khoa
-      select(name="id_department" id="id_department" class="form-control")
-        option(disabled) -- Chọn --
-        each department in departments
-          option(value=department._id) #{department.name}
-    
-    div(class="form-group")
-      label(for="id_teacher") Giảng viên
-      select(name="id_teacher" id="id_teacher" class="form-control")
-        option(disabled) -- Chọn --
-        each teacher in teachers
-          option(value=teacher._id) #{teacher.name}
-        
-    div(class="form-group")
-      label(for="yearStart") Năm bắt đầu
-      input(
-        type="text"
-        id="yearStart"
-        name="yearStart"
-        class="form-control"
-        min=0
-        placeholder="Mặc định là năm hiện tại xxxx-yyyy"
-      )
-    
-    div(class="form-group")
-      label(for="quantity") Số sinh viên
-      input(
-        type="number"
-        class="form-control"
-        id="quantity"
-        name="quantity"
-        min=0
-        value=50
-        required
-      )
+      div(class="form-group")
+        label(for="id_department") Khoa
+        select(name="id_department" id="id_department" class="form-control")
+          option(disabled) -- Chọn --
+          each department in departments
+            option(value=department._id) #{department.name}
+      
+      div(class="form-group")
+        label(for="id_teacher") Giảng viên
+        select(name="id_teacher" id="id_teacher" class="form-control")
+          option(disabled) -- Chọn --
+          each teacher in teachers
+            option(value=teacher._id) #{teacher.name}
+          
+      div(class="form-group")
+        label(for="yearStart") Năm bắt đầu
+        input(
+          type="text"
+          id="yearStart"
+          name="yearStart"
+          class="form-control"
+          min=0
+          placeholder="Mặc định là năm hiện tại xxxx-yyyy"
+        )
+      
+      div(class="form-group")
+        label(for="quantity") Số sinh viên
+        input(
+          type="number"
+          class="form-control"
+          id="quantity"
+          name="quantity"
+          min=0
+          value=50
+          required
+        )
 
-    div(class="form-group")
-      label(for="id_room") Phòng học
-      select(name="id_room" id="id_room" class="form-control")
-        option(disabled) -- Chọn --
-        each room in rooms
-          option(value=room._id) #{room.name}
+      div(class="form-group")
+        label(for="id_room") Phòng học
+        select(name="id_room" id="id_room" class="form-control")
+          option(disabled) -- Chọn --
+          each room in rooms
+            option(value=room._id) #{room.name}
 
-    div(class="form-group form-check form-check-inline")
-      input(
-        type="radio"
-        class="form-check-input"
-        id="statusActive"
-        name="status"
-        value="active"
-        checked
-      )
-      label(for="statusActive" class="form-check-label") Hoạt động
-    div(class="form-group form-check form-check-inline")
-      input(
-        type="radio"
-        class="form-check-input"
-        id="statusCancel"
-        name="status"
-        value="cancel"
-      )
-      label(for="statusCancel" class="form-check-label") Đã hủy
-    div(class="form-group form-check form-check-inline")
-      input(
-        type="radio"
-        class="form-check-input"
-        id="statusComplete"
-        name="status"
-        value="complete"
-      )
-      label(for="statusComplete" class="form-check-label") Hoàn thành
+      div(class="form-group form-check form-check-inline")
+        input(
+          type="radio"
+          class="form-check-input"
+          id="statusActive"
+          name="status"
+          value="active"
+          checked
+        )
+        label(for="statusActive" class="form-check-label") Hoạt động
+      div(class="form-group form-check form-check-inline")
+        input(
+          type="radio"
+          class="form-check-input"
+          id="statusCancel"
+          name="status"
+          value="cancel"
+        )
+        label(for="statusCancel" class="form-check-label") Đã hủy
+      div(class="form-group form-check form-check-inline")
+        input(
+          type="radio"
+          class="form-check-input"
+          id="statusComplete"
+          name="status"
+          value="complete"
+        )
+        label(for="statusComplete" class="form-check-label") Hoàn thành
 
-    div(class="form-group")
-      button(
-        type="submit"
-        class="btn btn-primary"
-      ) Tạo mới
+      div(class="form-group")
+        button(
+          type="submit"
+          class="btn btn-primary"
+        ) Tạo mới
+  else 
+    h1 Không có quyền truy cập

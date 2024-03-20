@@ -1,5 +1,6 @@
 const GenerateAccount = require('../../models/generate-account.model');
 const Student = require('../../models/student.model');
+const Role = require('../../models/role.model');
 
 const generateHelper = require('../../helpers/generate.helper');
 const { systemConfig } = require('../../config/system');
@@ -8,38 +9,64 @@ const md5 = require("md5");
 
 //[GET] /admin/student-account/
 module.exports.index = async (req, res) => {
-  let listStudentAccount = await GenerateAccount.find({
-    deleted: false,
-    type: "student"
-  });
+  try {
+    let listStudentAccount = await GenerateAccount.find({
+      deleted: false,
+      type: "student"
+    });
 
-  for (const studentAccount of listStudentAccount) {
-    const student = await Student.findOne({
-      studentCode: studentAccount.code,
-      deleted: false
+    for (const studentAccount of listStudentAccount) {
+      const student = await Student.findOne({
+        studentCode: studentAccount.code,
+        deleted: false
+      })
+      studentAccount.studentInfo = student;
+
+      const role = await Role.findOne({
+        _id: studentAccount.role_id,
+        deleted: false
+      });
+      if (role)
+        studentAccount.roleName = role.name;
+      else
+        studentAccount.roleName = "";
+    }
+
+    res.render("admin/pages/student-account/index.pug", {
+      pageTitle: "Danh sách tài khoản sinh viên",
+      listStudentAccount: listStudentAccount
     })
-    studentAccount.studentInfo = student;
+  } catch (error) {
+    console.log(error);
+    req.flash("error", "Không tìm thấy danh sách tài khoản sinh viên");
+    res.redirect(`${systemConfig.prefixAdmin}/dashboard`);
   }
-
-  res.render("admin/pages/student-account/index.pug", {
-    pageTitle: "Danh sách tài khoản sinh viên",
-    listStudentAccount: listStudentAccount
-  })
 }
 
 //[GET] /admin/student-account/create
 module.exports.create = async (req, res) => {
-  const listStudent = await Student.find({
-    deleted: false
-  });
-  let listCode = [];
-  for (const student of listStudent) {
-    listCode.push(student.studentCode);
-  };
-  res.render("admin/pages/student-account/create.pug", {
-    pageTitle: "Thêm mới tài khoản sinh viên",
-    listCode: listCode
-  })
+  try {
+    const listStudent = await Student.find({
+      deleted: false
+    });
+    let listCode = [];
+    for (const student of listStudent) {
+      listCode.push(student.studentCode);
+    };
+
+    const roles = await Role.find({
+      deleted: false
+    });
+
+    res.render("admin/pages/student-account/create.pug", {
+      pageTitle: "Thêm mới tài khoản sinh viên",
+      listCode: listCode,
+      roles: roles
+    })
+  } catch (error) {
+    console.log(error);
+    req.flash("error", "Không thể vào trang thêm mới tài khoản sinh viên");
+  }
 }
 
 //[POST] /admin/student-account/createPOST
@@ -60,6 +87,7 @@ module.exports.createPOST = async (req, res) => {
       password: md5(req.body.password),
       token: generateHelper.generateRandomString(20),
       type: "student",
+      role_id: req.body.role_id,
       code: req.body.code
     }
     const newStudent = new GenerateAccount(data);
@@ -85,6 +113,12 @@ module.exports.detail = async (req, res) => {
       studentCode: account.code
     });
     account.infoStudent = student;
+
+    const role = await Role.findOne({
+      deleted: false,
+      _id: account.role_id
+    });
+    account.roleName = role.name;
 
     res.render("admin/pages/student-account/detail.pug", {
       pageTitle: "Chi tiết tài khoản sinh viên",
@@ -114,10 +148,15 @@ module.exports.edit = async (req, res) => {
       listCode.push(student.studentCode);
     }
 
+    const roles = await Role.find({
+      deleted: false
+    });
+
     res.render("admin/pages/student-account/edit.pug", {
       pageTitle: "Chỉnh sửa thông tin tài khoản sinh viên",
       account: account,
-      listCode: listCode
+      listCode: listCode,
+      roles: roles
     });
   } catch (error) {
     console.log(error);

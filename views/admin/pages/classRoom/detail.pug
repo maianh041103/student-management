@@ -2,76 +2,80 @@ extends ../../layouts/default
 include ../../mixins/moment
 
 block main
-  if(classRoom)
-    if(classRoom.name)
-      h1(class="mb-4") #{classRoom.name}
-    
-    if(classRoom.teacherName)
-      div(class="mb-4") Giảng viên : #{classRoom.teacherName}
+  if(user.permissions.includes("classRoom_view"))
+    if(classRoom)
+      if(classRoom.name)
+        h1(class="mb-4") #{classRoom.name}
+      
+      if(classRoom.teacherName)
+        div(class="mb-4") Giảng viên : #{classRoom.teacherName}
 
-    if(classRoom.courseName)
-      div(class="mb-4") Môn học : #{classRoom.courseName}
-    
-    if(classRoom.listStudent)
-      div(class="mb-4") Số sinh viên : #{classRoom.listStudent.length}
-    
-    if(classRoom.listStudent && classRoom.quantity)
-      div(class="mb-4") Số chỗ trống : #{classRoom.quantity - classRoom.listStudent.length}
+      if(classRoom.courseName)
+        div(class="mb-4") Môn học : #{classRoom.courseName}
+      
+      if(classRoom.listStudent)
+        div(class="mb-4") Số sinh viên : #{classRoom.listStudent.length}
+      
+      if(classRoom.listStudent && classRoom.quantity)
+        div(class="mb-4") Số chỗ trống : #{classRoom.quantity - classRoom.listStudent.length}
 
-    if(classRoom.semester)
-      div(class="mb-4") Học kỳ : #{classRoom.semester}
+      if(classRoom.semester)
+        div(class="mb-4") Học kỳ : #{classRoom.semester}
 
-    if(classRoom.year)
-      div(class="mb-4") Năm học : #{classRoom.year}
+      if(classRoom.year)
+        div(class="mb-4") Năm học : #{classRoom.year}
 
-    if(listStudent)
-      .card.mb-3
-        .card-header Danh sách sinh viên
-        .card-body 
-          table(
-            class="table table-hover table-sm"
-          )
-            thead
-              tr 
-                th STT
-                th Mã sinh viên
-                th Họ tên
-                th Ngày sinh
-                th Lớp quản lý
-                th Điểm quá trình
-                th Điểm thi
-                th Điểm hệ 10
-                th Điểm hệ 4
-            tbody    
-              each student, index in listStudent 
-                tr
-                  td #{index + 1}
-                  td #{student.studentCode}
-                  td #{student.name}
-                  td 
-                    +formatDate(student.birthday)
-                  td #{student.classManagementName}
-                  td #{student.pointProcess||""}
-                  td #{student.pointTest||""}
-                  td #{student.point10||""}
-                  td #{student.point4||""}
+      if(listStudent)
+        .card.mb-3
+          .card-header Danh sách sinh viên
+          .card-body 
+            table(
+              class="table table-hover table-sm"
+            )
+              thead
+                tr 
+                  th STT
+                  th Mã sinh viên
+                  th Họ tên
+                  th Ngày sinh
+                  th Lớp quản lý
+                  th Điểm quá trình
+                  th Điểm thi
+                  th Điểm hệ 10
+                  th Điểm hệ 4
+              tbody    
+                each student, index in listStudent 
+                  tr
+                    td #{index + 1}
+                    td #{student.studentCode}
+                    td #{student.name}
+                    td 
+                      +formatDate(student.birthday)
+                    td #{student.classManagementName}
+                    td #{student.pointProcess||""}
+                    td #{student.pointTest||""}
+                    td #{student.point10||""}
+                    td #{student.point4||""}
 
-    if (classRoom.status)
-      div(class="mb-4")
-        span Trạng thái :
-        if (classRoom.status === "active")
-          span(class="btn btn-success") Hoạt động
-        else if(classRoom.status==="cancel")
-          span(class="btn btn-danger") Đã hủy
-        else
-          span(class="badge text-bg-primary") Hoàn thành
+      if (classRoom.status)
+        div(class="mb-4")
+          span Trạng thái :
+          if (classRoom.status === "active")
+            span(class="btn btn-success") Hoạt động
+          else if(classRoom.status==="cancel")
+            span(class="btn btn-danger") Đã hủy
+          else
+            span(class="badge text-bg-primary") Hoàn thành
 
-    a(
-      class="btn btn-warning btn-sm"
-      href = `${prefixAdmin}/classRoom/edit/${classRoom._id}`
-      ) <b>Chỉnh sửa</b>
+      if(user.permissions.includes("classRoom_edit"))
+        a(
+          class="btn btn-warning btn-sm"
+          href = `${prefixAdmin}/classRoom/edit/${classRoom._id}`
+          ) <b>Chỉnh sửa</b>
+    else  
+      h1(class="mb-4") Không tìm thấy lớp học phần
   else  
-    h1(class="mb-4") Không tìm thấy lớp học phần
+    h1 Không có quyền truy cập
   
 
     

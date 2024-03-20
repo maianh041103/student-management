@@ -1,35 +1,51 @@
 const GenerateAccount = require('../../models/generate-account.model');
 const Teacher = require('../../models/teacher.model');
 const Department = require('../../models/department.model');
+const Role = require('../../models/role.model');
 
 const generateHelper = require('../../helpers/generate.helper');
 const { systemConfig } = require('../../config/system');
-
 const md5 = require("md5");
 
 //[GET] /admin/teacher-account/
 module.exports.index = async (req, res) => {
-  let listTeacherAccount = await GenerateAccount.find({
-    deleted: false,
-    type: "teacher"
-  });
-
-  for (const teacherAccount of listTeacherAccount) {
-    const teacher = await Teacher.findOne({
-      teacherCode: teacherAccount.code,
-      deleted: false
-    })
-    const department = await Department.findOne({
-      _id: teacher.id_department
+  try {
+    let listTeacherAccount = await GenerateAccount.find({
+      deleted: false,
+      type: "teacher"
     });
-    teacher.departmentName = department.name;
-    teacherAccount.teacherInfo = teacher;
-  }
 
-  res.render("admin/pages/teacher-account/index.pug", {
-    pageTitle: "Danh sách tài khoản giảng viên",
-    listTeacherAccount: listTeacherAccount
-  })
+    for (const teacherAccount of listTeacherAccount) {
+      const teacher = await Teacher.findOne({
+        teacherCode: teacherAccount.code,
+        deleted: false
+      })
+      const department = await Department.findOne({
+        _id: teacher.id_department
+      });
+      teacher.departmentName = department.name;
+      teacherAccount.teacherInfo = teacher;
+
+      const role = await Role.findOne({
+        deleted: false,
+        _id: teacherAccount.role_id
+      });
+      if (role) {
+        teacherAccount.roleName = role.name;
+      } else {
+        teacherAccount.roleName = "";
+      }
+    }
+
+    res.render("admin/pages/teacher-account/index.pug", {
+      pageTitle: "Danh sách tài khoản giảng viên",
+      listTeacherAccount: listTeacherAccount
+    })
+  } catch (error) {
+    console.log(error);
+    req.flash("error", "Không tìm thấy danh sách tài khoản giảng viên");
+    res.redirect(`${systemConfig.prefixAdmin}/dashboard`);
+  }
 }
 
 //[GET] /admin/teacher-account/create
@@ -41,9 +57,14 @@ module.exports.create = async (req, res) => {
   for (const teacher of listTeacher) {
     listCode.push(teacher.teacherCode);
   };
+
+  const roles = await Role.find({
+    deleted: false
+  });
   res.render("admin/pages/teacher-account/create.pug", {
     pageTitle: "Thêm mới tài khoản giảng viên",
-    listCode: listCode
+    listCode: listCode,
+    roles: roles
   })
 }
 
@@ -65,7 +86,8 @@ module.exports.createPOST = async (req, res) => {
       password: md5(req.body.password),
       token: generateHelper.generateRandomString(20),
       type: "teacher",
-      code: req.body.code
+      code: req.body.code,
+      role_id: req.body.role_id
     }
     const newTeacher = new GenerateAccount(data);
     await newTeacher.save();
@@ -96,12 +118,19 @@ module.exports.detail = async (req, res) => {
     teacher.departmentName = department.name;
     account.infoTeacher = teacher;
 
+    const role = await Role.findOne({
+      deleted: false,
+      _id: account.role_id
+    });
+
+    account.roleName = role ? role.name : "";
 
     res.render("admin/pages/teacher-account/detail.pug", {
       pageTitle: "Chi tiết tài khoản giảng viên",
       account: account
     });
   } catch (error) {
+    console.log(error);
     req.flash("error", "Không thấy tìm thấy tài khoản giảng viên");
     res.redirect("back");
   }
@@ -125,10 +154,15 @@ module.exports.edit = async (req, res) => {
       listCode.push(teacher.teacherCode);
     }
 
+    const roles = await Role.find({
+      deleted: false
+    });
+
     res.render("admin/pages/teacher-account/edit.pug", {
       pageTitle: "Chỉnh sửa thông tin tài khoản giảng viên",
       account: account,
-      listCode: listCode
+      listCode: listCode,
+      roles: roles
     });
   } catch (error) {
     console.log(error);

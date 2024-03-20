@@ -15,6 +15,7 @@ const adminAccountRoute = require('./admin-account.route');
 const roomRoute = require('./room.route');
 const scheduleRoute = require("./schedule.route");
 const professionalTeamRoute = require("./professionalTeam.route");
+const roleRoute = require("./role.route");
 
 const authMiddlerware = require('../../middlerware/auth.middlerware');
 
@@ -30,9 +31,10 @@ module.exports = async (app) => {
   app.use(`${systemConfig.prefixAdmin}/programFrame`, authMiddlerware.auth, programFrameRoute);
   app.use(`${systemConfig.prefixAdmin}/classRoom`, authMiddlerware.auth, classRoomRoute);
   app.use(`${systemConfig.prefixAdmin}/classManagement`, authMiddlerware.auth, classManagementRoute);
-  app.use(`${systemConfig.prefixAdmin}`, authMiddlerware.auth, dashboardRoute);
+  app.use(`${systemConfig.prefixAdmin}/dashboard`, authMiddlerware.auth, dashboardRoute);
   app.use(`${systemConfig.prefixAdmin}/admin-account`, authMiddlerware.auth, adminAccountRoute);
   app.use(`${systemConfig.prefixAdmin}/room`, authMiddlerware.auth, roomRoute);
   app.use(`${systemConfig.prefixAdmin}/schedule`, authMiddlerware.auth, scheduleRoute);
   app.use(`${systemConfig.prefixAdmin}/professionalTeam`, authMiddlerware.auth, professionalTeamRoute);
+  app.use(`${systemConfig.prefixAdmin}/role`, authMiddlerware.auth, roleRoute);
 }

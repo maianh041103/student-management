@@ -9,6 +9,7 @@ const generateAccountSchema = new mongoose.Schema({
   token: String,
   type: String,
   code: String,
+  role_id: String,
   status: {
     type: String,
     default: "active"

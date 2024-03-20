@@ -1,70 +1,85 @@
 extends ../../layouts/default
 
 block main 
-  h1(class="mb-4") Danh sách tổ chuyên môn
-  .card.mb-3
-    .card-header Danh sách
-    .card-body 
-      .row 
-        .col-8 
-          .col-4.text-right 
-            a(
-              href=`${prefixAdmin}/professionalTeam/create`
-              class="btn btn-outline-success"
-            ) +Thêm mới
+  if(user.permissions.includes("professionalTeam_view"))
+    h1(class="mb-4") Danh sách tổ chuyên môn
+    .card.mb-3
+      .card-header Danh sách
+      .card-body 
+        .row 
+          .col-8
+            if(user.permissions.includes("professionalTeam_create")) 
+              .col-4.text-right 
+                a(
+                  href=`${prefixAdmin}/professionalTeam/create`
+                  class="btn btn-outline-success"
+                ) +Thêm mới
 
-      table(
-        class="table table-hover table-sm"
-      )
-        thead
-          tr 
-            th STT 
-            th Tên bộ môn
-            th Trưởng bộ môn
-            th Trạng thái
-            th Hành động
-        tbody 
-          if(professionalTeams && professionalTeams.length>0)
-            each professionalTeam,index in professionalTeams 
-              tr 
-                td #{index+1}
-                td #{professionalTeam.name}
-                td #{professionalTeam.teacherName}
-                td 
-                  if(professionalTeam.status == "active")
-                    a(
-                      href="javascript:;" 
-                      class="badge text-bg-success"
-                      type="professionalTeam"
-                      data-status=professionalTeam.status
-                      data-id=professionalTeam._id
-                      ) Hoạt động 
-                  else
-                    a(
-                      href="javascript:;" 
-                      class="badge text-bg-danger"
-                      type="department"
-                      data-status=professionalTeam.status
-                      data-id=professionalTeam._id
-                      ) Dừng hoạt động
-                
-                td 
-                  a(
-                    class="btn btn-secondary btn-sm"
-                    href=`${prefixAdmin}/professionalTeam/detail/${professionalTeam._id}`
-                  ) Chi tiết
-                  a(
-                    class="btn btn-warning btn-sm"
-                    href=`${prefixAdmin}/professionalTeam/edit/${professionalTeam._id}`
-                  ) Sửa
-                  button(
-                    class="btn btn-danger btn-sm ml-1"
-                    button-delete
-                    data-id=professionalTeam._id
-                    type="professionalTeam"
-                  ) Xóa
-          else
-            tr
-              td(colspan="4" class="text-center") 
-                h3 Chưa có bộ môn nào được tạo
-
+        table(
+          class="table table-hover table-sm"
+        )
+          thead
+            tr 
+              th STT 
+              th Tên bộ môn
+              th Trưởng bộ môn
+              th Trạng thái
+              th Hành động
+          tbody 
+            if(professionalTeams && professionalTeams.length>0)
+              each professionalTeam,index in professionalTeams 
+                tr 
+                  td #{index+1}
+                  td #{professionalTeam.name}
+                  td #{professionalTeam.teacherName}
+                  td 
+                    if(user.permissions.includes("professionalTeam_edit"))
+                      if(professionalTeam.status == "active")
+                        a(
+                          href="javascript:;" 
+                          class="badge text-bg-success"
+                          type="professionalTeam"
+                          data-status=professionalTeam.status
+                          data-id=professionalTeam._id
+                          ) Hoạt động 
+                      else
+                        a(
+                          href="javascript:;" 
+                          class="badge text-bg-danger"
+                          type="department"
+                          data-status=professionalTeam.status
+                          data-id=professionalTeam._id
+                          ) Dừng hoạt động
+                    else 
+                      if(professionalTeam.status == "active")
+                        span(
+                          class="badge text-bg-success"
+                          ) Hoạt động 
+                      else
+                        span(
+                          class="badge text-bg-danger"
+                          ) Dừng hoạt động
+                  td 
+                    if(user.permissions.includes("professionalTeam_view"))
+                      a(
+                        class="btn btn-secondary btn-sm"
+                        href=`${prefixAdmin}/professionalTeam/detail/${professionalTeam._id}`
+                      ) Chi tiết
+                    if(user.permissions.includes("professionalTeam_edit"))
+                      a(
+                        class="btn btn-warning btn-sm"
+                        href=`${prefixAdmin}/professionalTeam/edit/${professionalTeam._id}`
+                      ) Sửa
+                    if(user.permissions.includes("professionalTeam_delete"))
+                      button(
+                        class="btn btn-danger btn-sm ml-1"
+                        button-delete
+                        data-id=professionalTeam._id
+                        type="professionalTeam"
+                      ) Xóa
+            else
+              tr
+                td(colspan="4" class="text-center") 
+                  h3 Chưa có bộ môn nào được tạo
+  else  
+    h1 Không có quyền truy cập 

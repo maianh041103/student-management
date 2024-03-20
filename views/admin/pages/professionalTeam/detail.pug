@@ -1,67 +1,69 @@
 extends ../../layouts/default
 
 block main
-  if(professionalTeam)
-    if(professionalTeam.name)
-      h1(class="mb-4") #{professionalTeam.name}
+  if(user.permissions.includes("professionalTeam_view"))
+    if(professionalTeam)
+      if(professionalTeam.name)
+        h1(class="mb-4") #{professionalTeam.name}
 
-    if(teachers)
-      .card.mb-3
-        .card-header Danh sách giảng viên
-        .card-body 
-          table(
-            class="table table-hover table-sm"
-          )
-            thead
-              tr 
-                th STT 
-                th Avatar
-                th Mã giảng viên
-                th Họ tên
-                
-            tbody    
-              each teacher, index in teachers 
-                tr
-                  th #{index + 1}
-                  th 
-                    img(src=teacher.avatar style="width:100px")
-                  th #{teacher.teacherCode}
-                  th #{teacher.name} #{(professionalTeam.id_teacher==teacher._id)?"(Trưởng bộ môn)":""}
+      if(teachers)
+        .card.mb-3
+          .card-header Danh sách giảng viên
+          .card-body 
+            table(
+              class="table table-hover table-sm"
+            )
+              thead
+                tr 
+                  th STT 
+                  th Avatar
+                  th Mã giảng viên
+                  th Họ tên
                   
-    
-    if(courses)
-      .card.mb-3
-        .card-header Danh sách môn học
-        .card-body 
-          table(
-            class="table table-hover table-sm"
-          )
-            thead
-              tr 
-                th STT 
-                th Mã môn
-                th Tên môn
-            tbody    
-              each course, index in courses 
-                tr
-                  th #{index + 1}
-                  th #{course._id}
-                  th #{course.name}
+              tbody    
+                each teacher, index in teachers 
+                  tr
+                    th #{index + 1}
+                    th 
+                      img(src=teacher.avatar style="width:100px")
+                    th #{teacher.teacherCode}
+                    th #{teacher.name} #{(professionalTeam.id_teacher==teacher._id)?"(Trưởng bộ môn)":""}
+                    
+      
+      if(courses)
+        .card.mb-3
+          .card-header Danh sách môn học
+          .card-body 
+            table(
+              class="table table-hover table-sm"
+            )
+              thead
+                tr 
+                  th STT 
+                  th Mã môn
+                  th Tên môn
+              tbody    
+                each course, index in courses 
+                  tr
+                    th #{index + 1}
+                    th #{course._id}
+                    th #{course.name}
 
-    if (professionalTeam.status)
-      div(class="mb-4")
-        span Trạng thái :
-        if (professionalTeam.status === "active")
-          span(class="btn btn-success") Hoạt động
-        else
-          span(class="btn btn-danger") Dừng hoạt động
-
-    a(
-      class="btn btn-warning btn-sm"
-      href = `${prefixAdmin}/professionalTeam/edit/${professionalTeam._id}`
-      ) <b>Chỉnh sửa</b>
-  else  
-    h1(class="mb-4") Không tìm thấy tổ bộ môn
-  
+      if (professionalTeam.status)
+        div(class="mb-4")
+          span Trạng thái :
+          if (professionalTeam.status === "active")
+            span(class="btn btn-success") Hoạt động
+          else
+            span(class="btn btn-danger") Dừng hoạt động
+      if(user.permissions.includes("professionalTeam_edit"))
+        a(
+          class="btn btn-warning btn-sm"
+          href = `${prefixAdmin}/professionalTeam/edit/${professionalTeam._id}`
+          ) <b>Chỉnh sửa</b>
+    else  
+      h1(class="mb-4") Không tìm thấy tổ bộ môn
+  else
+    h1 Không có quyền truy cập
 
     

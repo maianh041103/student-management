@@ -1,75 +1,84 @@
 extends ../../layouts/default.pug
 
-block main 
-  h1(class="mb-4") Cập nhật thông tin tài khoản
+block main
+  if(user.permissions.includes("accountAdmin_edit"))
+    h1(class="mb-4") Cập nhật thông tin tài khoản
 
-  form(
-    action=`${prefixAdmin}/admin-account/edit/${account._id}?_method=PATCH`
-    method="POST"
-    enctype="multipart/form-data"
-  )
-    div(class="form-group")
-      label(for="fullName") Họ tên : 
-      input(
-        type="text"
-        name="fullName"
-        id="fullName"
-        required 
-        class="form-control"
-        value=account.fullName
+    form(
+      action=`${prefixAdmin}/admin-account/edit/${account._id}?_method=PATCH`
+      method="POST"
+      enctype="multipart/form-data"
+    )
+      div(class="form-group")
+        label(for="fullName") Họ tên : 
+        input(
+          type="text"
+          name="fullName"
+          id="fullName"
+          required 
+          class="form-control"
+          value=account.fullName
+          )
+      
+      div(class="form-group")
+        label(for="email") Email : 
+        input(
+          type="email"
+          class="form-control"
+          name="email"
+          id="email"
+          value=account.email
         )
-    
-    div(class="form-group")
-      label(for="email") Email : 
-      input(
-        type="email"
-        class="form-control"
-        name="email"
-        id="email"
-        value=account.email
-      )
-    
-    div(class="form-group")
-      label(for="password") Mật khẩu
-      input(
-        type="password"
-        class="form-control"
-        name="password"
-        id="password"
-      )
-    
-    div(class="form-group")
-      label(for="phone") Số điện thoại
-      input(
-        type="text"
-        class="form-control"
-        name="phone"
-        id="phone"
-        value=account.phone
-      )
-    
-    div(
-      class="form-group"
-      upload-image
-      )
-      label(for="avatar") Avatar 
-      input(
-        type="file"
-        class="form-control-file"
-        id="avatar"
-        name="avatar"
-        accept="image/*"
-        upload-image-input
-      )
-      img(
-        src=account.avatar 
-        class="image-preview"
-        style="width:150px"
-        upload-image-preview
-      )
-    
-    div(class="form-group")
-      button(
-        type="submit"
-        class="btn btn-primary"
-      ) Cập nhật
+      
+      div(class="form-group")
+        label(for="password") Mật khẩu
+        input(
+          type="password"
+          class="form-control"
+          name="password"
+          id="password"
+        )
+      
+      div(class="form-group")
+        label(for="phone") Số điện thoại
+        input(
+          type="text"
+          class="form-control"
+          name="phone"
+          id="phone"
+          value=account.phone
+        )
+      
+      div(
+        class="form-group"
+        upload-image
+        )
+        label(for="avatar") Avatar 
+        input(
+          type="file"
+          class="form-control-file"
+          id="avatar"
+          name="avatar"
+          accept="image/*"
+          upload-image-input
+        )
+        img(
+          src=account.avatar 
+          class="image-preview"
+          style="width:150px"
+          upload-image-preview
+        )
+
+      div(class="form-group")
+        label(for="role_id") Nhóm quyền 
+        select(name="role_id" id="role_id" class="form-control")
+          each role in roles 
+            option(value=role._id selected=(role._id==account.role_id?true:false)) #{role.name}
+      
+      div(class="form-group")
+        button(
+          type="submit"
+          class="btn btn-primary"
+        ) Cập nhật
+  else 
+    h1 Không có quyền truy cập

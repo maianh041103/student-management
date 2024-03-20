@@ -1,15 +1,31 @@
 const Account = require('../../models/account.model');
+const Role = require('../../models/role.model');
 const md5 = require("md5");
 
 //[GET] /admin/admin-account/
 module.exports.index = async (req, res) => {
-  const listAccount = await Account.find({
-    deleted: false
-  });
-  res.render("admin/pages/admin-account/index", {
-    pageTitle: "Danh sách tài khoản hệ thống",
-    listAccount: listAccount
-  })
+  try {
+    const listAccount = await Account.find({
+      deleted: false
+    });
+
+    for (const account of listAccount) {
+      const role = await Role.findOne({
+        deleted: false,
+        _id: account.role_id
+      });
+      account.roleName = role ? role.name : "";
+    }
+
+    res.render("admin/pages/admin-account/index", {
+      pageTitle: "Danh sách tài khoản hệ thống",
+      listAccount: listAccount
+    })
+  } catch (error) {
+    console.log(error);
+    req.flash("error", "Không tìm thấy danh sách tài khoản admin");
+    res.redirect("back");
+  }
 }
 
 //[GET] /admin/admin-account/detail/:id
@@ -19,6 +35,13 @@ module.exports.detail = async (req, res) => {
       deleted: false,
       _id: req.params.id
     });
+
+    const role = await Role.findOne({
+      deleted: false,
+      _id: account.role_id
+    });
+    account.roleName = role ? role.name : "";
+
     res.render("admin/pages/admin-account/detail", {
       pageTitle: "Chi tiết tài khoản",
       account: account
@@ -37,9 +60,15 @@ module.exports.edit = async (req, res) => {
       deleted: false,
       _id: req.params.id
     });
+
+    const roles = await Role.find({
+      deleted: false
+    });
+
     res.render("admin/pages/admin-account/edit.pug", {
       pageTitle: "Chỉnh sửa tài khoản",
-      account: account
+      account: account,
+      roles: roles
     });
   } catch (error) {
     console.log(error);
@@ -48,25 +77,13 @@ module.exports.edit = async (req, res) => {
   }
 }
 
-//[GET] /admin/admin-account/edit
-module.exports.edit = async (req, res) => {
-  const token = req.cookies.token;
-  const account = await Account.findOne({
-    token: token,
-    deleted: false,
-    status: "active"
-  })
-  res.render("admin/pages/my-account/edit.pug", {
-    pageTitle: "Sửa thông tin cá nhân",
-    account: account
-  })
-}
-
-//[PATCH] /admin/admin-account/edit
+//[PATCH] /admin/admin-account/edit/:id
 module.exports.editPATCH = async (req, res) => {
   try {
+    console.log(req.params.id);
+    console.log(req.body);
     const account = await Account.findOne({
-      token: req.cookies.token,
+      _id: req.params.id,
       deleted: false
     });
     const email = req.body.email;
@@ -92,13 +109,13 @@ module.exports.editPATCH = async (req, res) => {
       delete req.body.password;
     }
     await Account.updateOne({
-      token: req.cookies.token
+      _id: req.params.id
     }, req.body);
-    req.flash("success", "Cập nhật thông tin cá nhân thành công");
+    req.flash("success", "Cập nhật thông tin tài khoản thành công");
     res.redirect("back");
   } catch (error) {
     console.log(error);
-    req.flash("error", "Cập nhật thông tin cá nhân thất bại");
+    req.flash("error", "Cập nhật thông tin tài khoản thất bại");
     res.redirect("back");
   }
 }

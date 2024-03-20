@@ -2,49 +2,51 @@ extends ../../layouts/default
 include ../../mixins/moment
 
 block main
-  if(teacher)
-    if(teacher.avatar)
-      image(src=teacher.avatar alt="Ảnh đại diện" style="width:200px")
+  if(user.permissions.includes("teacher_view"))
+    if(teacher)
+      if(teacher.avatar)
+        image(src=teacher.avatar alt="Ảnh đại diện" style="width:200px")
 
-    if(teacher.name)
-      div(class="mb-4") Họ tên: #{teacher.name}
+      if(teacher.name)
+        div(class="mb-4") Họ tên: #{teacher.name}
 
-    if(teacher.teacherCode)
-      div(class="mb-4") Mã giảng viên: #{teacher.teacherCode}
-    
-    if (teacher.id_department)
-      div(class="mb-4") Khoa: #{teacher.departmentName}
+      if(teacher.teacherCode)
+        div(class="mb-4") Mã giảng viên: #{teacher.teacherCode}
+      
+      if (teacher.id_department)
+        div(class="mb-4") Khoa: #{teacher.departmentName}
 
-    if (teacher.gender)
-      div(class="mb-4") Giới tính: #{teacher.gender==0?"Nam":"Nữ"}
-    
-    if(teacher.countryside)
-      div(class="mb-4") Quê quán: #{teacher.countryside}
-    
-    if (teacher.bỉthday)
-      div(class="mb-4") Ngày sinh: 
-        +formatDate(teacher.bỉthday)
-    
-    if(teacher.salary)
-      div(class="mb-4") Lương: #{teacher.salary}
-    
-    if(account.email)
-      div(class="mb-4") Email: #{account.email}
+      if (teacher.gender)
+        div(class="mb-4") Giới tính: #{teacher.gender==0?"Nam":"Nữ"}
+      
+      if(teacher.countryside)
+        div(class="mb-4") Quê quán: #{teacher.countryside}
+      
+      if (teacher.bỉthday)
+        div(class="mb-4") Ngày sinh: 
+          +formatDate(teacher.bỉthday)
+      
+      if(teacher.salary)
+        div(class="mb-4") Lương: #{teacher.salary}
+      
+      if(account.email)
+        div(class="mb-4") Email: #{account.email}
 
-    if (teacher.status)
-      div(class="mb-4")
-        span Trạng thái :
-        if (teacher.status === "active")
-          span(class="btn btn-success") Đang dạy
-        else
-          span(class="btn btn-danger") Đang nghỉ dạy
-
-    a(
-      class="btn btn-warning btn-sm"
-      href = `${prefixAdmin}/teacher/edit/${teacher._id}`
-      ) <b>Chỉnh sửa</b>
-  else  
-    h1(class="mb-4") Không tìm thấy giảng viên
-  
+      if (teacher.status)
+        div(class="mb-4")
+          span Trạng thái :
+          if (teacher.status === "active")
+            span(class="btn btn-success") Đang dạy
+          else
+            span(class="btn btn-danger") Đang nghỉ dạy
+      if(user.permissions.includes("teacher_edit"))
+        a(
+          class="btn btn-warning btn-sm"
+          href = `${prefixAdmin}/teacher/edit/${teacher._id}`
+          ) <b>Chỉnh sửa</b>
+    else  
+      h1(class="mb-4") Không tìm thấy giảng viên
+  else 
+    h1 Không có quyền truy cập 
 
     

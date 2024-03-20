@@ -1,41 +1,51 @@
 extends ../../layouts/default.pug
 
 block main
-  h1(class="mb-4") Thêm mới tài khoản sinh viên
+  if(user.permissions.includes("accountStudent_create"))
+    h1(class="mb-4") Thêm mới tài khoản sinh viên
 
-  form(
-    action=`${prefixAdmin}/student-account/create`
-    method="POST"
-  )
-    div(class="form-group")
-      label(for="email") Email
-      input(
-        type="text"
-        class="form-control"
-        id="email"
-        name="email"
-        required
-      )
+    form(
+      action=`${prefixAdmin}/student-account/create`
+      method="POST"
+    )
+      div(class="form-group")
+        label(for="email") Email
+        input(
+          type="text"
+          class="form-control"
+          id="email"
+          name="email"
+          required
+        )
 
-    div(class="form-group")
-      label(for="password") Mật khẩu
-      input(
-        type="password"
-        class="form-control"
-        id="password"
-        name="password"
-        required
-      )
-    
-    div(class="form-group")
-      label(for="code") Mã sinh viên
-      select(name="code" id="code" class="form-control")
-        option(disabled) -- Chọn --
-        each code in listCode
-          option(value=code) #{code}
+      div(class="form-group")
+        label(for="password") Mật khẩu
+        input(
+          type="password"
+          class="form-control"
+          id="password"
+          name="password"
+          required
+        )
+      
+      div(class="form-group")
+        label(for="code") Mã sinh viên
+        select(name="code" id="code" class="form-control")
+          option(disabled) -- Chọn --
+          each code in listCode
+            option(value=code) #{code}
 
-    div(class="form-group")
-      button(
-        type="submit"
-        class="btn btn-primary"
-      ) Tạo mới
+      div(class="form-group")
+        label(for="role_id") Nhóm quyền
+        select(name="role_id" id="role_id" class="form-control")
+          option(disabled) -- Chọn --
+          each role in roles
+            option(value=role._id) #{role.name}
+
+      div(class="form-group")
+        button(
+          type="submit"
+          class="btn btn-primary"
+        ) Tạo mới
+  else 
+    h1 Không có quyền truy cập

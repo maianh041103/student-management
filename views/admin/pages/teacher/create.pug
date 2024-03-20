@@ -1,122 +1,125 @@
 extends ../../layouts/default.pug
 
 block main
-  h1(class="mb-4") Thêm mới giảng viên
+  if(user.permissions.includes("teacher_create"))
+    h1(class="mb-4") Thêm mới giảng viên
 
-  form(
-    action=`${prefixAdmin}/teacher/create`
-    method="POST"
-    enctype="multipart/form-data"
-  )
-    div(class="form-group")
-      label(for="name") Họ tên *
-      input(
-        type="text"
-        class="form-control"
-        id="name"
-        name="name"
-        required
-      )
-    
-    div(class="form-group")
-      label(for="id_department") Thuộc khoa
-      select(name="id_department" id="id_department" class="form-control")
-        option(disabled) -- Chọn --
-        each department in departments
-          option(value=department._id) #{department.name}
-    
-    div(class="form-group form-check form-check-inline")
-      input(
-        type="radio"
-        class="form-check-input"
-        id="genderNam"
-        name="gender"
-        value=0
-        checked
-      )
-      label(for="genderNam" class="form-check-label") Nam
-    div(class="form-group form-check form-check-inline")
-      input(
-        type="radio"
-        class="form-check-input"
-        id="genderNu"
-        name="gender"
-        value=1
-      )
-      label(for="genderNu" class="form-check-label") Nữ
-
-    div(
-      class="form-group"
-      upload-image
+    form(
+      action=`${prefixAdmin}/teacher/create`
+      method="POST"
+      enctype="multipart/form-data"
     )
-      label(for="avatar") Avatar
-      input(
-        type="file"
-        class="form-control-file"
-        id="avatar"
-        name="avatar"
-        accept="image/*"
-        upload-image-input
-      )
-      img(
-        src=""
-        class="image-preview"
-        style="width:150px"
-        upload-image-preview
-      )
+      div(class="form-group")
+        label(for="name") Họ tên *
+        input(
+          type="text"
+          class="form-control"
+          id="name"
+          name="name"
+          required
+        )
+      
+      div(class="form-group")
+        label(for="id_department") Thuộc khoa
+        select(name="id_department" id="id_department" class="form-control")
+          option(disabled) -- Chọn --
+          each department in departments
+            option(value=department._id) #{department.name}
+      
+      div(class="form-group form-check form-check-inline")
+        input(
+          type="radio"
+          class="form-check-input"
+          id="genderNam"
+          name="gender"
+          value=0
+          checked
+        )
+        label(for="genderNam" class="form-check-label") Nam
+      div(class="form-group form-check form-check-inline")
+        input(
+          type="radio"
+          class="form-check-input"
+          id="genderNu"
+          name="gender"
+          value=1
+        )
+        label(for="genderNu" class="form-check-label") Nữ
 
-    div(class="form-group")
-      label(for="name") Quê quán
-      input(
-        type="text"
-        class="form-control"
-        id="countryside"
-        name="countryside"
-        required
+      div(
+        class="form-group"
+        upload-image
       )
-    
-    div(class="form-group")
-      label(for="birthday") Ngày sinh
-      input(
-        type="date"
-        class="form-control"
-        id="birthday"
-        name="birthday"
-        required
-      )
-    
-    div(class="form-group")
-      label(for="salary") Lương/1 buổi
-      input(
-        type="number"
-        class="form-control"
-        id="salary"
-        name="salary"
-        required
-      )
+        label(for="avatar") Avatar
+        input(
+          type="file"
+          class="form-control-file"
+          id="avatar"
+          name="avatar"
+          accept="image/*"
+          upload-image-input
+        )
+        img(
+          src=""
+          class="image-preview"
+          style="width:150px"
+          upload-image-preview
+        )
 
-    div(class="form-group form-check form-check-inline")
-      input(
-        type="radio"
-        class="form-check-input"
-        id="statusActive"
-        name="status"
-        value="active"
-        checked
-      )
-      label(for="statusActive" class="form-check-label") Đang dạy
-    div(class="form-group form-check form-check-inline")
-      input(
-        type="radio"
-        class="form-check-input"
-        id="statusInActive"
-        name="status"
-        value="inactive"
-      )
-      label(for="statusInActive" class="form-check-label") Đang nghỉ
+      div(class="form-group")
+        label(for="name") Quê quán
+        input(
+          type="text"
+          class="form-control"
+          id="countryside"
+          name="countryside"
+          required
+        )
+      
+      div(class="form-group")
+        label(for="birthday") Ngày sinh
+        input(
+          type="date"
+          class="form-control"
+          id="birthday"
+          name="birthday"
+          required
+        )
+      
+      div(class="form-group")
+        label(for="salary") Lương/1 buổi
+        input(
+          type="number"
+          class="form-control"
+          id="salary"
+          name="salary"
+          required
+        )
 
-    div(class="form-group")
-      button(
-        type="submit"
-        class="btn btn-primary"
-      ) Tạo mới
+      div(class="form-group form-check form-check-inline")
+        input(
+          type="radio"
+          class="form-check-input"
+          id="statusActive"
+          name="status"
+          value="active"
+          checked
+        )
+        label(for="statusActive" class="form-check-label") Đang dạy
+      div(class="form-group form-check form-check-inline")
+        input(
+          type="radio"
+          class="form-check-input"
+          id="statusInActive"
+          name="status"
+          value="inactive"
+        )
+        label(for="statusInActive" class="form-check-label") Đang nghỉ
+
+      div(class="form-group")
+        button(
+          type="submit"
+          class="btn btn-primary"
+        ) Tạo mới
+  else 
+    h1 Không có quyền truy cập

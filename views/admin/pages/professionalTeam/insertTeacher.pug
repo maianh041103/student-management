@@ -2,40 +2,41 @@ extends ../../layouts/default.pug
 include ../../mixins/moment.pug
 
 block main
-  h1(class="mb-4") Thêm giảng viên vào tổ bộ môn
+  if(user.permissions.includes("professionalTeam_edit"))
+    h1(class="mb-4") Thêm giảng viên vào tổ bộ môn
 
-  form(
-    action=`${prefixAdmin}/professionalTeam/insertTeacher/${professionalTeamId}`
-    method="POST"
-  )
-    div(class="form-group")
-      <b>Danh sách giảng viên</b>
-      table(
-        class="table table-hover table-sm"
-        table-teachers
-      )
-        thead 
-          tr 
-            th 
-            th Mã giảng viên
-            th Tên giảng viên
-            th Giới tính
-            th Ngày sinh
-            th Quê quán
-        tbody
-          each teacher in teachers
+    form(
+      action=`${prefixAdmin}/professionalTeam/insertTeacher/${professionalTeamId}`
+      method="POST"
+    )
+      div(class="form-group")
+        <b>Danh sách giảng viên</b>
+        table(
+          class="table table-hover table-sm"
+          table-teachers
+        )
+          thead 
             tr 
-              td(class="text-center") 
-                input(type="checkbox" name="id_teacher" value=teacher._id checked=(teacher.id_professionalTeam==professionalTeamId?true:false))
-              td #{teacher.teacherCode}
-              td #{teacher.name}
-              td #{teacher.gender==0?"Nam":"Nữ"}
-              td 
-                +formatDate(teacher.birthday)
-              td #{teacher.countryside}
+              th 
+              th Mã giảng viên
+              th Tên giảng viên
+              th Giới tính
+              th Ngày sinh
+              th Quê quán
+          tbody
+            each teacher in teachers
+              tr 
+                td(class="text-center") 
+                  input(type="checkbox" name="id_teacher" value=teacher._id checked=(teacher.id_professionalTeam==professionalTeamId?true:false))
+                td #{teacher.teacherCode}
+                td #{teacher.name}
+                td #{teacher.gender==0?"Nam":"Nữ"}
+                td 
+                  +formatDate(teacher.birthday)
+                td #{teacher.countryside}
 
-    div(class="form-group")
-      button(
-        type="submit"
-        class="btn btn-primary"
-      ) Thêm mới
+      div(class="form-group")
+        button(
+          type="submit"
+          class="btn btn-primary"
+        ) Thêm mới

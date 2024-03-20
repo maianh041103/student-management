@@ -1,6 +1,7 @@
 extends ../../layouts/default
 
 block main 
+  if(user.permissions.includes("dashboard_view"))
     h1 Trang tổng quan
     .row.mt-4 
         .col-12 
@@ -93,3 +94,5 @@ block main
               p Số lượng: <b>#{data.accountStudentActive + data.accountStudentInactive}</b>
               p Hoạt động: <b>#{data.accountStudentActive}</b>
               p Dừng hoạt động: <b>#{data.accountStudentInactive}</b>
+  else 
+    h1 Không có quyền truy cập

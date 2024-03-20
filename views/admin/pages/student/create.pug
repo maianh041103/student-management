@@ -1,137 +1,140 @@
 extends ../../layouts/default.pug
 
 block main
-  h1(class="mb-4") Thêm mới sinh viên
+  if(user.permissions.includes("student_create"))
+    h1(class="mb-4") Thêm mới sinh viên
 
-  form(
-    action=`${prefixAdmin}/student/create`
-    method="POST"
-    enctype="multipart/form-data"
-  )
-    div(class="form-group")
-      label(for="name") Họ tên *
-      input(
-        type="text"
-        class="form-control"
-        id="name"
-        name="name"
-        required
-      )
-    
-    div(class="form-group")
-      label(for="id_classManagement") Thuộc lớp quản lý
-      select(name="id_classManagement" id="id_classManagement" class="form-control")
-        option(disabled) -- Chọn --
-        each classManagement in classManagements
-          option(value=classManagement._id) #{classManagement.name}
-      
-    div(class="form-group")
-      label(for="course") Khóa học
-      input(
-        type="number"
-        class="form-control"
-        id="course"
-        name="course"
-      )
-    
-    div(class="form-group form-check form-check-inline")
-      input(
-        type="radio"
-        class="form-check-input"
-        id="genderNam"
-        name="gender"
-        value=0
-        checked
-      )
-      label(for="genderNam" class="form-check-label") Nam
-    div(class="form-group form-check form-check-inline")
-      input(
-        type="radio"
-        class="form-check-input"
-        id="genderNu"
-        name="gender"
-        value=1
-      )
-      label(for="genderNu" class="form-check-label") Nữ
-
-    div(
-      class="form-group"
-      upload-image
+    form(
+      action=`${prefixAdmin}/student/create`
+      method="POST"
+      enctype="multipart/form-data"
     )
-      label(for="avatar") Avatar
-      input(
-        type="file"
-        class="form-control-file"
-        id="avatar"
-        name="avatar"
-        accept="image/*"
-        upload-image-input
-      )
-      img(
-        src=""
-        class="image-preview"
-        style="width:150px"
-        upload-image-preview
-      )
+      div(class="form-group")
+        label(for="name") Họ tên *
+        input(
+          type="text"
+          class="form-control"
+          id="name"
+          name="name"
+          required
+        )
+      
+      div(class="form-group")
+        label(for="id_classManagement") Thuộc lớp quản lý
+        select(name="id_classManagement" id="id_classManagement" class="form-control")
+          option(disabled) -- Chọn --
+          each classManagement in classManagements
+            option(value=classManagement._id) #{classManagement.name}
+        
+      div(class="form-group")
+        label(for="course") Khóa học
+        input(
+          type="number"
+          class="form-control"
+          id="course"
+          name="course"
+        )
+      
+      div(class="form-group form-check form-check-inline")
+        input(
+          type="radio"
+          class="form-check-input"
+          id="genderNam"
+          name="gender"
+          value=0
+          checked
+        )
+        label(for="genderNam" class="form-check-label") Nam
+      div(class="form-group form-check form-check-inline")
+        input(
+          type="radio"
+          class="form-check-input"
+          id="genderNu"
+          name="gender"
+          value=1
+        )
+        label(for="genderNu" class="form-check-label") Nữ
 
-    div(class="form-group")
-      label(for="name") Quê quán
-      input(
-        type="text"
-        class="form-control"
-        id="countryside"
-        name="countryside"
+      div(
+        class="form-group"
+        upload-image
       )
-    
-    div(class="form-group")
-      label(for="birthday") Ngày sinh
-      input(
-        type="date"
-        class="form-control"
-        id="birthday"
-        name="birthday"
-        required
-      )
-    
-    div(class="form-group")
-      label(for="phone") Số điện thoại
-      input(
-        type="number"
-        class="form-control"
-        id="phone"
-        name="phone"
-      )
+        label(for="avatar") Avatar
+        input(
+          type="file"
+          class="form-control-file"
+          id="avatar"
+          name="avatar"
+          accept="image/*"
+          upload-image-input
+        )
+        img(
+          src=""
+          class="image-preview"
+          style="width:150px"
+          upload-image-preview
+        )
 
-    div(class="form-group form-check form-check-inline")
-      input(
-        type="radio"
-        class="form-check-input"
-        id="statusActive"
-        name="status"
-        value="active"
-        checked
-      )
-      label(for="statusActive" class="form-check-label") Đang học
-    div(class="form-group form-check form-check-inline")
-      input(
-        type="radio"
-        class="form-check-input"
-        id="statusInActive"
-        name="status"
-        value="inactive"
-      )
-      label(for="statusInActive" class="form-check-label") Đã nghỉ học
-    div(class="form-group form-check form-check-inline")
-      input(
-        type="radio"
-        class="form-check-input"
-        id="statusComplete"
-        name="status"
-        value="complete"
-      )
-      label(for="statusComplete" class="form-check-label") Đã tốt nghiệp
-    div(class="form-group")
-      button(
-        type="submit"
-        class="btn btn-primary"
-      ) Tạo mới
+      div(class="form-group")
+        label(for="name") Quê quán
+        input(
+          type="text"
+          class="form-control"
+          id="countryside"
+          name="countryside"
+        )
+      
+      div(class="form-group")
+        label(for="birthday") Ngày sinh
+        input(
+          type="date"
+          class="form-control"
+          id="birthday"
+          name="birthday"
+          required
+        )
+      
+      div(class="form-group")
+        label(for="phone") Số điện thoại
+        input(
+          type="number"
+          class="form-control"
+          id="phone"
+          name="phone"
+        )
+
+      div(class="form-group form-check form-check-inline")
+        input(
+          type="radio"
+          class="form-check-input"
+          id="statusActive"
+          name="status"
+          value="active"
+          checked
+        )
+        label(for="statusActive" class="form-check-label") Đang học
+      div(class="form-group form-check form-check-inline")
+        input(
+          type="radio"
+          class="form-check-input"
+          id="statusInActive"
+          name="status"
+          value="inactive"
+        )
+        label(for="statusInActive" class="form-check-label") Đã nghỉ học
+      div(class="form-group form-check form-check-inline")
+        input(
+          type="radio"
+          class="form-check-input"
+          id="statusComplete"
+          name="status"
+          value="complete"
+        )
+        label(for="statusComplete" class="form-check-label") Đã tốt nghiệp
+      div(class="form-group")
+        button(
+          type="submit"
+          class="btn btn-primary"
+        ) Tạo mới
+  else 
+    h1 Không có quyền truy cập

@@ -1,0 +1,34 @@
+extends ../../layouts/default
+
+block main
+  if(user.permissions.includes("role_view"))
+    if(role)
+      if(role.name)
+        h1(class="mb-4") #{role.name}
+      
+      if(role.description)
+        div(class="mb-4") Mô tả : #{role.description}
+
+      if(role.permissions && role.permissions.length > 0)
+        p Phân quyền : 
+          each item in role.permissions 
+            span(class="mb-4") #{item} , 
+
+      if (role.status)
+        div(class="mb-4")
+          span Trạng thái :
+          if (role.status === "active")
+            span(class="btn btn-success") Hoạt động
+          else
+            span(class="btn btn-danger") Dừng hoạt động
+      if(user.permissions.includes("role_edit"))
+        a(
+          class="btn btn-warning btn-sm"
+          href = `${prefixAdmin}/role/edit/${role._id}`
+          ) <b>Chỉnh sửa</b>
+    else  
+      h1(class="mb-4") Không tìm thấy nhóm quyền
+  else 
+    h1 Không có quyền truy cập
+
+    

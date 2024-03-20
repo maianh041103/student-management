@@ -1,0 +1,416 @@
+extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+
+block main 
+  if(user.permissions.includes("role_permission"))
+    h1(class="mb-4") #{pageTitle}
+
+    if(roles.length>0)
+      div(data-permission=roles)
+
+      div(class="text-right")
+        button(
+          type="submit"
+          class="btn btn-primary mb-3"
+          button-submit
+        ) Cập nhật
+        
+      table(
+        class="table table-hover table-sm"
+        table-permissions
+      )
+        thead 
+          tr
+            th Tính năng
+            each role in roles 
+              th(class="text-center") #{role.name}
+        tbody
+          tr(
+            data-name="id"
+            class="d-none"
+            )
+            td 
+            each role in roles 
+              td(class="text-center") 
+                input(type="text" value=role.id)
+          
+          //- Tổng quan
+          tr 
+            td(colspan="4") <b>Trang tổng quan</b>
+          tr(data-name="dashboard_view")
+            td Xem 
+            each role in roles 
+              td(class="text-center")
+                input(type="checkbox")
+          
+          //- Khoa
+          tr 
+            td(colspan="4") <b>Khoa</b>
+          tr(data-name="department_view")
+            td Xem 
+            each role in roles 
+              td(class="text-center") 
+                input(type="checkbox")
+          tr(data-name="department_create")
+            td Thêm mới
+            each role in roles
+              td(class="text-center") 
+                input(type="checkbox")
+          tr(data-name="department_edit")
+            td Sửa 
+            each role in roles 
+              td(class="text-center") 
+                input(type="checkbox")
+          tr(data-name="department_delete")
+            td Xóa
+            each role in roles
+              td(class="text-center") 
+                input(type="checkbox")
+          
+          //- Tổ chuyên môn
+          tr
+            td(colspan="4")
+              b Tổ chuyên môn
+          tr(data-name="professionalTeam_view")
+            td Xem
+            each item in roles
+              td(class="text-center")
+                input(type="checkbox")
+          tr(data-name="professionalTeam_create")
+            td Thêm mới
+            each item in roles
+              td(class="text-center")
+                input(type="checkbox")
+          tr(data-name="professionalTeam_edit")
+            td Chỉnh sửa
+            each item in roles
+              td(class="text-center")
+                input(type="checkbox")
+          tr(data-name="professionalTeam_delete")
+            td Xóa
+            each item in roles
+              td(class="text-center")
+                input(type="checkbox")
+
+          //- Môn học
+          tr
+            td(colspan="4")
+              b Môn học
+          tr(data-name="course_view")
+            td Xem
+            each item in roles
+              td(class="text-center")
+                input(type="checkbox")
+          tr(data-name="course_create")
+            td Thêm mới
+            each item in roles
+              td(class="text-center")
+                input(type="checkbox")
+          tr(data-name="course_edit")
+            td Chỉnh sửa
+            each item in roles
+              td(class="text-center")
+                input(type="checkbox")
+          tr(data-name="course_delete")
+            td Xóa
+            each item in roles
+              td(class="text-center")
+                input(type="checkbox")
+        
+          //- Lớp quản lý
+          tr
+            td(colspan="4")
+              b Lớp quản lý
+          tr(data-name="classManagement_view")
+            td Xem
+            each item in roles
+              td(class="text-center")
+                input(type="checkbox")
+          tr(data-name="classManagement_create")
+            td Thêm mới
+            each item in roles
+              td(class="text-center")
+                input(type="checkbox")
+          tr(data-name="classManagement_edit")
+            td Chỉnh sửa
+            each item in roles
+              td(class="text-center")
+                input(type="checkbox")
+          tr(data-name="classManagement_delete")
+            td Xóa
+            each item in roles
+              td(class="text-center")
+                input(type="checkbox")
+        
+          //- Lớp học phần
+          tr
+            td(colspan="4")
+              b Lớp học phần
+          tr(data-name="classRoom_view")
+            td Xem
+            each item in roles
+              td(class="text-center")
+                input(type="checkbox")
+          tr(data-name="classRoom_create")
+            td Thêm mới
+            each item in roles
+              td(class="text-center")
+                input(type="checkbox")
+          tr(data-name="classRoom_edit")
+            td Chỉnh sửa
+            each item in roles
+              td(class="text-center")
+                input(type="checkbox")
+          tr(data-name="classRoom_delete")
+            td Xóa
+            each item in roles
+              td(class="text-center")
+                input(type="checkbox")
+
+          //- Chương trình khung
+          tr
+            td(colspan="4")
+              b Chương trình khung
+          tr(data-name="programFrame_view")
+            td Xem
+            each item in roles
+              td(class="text-center")
+                input(type="checkbox")
+          tr(data-name="programFrame_create")
+            td Thêm mới
+            each item in roles
+              td(class="text-center")
+                input(type="checkbox")
+          tr(data-name="programFrame_edit")
+            td Chỉnh sửa
+            each item in roles
+              td(class="text-center")
+                input(type="checkbox")
+          tr(data-name="programFrame_delete")
+            td Xóa
+            each item in roles
+              td(class="text-center")
+                input(type="checkbox")
+
+          //- Thời khóa biểu
+          tr
+            td(colspan="4")
+              b Thời khóa biểu
+          tr(data-name="schedule_view")
+            td Xem
+            each item in roles
+              td(class="text-center")
+                input(type="checkbox")
+          tr(data-name="schedule_edit")
+            td Chỉnh sửa
+            each item in roles
+              td(class="text-center")
+                input(type="checkbox")
+          tr(data-name="schedule_delete")
+            td Xóa
+            each item in roles
+              td(class="text-center")
+                input(type="checkbox")
+
+          //- Phòng học
+          tr
+            td(colspan="4")
+              b Phòng học
+          tr(data-name="room_view")
+            td Xem
+            each item in roles
+              td(class="text-center")
+                input(type="checkbox")
+          tr(data-name="room_create")
+            td Thêm mới
+            each item in roles
+              td(class="text-center")
+                input(type="checkbox")
+          tr(data-name="room_edit")
+            td Chỉnh sửa
+            each item in roles
+              td(class="text-center")
+                input(type="checkbox")
+          tr(data-name="room_delete")
+            td Xóa
+            each item in roles
+              td(class="text-center")
+                input(type="checkbox")
+          
+          //- Sinh viên
+          tr
+            td(colspan="4")
+              b Sinh viên
+          tr(data-name="student_view")
+            td Xem
+            each item in roles
+              td(class="text-center")
+                input(type="checkbox")
+          tr(data-name="student_create")
+            td Thêm mới
+            each item in roles
+              td(class="text-center")
+                input(type="checkbox")
+          tr(data-name="student_edit")
+            td Chỉnh sửa
+            each item in roles
+              td(class="text-center")
+                input(type="checkbox")
+          tr(data-name="student_delete")
+            td Xóa
+            each item in roles
+              td(class="text-center")
+                input(type="checkbox")
+          
+          //- Giảng viên
+          tr
+            td(colspan="4")
+              b Giảng viên
+          tr(data-name="teacher_view")
+            td Xem
+            each item in roles
+              td(class="text-center")
+                input(type="checkbox")
+          tr(data-name="teacher_create")
+            td Thêm mới
+            each item in roles
+              td(class="text-center")
+                input(type="checkbox")
+          tr(data-name="teacher_edit")
+            td Chỉnh sửa
+            each item in roles
+              td(class="text-center")
+                input(type="checkbox")
+          tr(data-name="teacher_delete")
+            td Xóa
+            each item in roles
+              td(class="text-center")
+                input(type="checkbox")
+
+          //- Tài khoản admin
+          tr
+            td(colspan="4")
+              b Tài khoản Admin
+          tr(data-name="accountAdmin_view")
+            td Xem
+            each item in roles
+              td(class="text-center")
+                input(type="checkbox")
+          tr(data-name="accountAdmin_edit")
+            td Chỉnh sửa
+            each item in roles
+              td(class="text-center")
+                input(type="checkbox")
+          tr(data-name="accountAdmin_delete")
+            td Xóa
+            each item in roles
+              td(class="text-center")
+                input(type="checkbox")
+
+          //- Tài khoản sinh viên
+          tr
+            td(colspan="4")
+              b Tài khoản sinh viên
+          tr(data-name="accountStudent_view")
+            td Xem
+            each item in roles
+              td(class="text-center")
+                input(type="checkbox")
+          tr(data-name="accountStudent_create")
+            td Thêm mới
+            each item in roles
+              td(class="text-center")
+                input(type="checkbox")
+          tr(data-name="accountStudent_edit")
+            td Chỉnh sửa
+            each item in roles
+              td(class="text-center")
+                input(type="checkbox")
+          tr(data-name="accountStudent_delete")
+            td Xóa
+            each item in roles
+              td(class="text-center")
+                input(type="checkbox")
+
+          //- Tài khoản giảng viên
+          tr
+            td(colspan="4")
+              b Tài khoản giảng viên
+          tr(data-name="accountTeacher_view")
+            td Xem
+            each item in roles
+              td(class="text-center")
+                input(type="checkbox")
+          tr(data-name="accountTeacher_create")
+            td Thêm mới
+            each item in roles
+              td(class="text-center")
+                input(type="checkbox")
+          tr(data-name="accountTeacher_edit")
+            td Chỉnh sửa
+            each item in roles
+              td(class="text-center")
+                input(type="checkbox")
+          tr(data-name="accountTeacher_delete")
+            td Xóa
+            each item in roles
+              td(class="text-center")
+                input(type="checkbox")
+
+          //- Phân quyền
+          tr
+            td(colspan="4")
+              b Phân quyền
+          tr(data-name="role_view")
+            td Xem
+            each item in roles
+              td(class="text-center")
+                input(type="checkbox")
+          tr(data-name="role_create")
+            td Thêm mới
+            each item in roles
+              td(class="text-center")
+                input(type="checkbox")
+          tr(data-name="role_edit")
+            td Chỉnh sửa
+            each item in roles
+              td(class="text-center")
+                input(type="checkbox")
+          tr(data-name="role_delete")
+            td Xóa
+            each item in roles
+              td(class="text-center")
+                input(type="checkbox")
+          tr(data-name="role_permission")
+            td Phân quyền
+            each item in roles
+              td(class="text-center")
+                input(type="checkbox")
+          
+
+    else 
+      h3 Không có nhóm quyền nào
+      .row
+          .col-8
+          .col-4.text-right
+            a(
+              href=`${prefixAdmin}/roles/create`
+              class="btn btn-outline-success"
+            ) + Thêm mới
+
+    //- Tạo form để gửi data cho BE
+    form(
+      class="d-none"
+      form-change-permissions 
+      action=`${prefixAdmin}/roles/permissions?_method=PATCH`
+      method="POST"
+    )
+      input(
+        data-permissions
+        name="data"
+        type="text"
+      )
+
+    script(src="/admin/js/role.js") 
+  else 
+    h1 Không có quyền truy cập

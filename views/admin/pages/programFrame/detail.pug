@@ -1,48 +1,52 @@
 extends ../../layouts/default
 
 block main
-  if(programFrame)
-    if(programFrame.departmentName)
-      div(class="mb-4") Khoa : #{programFrame.departmentName}
-    if(programFrame.semester)
-      div(class="mb-4") Học kỳ : #{programFrame.semester}
-    if(listCourse)
-      .card.mb-3
-        .card-header Danh sách môn học
-        .card-body 
-          table(
-            class="table table-hover table-sm"
-          )
-            thead
-              tr 
-                th STT 
-                th Tên môn
-                th Số tín chỉ
-                th Số tiết lý thuyết
-                th Số tiết thực hành
-            tbody    
-              each course, index in listCourse 
-                tr
-                  td #{index + 1}
-                  td #{course.name}
-                  td #{course.credits} 
-                  td #{course.theory} 
-                  td #{course.practice} 
+  if(user.permissions.includes("programFrame_view"))
+    if(programFrame)
+      if(programFrame.departmentName)
+        div(class="mb-4") Khoa : #{programFrame.departmentName}
+      if(programFrame.semester)
+        div(class="mb-4") Học kỳ : #{programFrame.semester}
+      if(listCourse)
+        .card.mb-3
+          .card-header Danh sách môn học
+          .card-body 
+            table(
+              class="table table-hover table-sm"
+            )
+              thead
+                tr 
+                  th STT 
+                  th Tên môn
+                  th Số tín chỉ
+                  th Số tiết lý thuyết
+                  th Số tiết thực hành
+              tbody    
+                each course, index in listCourse 
+                  tr
+                    td #{index + 1}
+                    td #{course.name}
+                    td #{course.credits} 
+                    td #{course.theory} 
+                    td #{course.practice} 
 
-    if (programFrame.status)
-      div(class="mb-4")
-        span Trạng thái 
-        if (programFrame.status === "active")
-          span(class="btn btn-success") Hoạt động
-        else
-          span(class="btn btn-danger") Dừng hoạt động
+      if (programFrame.status)
+        div(class="mb-4")
+          span Trạng thái 
+          if (programFrame.status === "active")
+            span(class="btn btn-success") Hoạt động
+          else
+            span(class="btn btn-danger") Dừng hoạt động
 
-    a(
-      class="btn btn-warning btn-sm"
-      href = `${prefixAdmin}/programFrame/edit/${programFrame._id}`
-      ) <b>Chỉnh sửa</b>
-  else  
-    h1(class="mb-4") Không tìm thấy chương trình khung
+      if(user.permissions.includes("programFrame_edit"))
+        a(
+          class="btn btn-warning btn-sm"
+          href = `${prefixAdmin}/programFrame/edit/${programFrame._id}`
+          ) <b>Chỉnh sửa</b>
+    else  
+      h1(class="mb-4") Không tìm thấy chương trình khung
+  else 
+    h1 Không có quyền truy cập 
   
 
     

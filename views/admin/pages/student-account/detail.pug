@@ -1,36 +1,42 @@
 extends ../../layouts/default
 
 block main
-  if(account)
-    if(account.infoStudent.avatar)
-      image(src=account.infoStudent.avatar alt="Ảnh đại diện" style="width:200px")
+  if(user.permissions.includes("accountStudent_view"))
+    if(account)
+      if(account.infoStudent.avatar)
+        image(src=account.infoStudent.avatar alt="Ảnh đại diện" style="width:200px")
 
-    if(account.infoStudent.name)
-      div(class="mb-4") Họ tên: #{account.infoStudent.name}
+      if(account.infoStudent.name)
+        div(class="mb-4") Họ tên: #{account.infoStudent.name}
 
-    if(account.infoStudent.studentCode)
-      div(class="mb-4") Mã sinh viên: #{account.infoStudent.studentCode}
-    
-    if (account.infoStudent.id_classManagement)
-      div(class="mb-4") Lớp quản lý: #{account.infoStudent.id_classManagement}
-    
-    if (account.email)
-      div(class="mb-4") Email: #{account.email}
+      if(account.infoStudent.studentCode)
+        div(class="mb-4") Mã sinh viên: #{account.infoStudent.studentCode}
+      
+      if (account.infoStudent.id_classManagement)
+        div(class="mb-4") Lớp quản lý: #{account.infoStudent.id_classManagement}
+      
+      if (account.email)
+        div(class="mb-4") Email: #{account.email}
 
-    if (account.status)
-      div(class="mb-4")
-        span Trạng thái :
-        if (account.status === "active")
-          span(class="btn btn-success") Hoạt động
-        else
-          span(class="btn btn-danger") Dừng hoạt động
+      if (account.role_id)
+        div(class="mb-4") Nhóm quyền: #{account.roleName}
 
-    a(
-      class="btn btn-warning btn-sm"
-      href = `${prefixAdmin}/student-account/edit/${account._id}`
-      ) <b>Chỉnh sửa</b>
-  else  
-    h1(class="mb-4") Không tìm thấy tài khoản sinh viên
-  
+      if (account.status)
+        div(class="mb-4")
+          span Trạng thái :
+          if (account.status === "active")
+            span(class="btn btn-success") Hoạt động
+          else
+            span(class="btn btn-danger") Dừng hoạt động
+
+      if(user.permissions.includes("accountStudent_edit"))
+        a(
+          class="btn btn-warning btn-sm"
+          href = `${prefixAdmin}/student-account/edit/${account._id}`
+          ) <b>Chỉnh sửa</b>
+    else  
+      h1(class="mb-4") Không tìm thấy tài khoản sinh viên
+  else 
+    h1 Không có quyền truy cập
 
     

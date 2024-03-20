@@ -1,31 +1,48 @@
 .sider 
   .inner-menu 
     ul 
-      li 
-        a(href=`${prefixAdmin}/`) Tổng quan
-      li 
-        a(href=`${prefixAdmin}/department`) Khoa 
-      li
-        a(href=`${prefixAdmin}/professionalTeam`) Tổ chuyên môn
-      li
-        a(href=`${prefixAdmin}/course`) Môn
-      li 
-        a(href=`${prefixAdmin}/classManagement`) Lớp quản lý
-      li 
-        a(href=`${prefixAdmin}/classRoom`) Lớp học phần
-      li 
-        a(href=`${prefixAdmin}/programFrame`) Chương trình khung
-      li 
-        a(href=`${prefixAdmin}/schedule`) Thời khóa biểu
-      li
-        a(href=`${prefixAdmin}/student`) Sinh viên
-      li
-        a(href=`${prefixAdmin}/teacher`) Giảng viên
-      li  
-        a(href=`${prefixAdmin}/admin-account`) Tài khoản admin
-      li 
-        a(href=`${prefixAdmin}/teacher-account`) Tài khoản giảng viên
-      li
-        a(href=`${prefixAdmin}/student-account`) Tài khoản sinh viên
-      li 
-        a(href=`${prefixAdmin}/room`) Phòng học
+      if(user.permissions.includes("dashboard_view"))
+        li 
+          a(href=`${prefixAdmin}/dashboard`) Tổng quan
+      if(user.permissions.includes("department_view"))
+        li 
+          a(href=`${prefixAdmin}/department`) Khoa 
+      if(user.permissions.includes("professionalTeam_view"))
+        li
+          a(href=`${prefixAdmin}/professionalTeam`) Tổ chuyên môn
+      if(user.permissions.includes("course_view"))
+        li
+          a(href=`${prefixAdmin}/course`) Môn
+      if(user.permissions.includes("classManagement_view"))
+        li 
+          a(href=`${prefixAdmin}/classManagement`) Lớp quản lý
+      if(user.permissions.includes("classRoom_view"))
+        li 
+          a(href=`${prefixAdmin}/classRoom`) Lớp học phần
+      if(user.permissions.includes("programFrame_view"))
+        li 
+          a(href=`${prefixAdmin}/programFrame`) Chương trình khung
+      if(user.permissions.includes("schedule_view"))
+        li 
+          a(href=`${prefixAdmin}/schedule`) Thời khóa biểu
+      if(user.permissions.includes("student_view"))
+        li
+          a(href=`${prefixAdmin}/student`) Sinh viên
+      if(user.permissions.includes("teacher_view"))
+        li
+          a(href=`${prefixAdmin}/teacher`) Giảng viên
+      if(user.permissions.includes("accountAdmin_view"))
+        li  
+          a(href=`${prefixAdmin}/admin-account`) Tài khoản admin
+      if(user.permissions.includes("accountTeacher_view"))
+        li 
+          a(href=`${prefixAdmin}/teacher-account`) Tài khoản giảng viên
+      if(user.permissions.includes("accountStudent_view"))
+        li
+          a(href=`${prefixAdmin}/student-account`) Tài khoản sinh viên
+      if(user.permissions.includes("room_view"))
+        li 
+          a(href=`${prefixAdmin}/room`) Phòng học
+      if(user.permissions.includes("role_view"))
+        li 
+          a(href=`${prefixAdmin}/role`) Phân quyền

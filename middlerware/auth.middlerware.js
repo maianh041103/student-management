@@ -1,4 +1,5 @@
-const Account = require("../models/account.model")
+const Account = require("../models/account.model");
+const Role = require("../models/role.model");
 
 const { systemConfig } = require('../config/system');
 
@@ -9,6 +10,11 @@ module.exports.auth = async (req, res, next) => {
       deleted: false
     });
     if (user) {
+      const role = await Role.findOne({
+        _id: user.role_id,
+        deleted: false
+      });
+      user.permissions = role ? role.permissions : [];
       res.locals.user = user;
       next();
       return;
