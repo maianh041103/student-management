@@ -29,8 +29,8 @@ app.use(express.static(`${__dirname}/public`));
 //End nhúng file public
 
 //Nhúng bodyParser
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 //End nhúng bodyParser
 
 //Nhúng methodOverride
@@ -46,6 +46,11 @@ app.use(flash());
 //Nhúng route
 const adminRoute = require('./routers/admin/index.route');
 adminRoute(app);
+app.get("*", (req, res) => {
+  res.render("admin/pages/404/index.pug", {
+    pageTile: "Không tìm thấy kết quả"
+  })
+})
 //End nhúng route
 
 //Nhúng file pug
