@@ -1,0 +1,67 @@
+extends ../../layouts/default.pug
+include ../../mixins/moment.pug
+
+block main 
+  h1(class="mb-4") Thông tin cá nhân
+
+  image(
+    src=user.info.avatar||`/client/images/avatar.jpg`
+    alt="Ảnh đại diện"
+    width="150px"
+    class="mb-4"
+  )
+
+  if(user.info.studentCode)
+    p Mã sinh viên: #{user.info.studentCode}
+
+  if(user.info.teacherCode)
+    p Mã giảng viên: #{user.info.teacherCode}
+
+  if(user.info.name)
+    p Họ tên: #{user.info.name}
+  
+  p Giới tính: #{user.info.gender==0?"Nam":"Nữ"}
+
+  if(user.info.birthday)
+    p Ngày sinh: 
+      +formatDate(user.info.birthday)
+
+  if(user.info.countryside)
+    p Quê quán: #{user.info.countryside}
+  
+  if(user.info.phone)
+    p Số điện thoại: #{user.info.phone}
+  
+  if(user.info.classManagementName)
+    p Lớp học: #{user.info.classManagementName}
+  
+  if(user.info.departmentName)
+    p Khoa: #{user.info.departmentName}
+
+  if(user.info.professionalTeamName)
+    p Lớp học: #{user.info.professionalTeamName}
+
+  if(user.info.salary)
+    p Lương: #{user.info.salary}
+
+  if(user.type=="student")
+    p 
+      span Trạng thái: 
+      if(user.info.status=="active") 
+        span Đang học
+      if(user.info.status=="inactive")
+        span Đã nghỉ học
+      if(user.info.status=="complete") 
+        span Đã tốt nghiệp
+  else  
+    p 
+      span Trạng thái: 
+      if(user.info.status=="active") 
+        span Đang dạy
+      else
+        span Đang nghỉ
+
+  a(
+    href=`/user/edit`
+    class="btn btn-primary"
+  ) Chỉnh sửa thông tin

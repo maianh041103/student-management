@@ -16,6 +16,7 @@ const port = process.env.PORT;
 
 //Biến toàn cục
 app.locals.prefixAdmin = systemConfig.prefixAdmin;
+app.locals.systemConfig = systemConfig;
 app.locals.moment = moment;
 //End biến toàn cục
 
@@ -45,7 +46,9 @@ app.use(flash());
 
 //Nhúng route
 const adminRoute = require('./routers/admin/index.route');
+const clientRoute = require('./routers/client/index.route');
 adminRoute(app);
+clientRoute(app);
 app.get("*", (req, res) => {
   res.render("admin/pages/404/index.pug", {
     pageTile: "Không tìm thấy kết quả"

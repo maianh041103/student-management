@@ -1,0 +1,98 @@
+extends ../../layouts/default.pug
+
+block main 
+  h1(class="mb-4") Cập nhật thông tin cá nhân
+
+  form(
+    action = `/user/edit?_method=PATCH`
+    method="POST"
+    enctype="multipart/form-data"
+  )
+    div(class="form-group")
+      label(for="name") Họ tên : 
+      input(
+        type="text"
+        name="name"
+        id="name"
+        required 
+        class="form-control"
+        value=user.info.name
+        )
+    
+    div(class="form-group form-check form-check-inline")
+      input(
+        type="radio"
+        class="form-check-input"
+        id="genderNam"
+        name="gender"
+        value=0
+        checked=(user.info.gender==0?true:false)
+      )
+      label(for="genderNam" class="form-check-label") Nam
+    div(class="form-group form-check form-check-inline")
+      input(
+        type="radio"
+        class="form-check-input"
+        id="genderNu"
+        name="gender"
+        value=1
+        checked=(user.info.gender==1?true:false)
+      )
+      label(for="genderNu" class="form-check-label") Nữ
+
+    
+    div(class="form-group")
+      label(for="countryside") Quê quán : 
+      input(
+        type="text"
+        name="countryside"
+        id="countryside"
+        required 
+        class="form-control"
+        value=user.info.countryside
+        )
+    
+    div(class="form-group")
+      label(for="birthday") Ngày sinh
+      input(
+        type="date"
+        class="form-control"
+        id="birthday"
+        name="birthday"
+      )
+    
+    div(class="form-group")
+      label(for="phone") Số điện thoại
+      input(
+        type="text"
+        class="form-control"
+        name="phone"
+        id="phone"
+        value=user.info.phone
+      )
+    
+    div(
+      class="form-group"
+      upload-image
+      )
+      label(for="avatar") Avatar 
+      input(
+        type="file"
+        class="form-control-file"
+        id="avatar"
+        name="avatar"
+        accept="image/*"
+        upload-image-input
+      )
+      img(
+        src=user.info.avatar 
+        class="image-preview"
+        style="width:150px"
+        upload-image-preview
+      )
+    
+    div(class="form-group")
+      button(
+        type="submit"
+        class="btn btn-primary"
+      ) Cập nhật

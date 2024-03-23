@@ -1,0 +1,34 @@
+header.header
+  .container
+    .row.align-items-center
+      .col-3
+        .inner-logo
+          .row
+            .col
+              img(src=`${systemConfig.logo}`, alt=`${systemConfig.websiteName}`) 
+            .col-9
+              p Đại học Xây Dựng Hà Nội
+            
+      .col-8
+        .inner-menu
+          ul
+            li
+              a(href="/home") Trang chủ
+            if(user.type=="student")
+              li 
+                a(href="/") Học tập
+              li
+                a(href="/") Thời khóa biểu
+            else 
+              li 
+                a(href="/") Nhập điểm
+              li
+                a(href="/") Thời khóa biểu
+            li 
+              a(href="/user/info") #{user.info.name}
+            li  
+              a(href="/user/changePassword") Đổi mật khẩu
+            li 
+              a(href="/auth/logout") Đăng xuất
+            
+            
