@@ -1,0 +1,29 @@
+extends ../../layouts/default.pug
+block main 
+  h2 Lịch học 
+
+  table(
+    class="table table-hover table-sm"
+  )
+    thead 
+      tr
+        th Ca
+        each thu in ["Thứ 2","Thứ 3","Thứ 4","Thứ 5","Thứ 6","Thứ 7"]
+          th #{thu}
+    tbody
+      each ca in [1,2,3,4]
+        tr 
+          td #{ca}
+            -for(let i=2;i<=7;i++)
+              td 
+                for item in schedules
+                  for lich in item.schedule
+                    if(i==lich.date && ca==lich.time)
+                      p  
+                        b #{item.courseName}
+                      p #{item.classRoomName}
+                      p Phòng: #{item.roomName?item.roomName:""}
+                      if(user.type=="student")
+                        p GV: #{item.teacherName}
+                    
+                

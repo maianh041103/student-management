@@ -17,13 +17,11 @@ header.header
             if(user.type=="student")
               li 
                 a(href="/") Học tập
-              li
-                a(href="/") Thời khóa biểu
             else 
               li 
                 a(href="/") Nhập điểm
-              li
-                a(href="/") Thời khóa biểu
+            li
+              a(href="/schedule") Thời khóa biểu
             li 
               a(href="/user/info") #{user.info.name}
             li  
