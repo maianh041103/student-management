@@ -1,4 +1,4 @@
-let URLBACKEND = "http://localhost:3000";
+let URLBACKEND = "https://student-management-k1k3.onrender.com";
 
 //Alert
 const showAlerts = document.querySelectorAll("[show-alert]");
