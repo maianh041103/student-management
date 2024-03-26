@@ -1,3 +1,5 @@
+let URLBACKEND = "http://localhost:3000";
+
 //Alert
 const showAlerts = document.querySelectorAll("[show-alert]");
 if (showAlerts) {

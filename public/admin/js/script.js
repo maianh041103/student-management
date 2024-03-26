@@ -1,3 +1,5 @@
+let URLBACKEND = "http://localhost:3000";
+
 //Alert
 const showAlerts = document.querySelectorAll("[show-alert]");
 if (showAlerts) {
@@ -22,7 +24,7 @@ if (listButtonStatus) {
       const dataId = button.getAttribute("data-id");
       const dataStatus = button.getAttribute("data-status");
       const type = button.getAttribute("type");
-      fetch(`http://localhost:3000/admin/${type}/changeStatus?id=${dataId}&status=${dataStatus}`, {
+      fetch(`${URLBACKEND}/admin/${type}/changeStatus?id=${dataId}&status=${dataStatus}`, {
         method: "PATCH",
         "headers": {
           "Content-Type": "application/json"
@@ -46,7 +48,7 @@ if (listButtonDelete) {
       if (check) {
         const type = button.getAttribute("type");
         const id = button.getAttribute("data-id");
-        fetch(`http://localhost:3000/admin/${type}/delete/${id}`, {
+        fetch(`${URLBACKEND}/admin/${type}/delete/${id}`, {
           method: "DELETE",
           "headers": {
             "Content-Type": "application/json"
@@ -85,7 +87,7 @@ if (listButtonRemove) {
         const studentId = button.getAttribute("data-student-id");
         const classRoomId = button.getAttribute("data-class-id");
         const type = button.getAttribute("type");
-        fetch(`http://localhost:3000/admin/${type}/remove/${classRoomId}/${studentId}`, {
+        fetch(`${URLBACKEND}/admin/${type}/remove/${classRoomId}/${studentId}`, {
           method: "DELETE",
           "headers": {
             "Content-Type": "application/json"
@@ -131,7 +133,7 @@ if (listButtonEdit) {
           pointTest: inputPointTest.value
         }
 
-        fetch(`http://localhost:3000/admin/${type}/edit/${classRoomId}/${studentId}`, {
+        fetch(`${URLBACKEND}/admin/${type}/edit/${classRoomId}/${studentId}`, {
           method: "PATCH",
           "headers": {
             "Content-Type": "application/json"
@@ -185,7 +187,7 @@ if (listButtonSave) {
           listStudentId: listStudentId
         }
 
-        fetch(`http://localhost:3000/admin/${type}/save/${classRoomId}`, {
+        fetch(`${URLBACKEND}/admin/${type}/save/${classRoomId}`, {
           method: "PATCH",
           "headers": {
             "Content-Type": "application/json"

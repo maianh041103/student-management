@@ -39,7 +39,7 @@ if (buttonLock) {
       const year = buttonLock.getAttribute("year");
       const semester = buttonLock.getAttribute("semester");
 
-      fetch(`http://localhost:3000/insertPoint/lock/${classRoomId}?year=${year}&semester=${semester}`, {
+      fetch(`${URLBACKEND}/insertPoint/lock/${classRoomId}?year=${year}&semester=${semester}`, {
         method: "PATCH",
         "headers": {
           "Content-Type": "application/json"
@@ -48,7 +48,7 @@ if (buttonLock) {
         .then(res => res.json())
         .then(data => {
           if (data.code == 200) {
-            window.location.href = `http://localhost:3000/insertPoint?year=${year}&semester=${semester}`
+            window.location.href = `${URLBACKEND}/insertPoint?year=${year}&semester=${semester}`
             alert("Khóa lớp học phần thành công");
           }
           else {

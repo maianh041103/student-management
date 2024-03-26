@@ -53,7 +53,7 @@ if (tableScheduleEdit) {
     const classManagementId = tableScheduleEdit.getAttribute("class-management-id");
     const year = tableScheduleEdit.getAttribute("year");
     const semester = tableScheduleEdit.getAttribute("semester");
-    fetch(`http://localhost:3000/admin/schedule/edit/${classManagementId}?year=${year}&semester=${semester}`, {
+    fetch(`${URLBACKEND}/admin/schedule/edit/${classManagementId}?year=${year}&semester=${semester}`, {
       method: "PATCH",
       "headers": {
         "Content-Type": "application/json"

@@ -26,7 +26,7 @@ if (tablePermission) {
       }
     }
 
-    fetch(`http://localhost:3000/admin/role/permissions`, {
+    fetch(`${URLBACKEND}/admin/role/permissions`, {
       method: "PATCH",
       "headers": {
         "Content-Type": "application/json"

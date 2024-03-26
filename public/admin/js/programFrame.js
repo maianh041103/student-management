@@ -22,7 +22,7 @@ if (semester) {
 function callApi() {
   if (selectedDepartmentValue != "" && selectedSemesterValue != "") {
     console.log("OK");
-    fetch(`http://localhost:3000/admin/programFrame/create/getData?departmentId=${selectedDepartmentValue}&semester=${selectedSemesterValue}`, {
+    fetch(`${URLBACKEND}/admin/programFrame/create/getData?departmentId=${selectedDepartmentValue}&semester=${selectedSemesterValue}`, {
       method: "GET",
       "headers": {
         "Content-Type": "application/json"
