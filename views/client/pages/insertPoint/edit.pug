@@ -1,0 +1,93 @@
+extends ../../layouts/default.pug
+include ../../mixins/moment.pug
+
+block main
+  if(classRoom.status=="active")
+    if(classRoom)
+      if(classRoom.name)
+        div(class="mb-4") Lớp học phần : #{classRoom.name}
+
+      if(classRoom.courseName)
+        div(class="mb-4") Môn học : #{classRoom.courseName}
+      
+      if(classRoom.listStudent)
+        div(class="mb-4") Số sinh viên : #{classRoom.listStudent.length}
+
+      if(classRoom.semester)
+        div(class="mb-4") Học kỳ : #{classRoom.semester}
+
+      if(classRoom.year)
+        div(class="mb-4") Năm học : #{classRoom.year}
+
+      form(
+        action=`/insertPoint/edit/${classRoom._id}?_method=PATCH`
+        method="POST"
+      )
+        .card.mb-3
+          .card-header Danh sách sinh viên
+          .card-body 
+            table(
+              class="table table-hover table-sm"
+            )
+              thead
+                tr 
+                  th STT
+                  th Mã sinh viên
+                  th Họ tên
+                  th Ngày sinh
+                  th Điểm quá trình
+                  th Điểm thi
+                  th Điểm hệ 10
+                  th Điểm hệ 4
+              tbody    
+                each student, index in listStudent 
+                  tr
+                    td(class="d-none")
+                      input(name="studentId" value=student.id)
+                    td #{index + 1}
+                    td #{student.studentCode}
+                    td #{student.name}
+                    td 
+                      +formatDate(student.birthday)
+                    td 
+                      input(
+                        type="number"
+                        class="form-control"
+                        id="pointProcess"
+                        name="pointProcess"
+                        min=0
+                        value=student.pointProcess
+                      )
+                    td 
+                      input(
+                        type="number"
+                        class="form-control"
+                        id="pointTest"
+                        name="pointTest"
+                        min=0
+                        value=student.pointTest
+                      )
+                    td #{student.point10}
+                    td #{student.point4}
+          
+        button(
+          class="btn btn-warning btn-sm ml-1 float-end"
+          type="submit"
+        ) Lưu điểm
+      br
+      br
+      .d-flex.justify-content-center.mb-5
+        button(
+          javascript;
+          class="btn btn-primary btn-sm "
+          button-lock
+          class-id=classRoom._id
+          year=classRoom.year
+          semester=classRoom.semester
+        ) Khóa danh sách điểm
+      
+      script(src="/client/js/insertPoint.js")
+    else  
+      h1(class="mb-4") Không tìm thấy lớp học phần
+  else 
+    h1 Lớp học phần này đã hoàn thành không thể sửa điểm

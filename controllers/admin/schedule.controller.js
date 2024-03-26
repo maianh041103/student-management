@@ -5,15 +5,13 @@ const Course = require('../../models/course.model');
 
 const { systemConfig } = require("../../config/system");
 const scheduleHelper = require("../../helpers/schedule.helper");
+const getListYearHelper = require("../../helpers/getListYear");
 
 //[GET] /admin/schedule/
 module.exports.index = async (req, res) => {
+  let listYear = getListYearHelper.getListYear();
   const currentDate = new Date();
   const currentYear = currentDate.getFullYear();
-  let listYear = [];
-  for (let i = 0; i <= 10; i++) {
-    listYear.push(`${currentYear - i}-${currentYear - i + 1}`);
-  }
 
   const yearSeleted = req.query.year || "";
   const semesterSelected = req.query.semester || "";

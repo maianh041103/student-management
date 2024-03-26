@@ -21,7 +21,7 @@ module.exports.calcPoint10 = (pointProcess, pointTest) => {
 
 module.exports.calcPoint4 = (point10) => {
   if (point10 < 4) {
-    return 0;
+    return "0";
   }
   if (point10 < 5) {
     return 1;

@@ -1,0 +1,73 @@
+extends ../../layouts/default
+include ../../mixins/moment.pug
+
+block main 
+    h1(class="mb-4") Danh sách lớp học phần
+    
+    form(
+      action="/insertPoint",
+      method="GET",
+      form-data-insertPoint
+      )
+      .row  
+        .col-4
+          div(class="row g-3 align-items-center")
+            div(class="col-auto")
+              label(for="year" class="col-form-label") Năm học
+            div(class="col-auto")
+              select(name="year" id="year" class="form-control")
+                option(disabled selected) -- Chọn --
+                each year in listYear
+                  option(value=year selected=(yearSeleted==year)?true:false) #{year}
+        .col-4 
+          div(class="row g-3 align-items-center")
+            div(class="col-auto")
+              label(for="semester" class="col-form-label") Học kỳ
+            div(class="col-auto")
+              select(name="semester" id="semester" class="form-control")
+                option(disabled selected) -- Chọn --
+                option(value=1 selected=(semesterSelected==1)?true:false ) 1
+                option(value=2 selected=(semesterSelected==2)?true:false) 2
+                option(value=3 selected=(semesterSelected==3)?true:false) 3
+
+    if(listClassRoom && listClassRoom.length>0)
+      .card.mb-3
+        .card-header Danh sách
+        .card-body     
+          table(
+            class="table table-hover table-sm"
+          )
+            thead
+              tr 
+                th STT 
+                th Tên môn
+                th Tên lớp học phần
+                th Trạng thái
+                th Hành động
+            tbody 
+              each classRoom,index in listClassRoom
+                tr 
+                  td #{index+1}
+                  td #{classRoom.courseName}
+                  td #{classRoom.name}
+                  td 
+                    if(classRoom.status == "active")
+                      span(
+                        class="badge text-bg-success"
+                        ) Đang học
+                    else 
+                      span(
+                        class="badge text-bg-primary"
+                        ) Đã hoàn thành
+                  td 
+                    a(
+                      class="btn btn-secondary btn-sm"
+                      href=`/insertPoint/detail/${classRoom._id}?year=${yearSeleted}&semester=${semesterSelected}`
+                    ) Chi tiết
+                    if(classRoom.status=="active")
+                      a(
+                        class="btn btn-warning btn-sm"
+                        href=`/insertPoint/edit/${classRoom._id}?year=${yearSeleted}&semester=${semesterSelected}`
+                      ) Nhập điểm
+    
+    script(src="/client/js/insertPoint.js")

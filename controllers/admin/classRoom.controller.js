@@ -149,11 +149,21 @@ module.exports.generatePOST = async (req, res) => {
       let year;
       const currentDate = new Date();
       const currentYear = currentDate.getFullYear();
-      if (semester == 1) {
+
+      const month = currentDate.getMonth() + 1;
+
+      let semesterClassRoom;
+      if (month >= 9 && month <= 12) {
+        semesterClassRoom = 1;
         year = `${currentYear}-${currentYear + 1}`;
+      } else if (month >= 1 && month <= 5) {
+        semesterClassRoom = 2;
+        year = `${currentYear - 1}-${currentYear}`
       } else {
-        year = `${currentYear - 1}-${currentYear}`;
+        semesemesterClassRoomster = 3;
+        year = `${currentYear - 1}-${currentYear}`
       }
+
       const listIdCourse = programFrame.id_course;
 
       const listStudent = await Student.find({
@@ -173,7 +183,7 @@ module.exports.generatePOST = async (req, res) => {
           id_course: idCourse,
           quantity: 50,
           listStudent: listStudentId,
-          semester: semester,
+          semester: semesterClassRoom,
           year: year,
           status: "active"
         }
