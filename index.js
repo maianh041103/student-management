@@ -14,6 +14,15 @@ require("dotenv").config();
 const port = process.env.PORT;
 //End nhúng file env
 
+//Nhúng cors
+const cors = require('cors');
+
+const corsOptions = {
+  origin: 'http://localhost:3000',
+}
+app.use(cors());
+//End nhúng cors
+
 //Biến toàn cục
 app.locals.prefixAdmin = systemConfig.prefixAdmin;
 app.locals.systemConfig = systemConfig;
