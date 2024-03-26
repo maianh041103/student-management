@@ -1,0 +1,47 @@
+extends ../../layouts/default.pug
+
+block main
+  .card.mb-3
+  .card-header Kết quả học tập
+  .card-body 
+    table(
+      class="table table-hover table-sm"
+    )
+      thead
+        tr 
+          th STT
+          th Mã học phần
+          th Tên môn học
+          th Lớp học phần
+          th Số tín chỉ
+          th Điểm quá trình
+          th Điểm thi
+          th Điểm hệ 10
+          th Điểm hệ 4
+          th Điểm chữ
+          th Đạt
+      tbody    
+        each item, index in result 
+          tr
+            td #{index + 1}
+            td #{item._id}
+            td #{item.courseName}
+            td #{item.name}
+            td #{item.credit}
+            td #{item.pointProcess||""}
+            td #{item.pointTest||""}
+            td #{item.point10||""}
+            td #{item.point4||""}
+            td #{item.pointChar||""}
+            td 
+              if(item.point4)
+                if(item.point4<1)
+                  span(
+                    class="badge text-bg-danger"
+                    ) X
+                else 
+                  span(
+                    class="badge text-bg-success"
+                    ) V
+              else 
+                span 
